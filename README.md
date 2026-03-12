@@ -1,4 +1,4 @@
-# Apps deployed to Netlify
+# AI App Playgound
 Deployment Repository for AI Apps deployed to Netlify
 
 ## Resilience Test Engineering Interview Questionnaire
