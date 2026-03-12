@@ -485,6 +485,21 @@
             background: #b83030;
         }
 
+        .card-updated {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color var(--transition);
+        }
+
+        .card:hover .card-updated {
+            color: var(--text-secondary);
+        }
+
         /* ── Footer ───────────────────────────────────────── */
         footer {
             text-align: center;
@@ -577,6 +592,9 @@
                         <span class="tag status checking" data-url="https://projects.reubenrajan.dev/resilience-interview/"><span
                                 class="status-dot"></span> Checking…</span>
                     </div>
+                    <div class="card-updated" data-github-path="resilience-interview">
+                        <span class="status-dot"></span> <span>Checking update…</span>
+                    </div>
                 </div>
             </a>
         <div class="card-grid">
@@ -597,6 +615,9 @@
                         <span class="tag">90 Questions</span>
                         <span class="tag status checking" data-url="https://projects.reubenrajan.dev/bible-art-attack/"><span
                                 class="status-dot"></span> Checking…</span>
+                    </div>
+                    <div class="card-updated" data-github-path="bible-art-attack">
+                        <span class="status-dot"></span> <span>Checking update…</span>
                     </div>
                 </div>
             </a>
@@ -652,6 +673,35 @@
                     tag.classList.remove('checking');
                     tag.classList.add('offline');
                     tag.innerHTML = '<span class="status-dot"></span> Offline';
+                }
+            });
+
+            /* ── GitHub Last Updated ──────────────────────── */
+            const formatRelativeDate = (date) => {
+                const now = new Date();
+                const diffInSeconds = Math.floor((now - date) / 1000);
+                if (diffInSeconds < 60) return 'Just now';
+                if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+                if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+                if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+                return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+            };
+
+            document.querySelectorAll('.card-updated[data-github-path]').forEach(async el => {
+                const path = el.dataset.githubPath;
+                const repo = 'reubenrajan/netlify-deploy';
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${repo}/commits?path=${path}&per_page=1`);
+                    if (!res.ok) throw new Error();
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        const date = new Date(data[0].commit.committer.date);
+                        el.innerHTML = `<span class="status-dot"></span> Updated ${formatRelativeDate(date)}`;
+                    } else {
+                        el.style.display = 'none';
+                    }
+                } catch {
+                    el.style.display = 'none';
                 }
             });
         })();
