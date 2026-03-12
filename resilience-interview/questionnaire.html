@@ -1,0 +1,2729 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resilience Test Engineer — Interview Questionnaire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────────── */
+    :root {
+      --bg: #0b0d12;
+      --bg2: #10131a;
+      --bg3: #161b26;
+      --bg4: #1d2333;
+      --surface: #1a1f2e;
+      --sur2: #212840;
+      --border: #272e45;
+      --bor2: #323d5c;
+      --text: #e4e8f4;
+      --text2: #8e97b8;
+      --text3: #545d7e;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --violet: #8b5cf6;
+      --vsof: rgba(139, 92, 246, .14);
+      --gsof: rgba(34, 197, 94, .11);
+      --tr: 0.25s ease;
+      --sidebar: 256px;
+
+      --c0: #22c55e;
+      --c1: #3b82f6;
+      --c2: #f59e0b;
+      --c3: #ec4899;
+      --c4: #8b5cf6;
+      --c5: #06b6d4;
+      --c6: #f97316;
+      --c7: #a3e635;
+      --c8: #e879f9;
+    }
+
+    [data-theme="light"] {
+      --bg: #f1f3fa;
+      --bg2: #e8eaf4;
+      --bg3: #dde1f0;
+      --bg4: #d0d5ea;
+      --surface: #ffffff;
+      --sur2: #f4f5fc;
+      --border: #c6cce0;
+      --bor2: #adb5d2;
+      --text: #0f1420;
+      --text2: #374166;
+      --text3: #6b748f;
+      --green: #16a34a;
+      --amber: #d97706;
+      --red: #dc2626;
+      --violet: #7c3aed;
+      --vsof: rgba(124, 58, 237, .10);
+      --gsof: rgba(22, 163, 74, .10);
+      --c0: #16a34a;
+      --c1: #2563eb;
+      --c2: #d97706;
+      --c3: #db2777;
+      --c4: #7c3aed;
+      --c5: #0891b2;
+      --c6: #ea580c;
+      --c7: #65a30d;
+      --c8: #c026d3;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background var(--tr), color var(--tr);
+      font-size: 14.5px;
+      line-height: 1.65;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────────── */
+    .hdr {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      transition: background var(--tr), border-color var(--tr);
+    }
+
+    .hdr-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 13px 0;
+    }
+
+    .hdr-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0
+    }
+
+    .sidebar-toggle {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background var(--tr), border-color var(--tr);
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--bg4)
+    }
+
+    .sidebar-toggle span {
+      display: block;
+      width: 14px;
+      height: 1.5px;
+      background: var(--text2);
+      border-radius: 2px;
+      transition: background var(--tr);
+    }
+
+    .hdr-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text);
+      letter-spacing: -.02em;
+      white-space: nowrap;
+      transition: color var(--tr);
+    }
+
+    .hdr-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      color: var(--text3);
+      letter-spacing: .06em;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0
+    }
+
+    /* progress strip */
+    .hdr-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      border-right: 1px solid var(--border);
+    }
+
+    .prog-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      color: var(--text3);
+      letter-spacing: .05em;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .autosave-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      opacity: 0;
+      transition: opacity .3s
+    }
+
+    .autosave-dot.pulsing {
+      opacity: 1;
+      animation: pulse 1s infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .25
+      }
+    }
+
+    .save-pill {
+      font-family: 'DM Mono', monospace;
+      font-size: .62rem;
+      letter-spacing: .04em;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--gsof);
+      color: var(--green);
+      opacity: 0;
+      transition: opacity .4s;
+      white-space: nowrap;
+    }
+
+    .save-pill.show {
+      opacity: 1
+    }
+
+    .hdr-prog-bar-track {
+      width: 120px;
+      height: 4px;
+      background: var(--bg4);
+      border-radius: 99px;
+      overflow: hidden
+    }
+
+    .hdr-prog-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--c1), var(--green));
+      border-radius: 99px;
+      transition: width .5s ease;
+      width: 0
+    }
+
+    .prog-count {
+      font-family: 'Syne', sans-serif;
+      font-size: .78rem;
+      color: var(--text2);
+      white-space: nowrap
+    }
+
+    /* score widget */
+    .score-widget {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 1px solid var(--border);
+      padding-left: 16px
+    }
+
+    .ring-wrap {
+      position: relative;
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg)
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: var(--bor2);
+      stroke-width: 4;
+      transition: stroke var(--tr)
+    }
+
+    .ring-fg {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 119;
+      stroke-dashoffset: 119;
+      transition: stroke-dashoffset .6s ease, stroke .4s ease
+    }
+
+    .ring-pct {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: .75rem;
+      color: var(--text)
+    }
+
+    .score-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px
+    }
+
+    .verdict {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: .82rem;
+      transition: color .3s
+    }
+
+    .verdict.pop {
+      animation: vpop .35s cubic-bezier(.175, .885, .32, 1.275)
+    }
+
+    @keyframes vpop {
+      0% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.2)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    .verdict-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      color: var(--text3);
+      letter-spacing: .04em
+    }
+
+    /* theme toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      user-select: none
+    }
+
+    .tgl-pill {
+      width: 40px;
+      height: 22px;
+      background: var(--bg4);
+      border-radius: 11px;
+      border: 1px solid var(--bor2);
+      position: relative;
+      cursor: pointer;
+      transition: background var(--tr), border-color var(--tr);
+    }
+
+    .tgl-pill::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--text3);
+      top: 2px;
+      left: 2px;
+      transition: transform .25s ease, background .25s ease;
+    }
+
+    [data-theme="light"] .tgl-pill::after {
+      transform: translateX(18px);
+      background: var(--c4)
+    }
+
+    .tgl-icon {
+      font-size: .85rem
+    }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────── */
+    .app-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar);
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 57px;
+      /* header height */
+      height: calc(100vh - 57px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: width var(--tr), background var(--tr), border-color var(--tr);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .sidebar.collapsed {
+      width: 56px
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px
+    }
+
+    .sidebar-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      color: var(--text3);
+      letter-spacing: .1em;
+      padding: 16px 16px 6px;
+      white-space: nowrap;
+      transition: opacity var(--tr), padding var(--tr);
+    }
+
+    .sidebar.collapsed .sidebar-label {
+      opacity: 0;
+      padding: 16px 0 6px
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background .2s, border-color .2s, padding var(--tr);
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed .nav-item {
+      padding: 11px 0;
+      justify-content: center
+    }
+
+    .nav-item:hover {
+      background: var(--bg3)
+    }
+
+    .nav-item.active {
+      border-left-color: var(--sc, var(--c1));
+      background: var(--bg4)
+    }
+
+    .sidebar.collapsed .nav-item.active {
+      border-left-color: transparent;
+      border-left: 3px solid var(--sc, var(--c1))
+    }
+
+    .nav-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: color-mix(in srgb, var(--sc, #6b7280) 15%, transparent);
+      transition: background var(--tr);
+    }
+
+    .nav-text-wrap {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden
+    }
+
+    .nav-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: .78rem;
+      color: var(--text2);
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color .2s, opacity var(--tr), max-width var(--tr);
+    }
+
+    .sidebar.collapsed .nav-title {
+      opacity: 0;
+      max-width: 0
+    }
+
+    .nav-item.active .nav-title {
+      color: var(--text)
+    }
+
+    .nav-counter {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      padding: 2px 6px;
+      border-radius: 99px;
+      background: var(--bg3);
+      color: var(--text3);
+      flex-shrink: 0;
+      transition: background .2s, color .2s, opacity var(--tr);
+    }
+
+    .sidebar.collapsed .nav-counter {
+      opacity: 0
+    }
+
+    .nav-item.complete .nav-counter {
+      background: var(--gsof);
+      color: var(--green)
+    }
+
+    /* sidebar section progress bar */
+    .nav-prog {
+      height: 2px;
+      background: var(--bg4);
+      margin: 0 14px 2px;
+      border-radius: 99px;
+      overflow: hidden;
+      transition: margin var(--tr);
+    }
+
+    .sidebar.collapsed .nav-prog {
+      margin: 0 8px 2px
+    }
+
+    .nav-prog-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--sc, var(--c1));
+      transition: width .4s ease
+    }
+
+    /* ── MAIN ─────────────────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 28px 32px 120px;
+      transition: padding var(--tr);
+    }
+
+    @media(max-width:1024px) {
+      .main {
+        padding: 20px 20px 120px
+      }
+    }
+
+    .section-panel {
+      display: none
+    }
+
+    .section-panel.active {
+      display: block
+    }
+
+    .sec-hdr {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sec-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      background: color-mix(in srgb, var(--sc) 14%, transparent);
+    }
+
+    .sec-title-wrap {
+      flex: 1
+    }
+
+    .sec-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--sc);
+      letter-spacing: -.01em;
+    }
+
+    .sec-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      color: var(--text3);
+      letter-spacing: .04em;
+      margin-top: 3px
+    }
+
+    .sec-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      padding: 5px 12px;
+      border-radius: 99px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      border: 1px solid color-mix(in srgb, var(--sc) 30%, transparent);
+      background: color-mix(in srgb, var(--sc) 10%, transparent);
+      color: var(--sc);
+    }
+
+    /* ── QUESTION CARD ───────────────────────────────────────────── */
+    .q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: background var(--tr), border-color var(--tr), box-shadow .2s;
+    }
+
+    .q-card:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .18)
+    }
+
+    .q-card.asked {
+      border-color: var(--green)
+    }
+
+    .q-hdr {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+    }
+
+    .q-cb-wrap {
+      padding-top: 2px;
+      flex-shrink: 0
+    }
+
+    .q-cb {
+      width: 19px;
+      height: 19px;
+      border-radius: 6px;
+      border: 2px solid var(--bor2);
+      background: var(--bg3);
+      appearance: none;
+      cursor: pointer;
+      position: relative;
+      transition: border-color .2s, background .2s;
+      flex-shrink: 0;
+    }
+
+    .q-cb:checked {
+      background: var(--green);
+      border-color: var(--green)
+    }
+
+    .q-cb:checked::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 5px;
+      width: 5px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+
+    .q-body {
+      flex: 1;
+      min-width: 0
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 7px
+    }
+
+    .q-num {
+      font-family: 'DM Mono', monospace;
+      font-size: .62rem;
+      color: var(--text3);
+      letter-spacing: .06em
+    }
+
+    .q-type {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      letter-spacing: .04em;
+      font-weight: 500;
+    }
+
+    .q-type.open {
+      background: rgba(59, 130, 246, .13);
+      color: #5b9cf7
+    }
+
+    .q-type.closed {
+      background: rgba(236, 72, 153, .11);
+      color: #f472b6
+    }
+
+    .q-type.mixed {
+      background: rgba(245, 158, 11, .11);
+      color: var(--amber)
+    }
+
+    [data-theme="light"] .q-type.open {
+      background: rgba(37, 99, 235, .09);
+      color: #1d4ed8
+    }
+
+    [data-theme="light"] .q-type.closed {
+      background: rgba(219, 39, 119, .09);
+      color: #be185d
+    }
+
+    [data-theme="light"] .q-type.mixed {
+      background: rgba(217, 119, 6, .09);
+      color: #b45309
+    }
+
+    .q-topic {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: var(--bg4);
+      color: var(--text3);
+    }
+
+    .q-text {
+      font-size: .9rem;
+      color: var(--text);
+      line-height: 1.6;
+      transition: color var(--tr)
+    }
+
+    .q-expand {
+      margin-left: auto;
+      color: var(--text3);
+      font-size: .7rem;
+      padding-top: 2px;
+      flex-shrink: 0;
+      user-select: none
+    }
+
+    .q-lower {
+      padding: 0 16px 16px;
+      display: none
+    }
+
+    .q-lower.open {
+      display: block
+    }
+
+    /* hints */
+    .hints-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+
+    .hints-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      color: var(--violet);
+      letter-spacing: .05em;
+      font-weight: 500
+    }
+
+    .hmb-track {
+      flex: 1;
+      max-width: 80px;
+      height: 3px;
+      background: var(--bg4);
+      border-radius: 99px;
+      overflow: hidden
+    }
+
+    .hmb-fill {
+      height: 100%;
+      background: var(--violet);
+      border-radius: 99px;
+      transition: width .3s ease;
+      width: 0
+    }
+
+    .hmc {
+      font-family: 'DM Mono', monospace;
+      font-size: .62rem;
+      color: var(--text3)
+    }
+
+    .hchev {
+      font-size: .6rem;
+      color: var(--text3);
+      transition: transform .2s
+    }
+
+    .hchev.open {
+      transform: rotate(180deg)
+    }
+
+    .hints-panel {
+      display: none;
+      margin-bottom: 14px;
+      background: var(--vsof);
+      border-radius: 9px;
+      padding: 4px 0;
+      border: 1px solid rgba(139, 92, 246, .15)
+    }
+
+    .hints-panel.open {
+      display: block
+    }
+
+    [data-theme="light"] .hints-panel {
+      background: var(--vsof);
+      border-color: rgba(124, 58, 237, .12)
+    }
+
+    .hint-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(139, 92, 246, .1);
+    }
+
+    .hint-row:last-child {
+      border-bottom: none
+    }
+
+    .hint-cb {
+      width: 15px;
+      height: 15px;
+      border-radius: 4px;
+      border: 2px solid var(--bor2);
+      background: var(--bg3);
+      appearance: none;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: border-color .2s, background .2s;
+    }
+
+    .hint-cb:checked {
+      background: var(--violet);
+      border-color: var(--violet)
+    }
+
+    .hint-cb:checked::after {
+      content: '';
+      position: absolute;
+      top: 0px;
+      left: 3px;
+      width: 4px;
+      height: 8px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+
+    .hint-text {
+      font-size: .81rem;
+      color: var(--text2);
+      line-height: 1.55;
+      transition: color var(--tr)
+    }
+
+    .hint-text b {
+      color: var(--text);
+      font-weight: 600
+    }
+
+    /* notes */
+    .notes-lbl {
+      font-family: 'DM Mono', monospace;
+      font-size: .62rem;
+      color: var(--text3);
+      letter-spacing: .06em;
+      display: block;
+      margin-bottom: 5px
+    }
+
+    .notes-ta {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem;
+      padding: 9px 12px;
+      resize: vertical;
+      min-height: 68px;
+      outline: none;
+      transition: border-color .2s, background var(--tr), color var(--tr);
+    }
+
+    .notes-ta:focus {
+      border-color: var(--violet)
+    }
+
+    .notes-ta::placeholder {
+      color: var(--text3)
+    }
+
+    /* ── BOTTOM TOOLBAR ──────────────────────────────────────────── */
+    .btoolbar {
+      position: fixed;
+      bottom: 20px;
+      right: 24px;
+      z-index: 300;
+      display: flex;
+      gap: 8px;
+    }
+
+    .tbtn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--sur2);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s, transform .15s, border-color .2s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .25);
+      backdrop-filter: blur(8px);
+    }
+
+    .tbtn:hover {
+      background: var(--bg4);
+      transform: translateY(-2px)
+    }
+
+    .tbtn.primary {
+      background: var(--violet);
+      border-color: var(--violet);
+      color: #fff
+    }
+
+    .tbtn.primary:hover {
+      background: #7c3aed
+    }
+
+    /* ── MODALS ──────────────────────────────────────────────────── */
+    .modal-bd {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .65);
+      z-index: 400;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-bd.open {
+      display: flex
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+      transition: background var(--tr), border-color var(--tr);
+    }
+
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 16px
+    }
+
+    .modal-input {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .86rem;
+      padding: 9px 13px;
+      outline: none;
+      margin-bottom: 12px;
+      transition: border-color .2s;
+    }
+
+    .modal-input:focus {
+      border-color: var(--violet)
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px
+    }
+
+    .mbtn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .mbtn:hover {
+      background: var(--bg4)
+    }
+
+    .mbtn.primary {
+      background: var(--violet);
+      border-color: var(--violet);
+      color: #fff
+    }
+
+    .mbtn.primary:hover {
+      background: #7c3aed
+    }
+
+    .mbtn.danger {
+      background: rgba(239, 68, 68, .08);
+      border-color: var(--red);
+      color: var(--red)
+    }
+
+    .mbtn.danger:hover {
+      background: var(--red);
+      color: #fff
+    }
+
+    .session-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 12px
+    }
+
+    .sess-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+
+    .sess-item:hover {
+      border-color: var(--violet)
+    }
+
+    .sess-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .sess-name {
+      font-weight: 500;
+      font-size: .83rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .sess-ts {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      color: var(--text3);
+      margin-top: 1px
+    }
+
+    .sess-del {
+      background: none;
+      border: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: .82rem;
+      padding: 3px;
+      border-radius: 4px;
+      transition: color .2s
+    }
+
+    .sess-del:hover {
+      color: var(--red)
+    }
+
+    .modal-div {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 14px 0
+    }
+
+    .modal-lbl {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      color: var(--text3);
+      letter-spacing: .06em;
+      display: block;
+      margin-bottom: 7px
+    }
+
+    .import-wrap {
+      position: relative
+    }
+
+    .import-file {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%
+    }
+
+    /* ── SECTION COLOUR UTILITIES ────────────────────────────────── */
+    .s0 {
+      --sc: var(--c0)
+    }
+
+    .s1 {
+      --sc: var(--c1)
+    }
+
+    .s2 {
+      --sc: var(--c2)
+    }
+
+    .s3 {
+      --sc: var(--c3)
+    }
+
+    .s4 {
+      --sc: var(--c4)
+    }
+
+    .s5 {
+      --sc: var(--c5)
+    }
+
+    .s6 {
+      --sc: var(--c6)
+    }
+
+    .s7 {
+      --sc: var(--c7)
+    }
+
+    .s8 {
+      --sc: var(--c8)
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media(max-width:768px) {
+      .sidebar {
+        position: fixed;
+        top: 57px;
+        left: 0;
+        height: calc(100vh - 57px);
+        z-index: 150;
+        transform: translateX(-100%);
+        transition: transform var(--tr), background var(--tr)
+      }
+
+      .sidebar.mob-open {
+        transform: translateX(0)
+      }
+
+      .sidebar.collapsed {
+        width: var(--sidebar);
+        transform: translateX(-100%)
+      }
+
+      .hdr-prog-bar-track {
+        width: 80px
+      }
+
+      .main {
+        padding: 16px 14px 110px
+      }
+
+      .btoolbar {
+        right: 14px;
+        bottom: 14px;
+        gap: 6px
+      }
+
+      .tbtn {
+        padding: 9px 13px;
+        font-size: .76rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="hdr" id="appHdr">
+    <div class="hdr-inner">
+      <div class="hdr-left">
+        <div class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar">
+          <span></span><span></span><span></span>
+        </div>
+        <div>
+          <div class="hdr-title">Resilience Test Engineer</div>
+          <span class="hdr-sub">INTERVIEW QUESTIONNAIRE · 9 AREAS · 90 QUESTIONS</span>
+        </div>
+      </div>
+      <div class="hdr-right">
+        <div class="hdr-progress">
+          <div class="prog-label">
+            <div class="autosave-dot" id="autosaveDot"></div>
+            PROGRESS
+            <div class="save-pill" id="savePill">Saved</div>
+          </div>
+          <div class="hdr-prog-bar-track">
+            <div class="hdr-prog-bar-fill" id="gBar"></div>
+          </div>
+          <div class="prog-count" id="gCount">0 / 90</div>
+        </div>
+        <div class="score-widget">
+          <div class="ring-wrap">
+            <svg width="46" height="46" viewBox="0 0 46 46">
+              <circle class="ring-bg" cx="23" cy="23" r="19" />
+              <circle class="ring-fg" id="ringFg" cx="23" cy="23" r="19" />
+            </svg>
+            <div class="ring-pct" id="ringPct">0%</div>
+          </div>
+          <div class="score-info">
+            <div class="verdict" id="verdict">No Hire</div>
+            <div class="verdict-sub" id="verdictSub">0 / 0 hints</div>
+          </div>
+        </div>
+        <div class="theme-toggle" onclick="toggleTheme()">
+          <span class="tgl-icon">🌙</span>
+          <div class="tgl-pill"></div>
+          <span class="tgl-icon">☀️</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY: sidebar + main -->
+  <div class="app-body">
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-label">AREAS</div>
+      <div id="navList"></div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main" id="mainContent"></main>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="btoolbar">
+    <button class="tbtn" onclick="openModal('loadMod')">📂 Load</button>
+    <button class="tbtn" onclick="openModal('saveMod')">💾 Save</button>
+    <button class="tbtn primary" onclick="exportTxt()">⬇ Export</button>
+  </div>
+
+  <!-- SAVE MODAL -->
+  <div class="modal-bd" id="saveMod">
+    <div class="modal">
+      <div class="modal-title">💾 Save Session</div>
+      <label class="modal-lbl">SESSION NAME</label>
+      <input class="modal-input" id="saveNameInput" placeholder="e.g. Jane Smith – 12 Mar 2026" type="text">
+      <div id="existWrap">
+        <label class="modal-lbl">EXISTING SESSIONS</label>
+        <div class="session-list" id="saveList"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="mbtn" onclick="closeModal('saveMod')">Cancel</button>
+        <button class="mbtn primary" onclick="saveSession()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOAD MODAL -->
+  <div class="modal-bd" id="loadMod">
+    <div class="modal">
+      <div class="modal-title">📂 Load Session</div>
+      <div class="session-list" id="loadList"></div>
+      <hr class="modal-div">
+      <label class="modal-lbl">IMPORT FROM FILE</label>
+      <div class="import-wrap">
+        <button class="mbtn" style="width:100%;margin-bottom:12px">📁 Choose JSON file…</button>
+        <input type="file" accept=".json" class="import-file" id="importFile" onchange="importSession(event)">
+      </div>
+      <div class="modal-actions">
+        <button class="mbtn" onclick="closeModal('loadMod')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // DATA — 90 questions across 9 resilience areas
+    // Questions are designed to probe CONCEPTUAL understanding AND
+    // direct experiential knowledge in equal measure.
+    // ═══════════════════════════════════════════════════════════════
+    const SECTIONS = [
+      {
+        id: 'reliability-metrics', title: 'Reliability Targets & Metrics', icon: '🎯',
+        questions: [
+          {
+            type: 'open', topic: 'RTO & RPO', text: 'What is the difference between RTO and RPO?',
+            hints: [
+              '<b>RTO (Recovery Time Objective)</b> is the maximum acceptable time the system can be down after a failure — it sets the deadline for recovery.',
+              '<b>RPO (Recovery Point Objective)</b> is the maximum acceptable amount of data loss, measured in time — e.g. "we can lose at most 15 minutes of transactions".',
+              'RPO determines how frequently you need backups or replication; RTO determines how fast your runbook steps must execute.',
+              'A strong candidate can explain how these targets are derived from business requirements, not just assigned arbitrarily by engineering.',
+              'Look for evidence they have actually <b>tested</b> against both targets — not just documented them.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Availability SLAs', text: 'Have you inherited an SLA with no way to measure if it was being met?',
+            hints: [
+              'This is very common. An SLA is a contract commitment; an <b>SLI (Service Level Indicator)</b> is the actual measurement that tells you whether you are meeting it.',
+              'A meaningful availability SLI measures <b>transaction success rate</b> — not just whether the host responds to a ping.',
+              'Good candidates name the tooling they used to close the gap, such as <b>Datadog Synthetics</b> or the <b>Dynatrace SLO module</b>.',
+              'The real measured baseline is often worse than the stated SLA — surfacing this requires careful stakeholder management.',
+              'The story should end with a remediation plan or an honest renegotiation of the SLA, not just an audit finding left open.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Error Budgets', text: 'What is an error budget and how does it change release decisions?',
+            hints: [
+              'An error budget equals <b>1 minus the SLO target</b>. A 99.9% SLO means 0.1% of requests can fail — that 0.1% is the budget.',
+              'When the budget is healthy, teams are free to release. When it is exhausted, reliability work takes priority over new features.',
+              'Mature teams set up <b>burn rate alerts</b> so they know the budget is running low before it is fully gone.',
+              'A good candidate mentions that error budgets protect engineers in both directions — they prevent reckless releases <i>and</i> unnecessarily long feature freezes.',
+              'The SLO and its budget should be owned by the team that runs the service, not imposed by a central SRE team.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'MTTx Metrics', text: 'Your average MTTR is 47 minutes. How do you find where the time is going?',
+            hints: [
+              'MTTR is a composite. Break it into four phases: <b>MTTD</b> (detect), <b>MTTI</b> (investigate), <b>MTTM</b> (mitigate), <b>MTTR</b> (resolve).',
+              'Use incident tooling — PagerDuty timelines or Jira Service Management — to timestamp each phase transition and identify the longest one.',
+              'If detection time is high, alerts are firing too late or customers are reporting before monitors do — a monitoring gap.',
+              'Investigation is usually the longest phase and the highest-value target: better traces, dashboards, and runbooks all shorten it.',
+              'Any fix should be followed by a re-measurement to confirm improvement — not just assumed to have helped.'
+            ]
+          },
+          {
+            type: 'open', topic: 'SLI Design', text: 'How do you define an SLI for an async payment pipeline?',
+            hints: [
+              'Reject naive SLIs like CPU utilisation or process uptime — they say nothing about whether payments are actually completing.',
+              'A meaningful SLI measures the <b>proportion of payments that complete successfully within the agreed time window</b>.',
+              'Separate two concerns: <b>availability</b> (did the payment complete at all?) and <b>latency</b> (did it complete in time?).',
+              'Decide up front how retries are counted — do you measure the first attempt, the final outcome, or track both separately?',
+              'Async jobs need <b>correlation IDs</b> to link the trigger event to the eventual completion metric — without them the SLI cannot be computed.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'RTO Validation', text: 'Have you run a DR drill where the system missed its RTO?',
+            hints: [
+              'Common causes of RTO misses: steps skipped under pressure, manual approval gates, DNS TTL too high, or a cold standby that took longer to warm up than expected.',
+              'The outcome should always include a concrete fix — a runbook update, architecture change, or configuration tweak — followed by a <b>re-test to confirm the fix worked</b>.',
+              'Ask whether they revised the RTO target to match reality, or fixed the system to meet the original target — both are valid but reveal very different instincts.',
+              'Strong candidates run RTO tests on an automated, repeatable schedule — not as a one-off annual exercise.',
+              'Stakeholders should be informed proactively when an RTO is missed in a drill, not discover it during the next compliance review.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Availability Measurement', text: 'How do you make sure availability metrics reflect user experience, not just infra?',
+            hints: [
+              'A host responding to a health check does not mean users can complete their tasks — these are completely different signals.',
+              'Use <b>synthetic transactions</b> that simulate real end-to-end user journeys, not just port checks or simple HTTP pings.',
+              '<b>Real user monitoring (RUM)</b> captures failures that synthetics miss because real users interact in ways test scripts do not anticipate.',
+              'Define availability as HTTP 2xx responses or business-event success rate — not reachability of a load balancer IP.',
+              'Watch for "invisible degradation" — partial failures where some users are impacted but the overall error rate stays below the alert threshold.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'SLO Compliance', text: 'Your SLO shows 99.4% vs a 99.5% target with 8 days left. What do you do?',
+            hints: [
+              'At 99.5% monthly, the total allowed downtime is roughly 3.65 hours. Being at 99.4% means nearly all of that budget is already consumed with 8 days remaining.',
+              'Any further incident this month will tip the team into an SLO breach — the risk is real and immediate, not theoretical.',
+              'The immediate action is to <b>freeze high-risk deployments and migrations</b> for the remainder of the period.',
+              'Escalate to engineering leadership using a clear "budget remaining" narrative — not just raw percentage figures, which are hard to reason about quickly.',
+              'Plan a retrospective regardless of how the month ends — why was the budget under pressure as early as week 3?'
+            ]
+          },
+          {
+            type: 'open', topic: 'MTTx Metrics', text: 'What alerting design detects a latency regression affecting 5% of users within 2 minutes?',
+            hints: [
+              'A regression affecting only 5% of users will not appear in average latency — you need <b>P95 or P99 percentile-based alerting</b>.',
+              'Use a short evaluation window of 1–2 minutes so the alert fires quickly after the regression begins.',
+              '<b>Multi-window burn rate alerting</b> catches both fast spikes and slow degradations that build gradually over time.',
+              'Every alert should carry immediate context: service name, affected endpoint, error type, and a direct link to the relevant dashboard.',
+              'Anomaly detection (available in Datadog and Dynatrace) reduces false positives on metrics that have natural day-of-week or time-of-day variance.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Error Budgets', text: 'Has your team ever actually paused releases due to error budget exhaustion?',
+            hints: [
+              'This question reveals whether SLOs are driving real engineering decisions or just displayed on a dashboard nobody acts on.',
+              'A strong answer describes a <b>clear, pre-agreed policy</b> that defined the trigger — not an ad hoc conversation when the moment arrived.',
+              'Probe for specifics: who made the call, how product management was aligned in advance, and how the decision was communicated.',
+              'The freeze period should be actively filled with reliability work — not a period of engineering idleness.',
+              'A vague answer like "we discussed it but kept releasing" is a signal that the SLO culture is still immature.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'resilient-architecture', title: 'Resilient Architecture', icon: '🏗️',
+        questions: [
+          {
+            type: 'open', topic: 'Failure Mode Analysis', text: 'How do you systematically find failure modes before a system goes live?',
+            hints: [
+              'The structured approach is an <b>FMEA (Failure Mode and Effect Analysis)</b> workshop run before launch, involving developers, SRE, and architects.',
+              'For each component, enumerate: what can fail, what the effect on the system would be, how severe it is, how likely, and whether it would be detected.',
+              'Classify failures by layer — compute, network, data, third-party dependencies — because each layer has distinct failure modes.',
+              'Seed the list from existing post-mortems and incident history rather than starting from a blank page.',
+              'The output should be a <b>prioritised backlog of chaos experiments to run</b>, not just a risk document that sits in a wiki.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'SPOFs', text: 'Have you found a hidden SPOF in a system the team thought was highly available?',
+            hints: [
+              'Ask for the specific component type — common hidden SPOFs include a shared message broker, a single DNS resolver, a shared auth service, or a certificate authority.',
+              'How it was discovered matters: a proactive chaos test or dependency graph analysis is more impressive than finding out during a real incident.',
+              'The proof is demonstrating that failure of that one component caused the "highly available" system to fail end-to-end.',
+              'Resolution should be architectural — redundancy, decoupling, or explicit risk acceptance with monitoring — not just a note in a wiki.',
+              'A strong follow-up: was a SPOF check added to the architecture review process so the same mistake cannot recur?'
+            ]
+          },
+          {
+            type: 'open', topic: 'Multi-Region Design', text: 'What is the core data consistency challenge in active-active multi-region, and how do you test it?',
+            hints: [
+              'When both regions accept writes simultaneously, the same record can be updated in both at the same time, creating a <b>write conflict</b> that must be resolved.',
+              'The choice between strong consistency (safe but slower) and eventual consistency (faster but requires conflict resolution logic) is a fundamental design decision.',
+              'CAP theorem applies: under a network partition, the system must choose between remaining consistent or remaining available — not both.',
+              'Test by injecting a network partition mid-write and observing whether data is lost, duplicated, or whether conflicts are resolved correctly by the application.',
+              'Measure <b>replication lag under realistic load</b> and agree on the threshold at which lag becomes a business problem.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Dependency Failure', text: 'Your service uses 5 APIs, 2 external. How do you stay up when one goes down?',
+            hints: [
+              'Start by classifying each dependency: is it on the <b>critical path</b> (failure = user-facing error) or non-critical (failure = degraded but functional)?',
+              'Implement a <b>circuit breaker</b> per dependency so that when a dependency starts failing, the circuit opens and a tested fallback activates instead.',
+              '<b>Bulkheads</b> give each dependency its own thread pool or connection pool, so one slow or failing dependency cannot exhaust resources shared by others.',
+              'For third-party APIs specifically: always implement a timeout, retry with exponential backoff, and a cached fallback response for when the API is unreachable.',
+              'Verify the design actually works by disabling each dependency in turn using Gremlin or LitmusChaos and checking that the correct degraded behaviour occurs.'
+            ]
+          },
+          {
+            type: 'open', topic: 'AZ Failure Handling', text: 'Describe a test you have run to verify your app survives an AZ failure.',
+            hints: [
+              'A concrete test: drain or terminate all instances in one AZ using chaos tooling or the cloud console, while the rest of the system runs normally.',
+              'Measure the key indicators: how long the load balancer takes to reroute, how long the database failover takes, and how the cache rebalances.',
+              'The most valuable outcome is discovering a gap — something that was assumed resilient but was not. Vague "everything worked fine" answers are weaker.',
+              'Common unexpected findings: health check interval too long, connection pool not refreshed after failover, or sticky sessions surviving the AZ drain.',
+              'The test is not complete until a configuration or architecture change is made and the test is repeated to confirm the fix.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'FMEA Practice', text: 'Does your team do failure analysis before launches, or only after incidents?',
+            hints: [
+              'Best-practice teams run FMEA as a <b>pre-launch gate</b> — it is a structured exercise before go-live, not a reaction to something breaking.',
+              'A sign of maturity: FMEA outputs live in the engineering backlog alongside feature work, not in a separate risk document nobody reads.',
+              'FMEA should feed into design reviews and Architecture Decision Records (ADRs) so failure modes are part of the design conversation.',
+              'Post-mortems are reactive (after the fact); FMEA is proactive (before the fact) — the candidate should understand and practice both.',
+              'A good follow-up: how do they keep FMEA findings current as the system changes rapidly, without redoing the entire exercise from scratch?'
+            ]
+          },
+          {
+            type: 'open', topic: 'Cascade Prevention', text: 'What is the difference between a circuit breaker, bulkhead, and timeout?',
+            hints: [
+              'A <b>timeout</b> limits how long a request waits for a response. Without it, slow downstream services hold threads or connections open until the caller runs out of them.',
+              'A <b>circuit breaker</b> monitors error rates and, once a threshold is crossed, stops sending requests to the failing dependency entirely — preventing cascade amplification.',
+              'A <b>bulkhead</b> isolates each dependency in its own resource pool so that exhaustion caused by one failing dependency cannot starve work going to healthy ones.',
+              'Test timeouts by injecting latency beyond the configured limit and verifying the caller degrades gracefully rather than hanging indefinitely.',
+              'Test circuit breakers by injecting progressively higher error rates and verifying the circuit opens at exactly the configured threshold and recovers correctly in the half-open state.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Legacy Resilience', text: 'You cannot refactor a critical legacy monolith. How do you improve its resilience?',
+            hints: [
+              'Add resilience externally: configure <b>load balancer health checks</b>, put a CDN in front for caching, and add an API gateway for rate limiting and circuit breaking.',
+              'Identify the internal SPOFs that are hardest to avoid: a single shared database, a shared config file, or the fact that the whole app deploys as one unit.',
+              'Run load and performance tests to find resource exhaustion thresholds before they become production incidents — know where the breaking point is.',
+              'Instrument the boundaries deeply: external HTTP call latency, database query durations, thread pool saturation — these are the leading indicators of trouble.',
+              'Use <b>blue-green deployments</b> to reduce release risk, and always test the rollback procedure before each release rather than discovering it does not work during an incident.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Dependency Mapping', text: 'Do you use tooling to keep your service dependency map current?',
+            hints: [
+              'Runtime dependency maps from <b>Datadog Service Map</b>, <b>Dynatrace SmartScape</b>, or AWS X-Ray automatically discover actual runtime dependencies — not just the documented ones.',
+              'These tools routinely surface undocumented dependencies that were added without updating any architecture diagram.',
+              'Undiscovered dependencies become untested SPOFs — they will not appear in chaos experiments or DR tests, so failures in them come as a surprise.',
+              'The accuracy of the map is bounded by instrumentation coverage — services with incomplete tracing create blind spots in the dependency view.',
+              'Make dependency map review a standard part of architecture review and pre-production sign-off.'
+            ]
+          },
+          {
+            type: 'open', topic: 'SPOF Prioritisation', text: 'You have found 12 SPOFs but capacity to fix only 3 this quarter. How do you choose?',
+            hints: [
+              'Score each SPOF on three dimensions: <b>severity of impact</b> (how many users affected, which SLOs breach), <b>probability of failure</b> (incident history, vendor reliability), and <b>detectability</b> (would monitoring catch it, or would it be a silent failure?).',
+              'A high-severity, high-probability, low-detectability SPOF is the most dangerous combination — prioritise these first.',
+              'SPOFs on the <b>critical path of the highest-priority user journeys</b> always outrank those on low-traffic or non-critical paths.',
+              'The remaining nine SPOFs should be documented in a risk register with named owners and target dates — not forgotten until next quarter.',
+              'Communicate the prioritisation and the backlog clearly to stakeholders so they understand what risk remains accepted for now.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'service-capacity', title: 'Service & Capacity Availability', icon: '📊',
+        questions: [
+          {
+            type: 'open', topic: 'Capacity Modelling', text: 'How do you build a capacity model for unpredictable traffic spikes, not just seasonal peaks?',
+            hints: [
+              'Start with historical traffic data: establish P50, P95, and P99 baselines and study the distribution of observed spike magnitudes, not just the average.',
+              'Model for a worst-case multiple of the highest traffic ever seen — not just the "expected" peak, which by definition the spike will exceed.',
+              'Validate the model by load testing at 150% and 200% of expected peak using tools like <b>k6, Gatling, or Locust</b>.',
+              'Validate <b>auto-scaling sensitivity</b> specifically: does the system scale out fast enough when load increases as a step-change, not just a gradual ramp?',
+              'Identify the actual bottleneck component — often database connections, thread pools, or a downstream API rate limit — not just compute.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Cloud Service Limits', text: 'Has a cloud quota ever caused an incident in a system you ran?',
+            hints: [
+              'Very common. Frequent culprits include Lambda concurrency limits, ECS task limits, API Gateway transactions per second, and RDS connection counts.',
+              'Post-incident controls should include CloudWatch or Datadog alarms set at 70% of the quota threshold — alerting before exhaustion, not after.',
+              'Quota review should be a standard item in the <b>capacity planning cadence</b> and on the new-feature launch checklist.',
+              'Know the difference between <b>soft limits</b> (can be raised by requesting an increase) and <b>hard limits</b> (require architectural changes to work around).',
+              'A process change matters more than a one-time fix — the same quota will be hit again as traffic grows if the review process is not formalised.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Load Profile Design', text: 'How do you build a realistic load test from real user traffic data?',
+            hints: [
+              'Capture real user behaviour from APM or analytics: session durations, think time between actions, and the mix of different user journeys.',
+              'Common mistake: using a constant request rate instead of modelling the <b>ramp-up and burst dynamics</b> that occur in real traffic.',
+              'Common mistake: hammering a single endpoint instead of running realistic multi-step user journeys that interact with multiple services.',
+              'Common mistake: using the wrong read/write ratio — production systems are often 90% reads, but test scripts default to a 50/50 split.',
+              'Validate the model by comparing the resource utilisation pattern during the test against what production APM shows — they should look similar.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Auto-Scaling Validation', text: 'Describe an experiment to prove auto-scaling handles a sudden spike, not just a gradual ramp.',
+            hints: [
+              'A sudden step-change in load tests the <b>cold scale-out path</b> — the system must provision new instances from zero, not just add to an already-warm pool.',
+              'Experiment design: jump load from 10% to 200% in under 30 seconds and observe whether the scaling alarm fires and new instances become healthy fast enough.',
+              'The key question: does the SLO remain intact during the scale-out period, or do errors spike while the new instances are initialising?',
+              'Test the <b>scale-in path</b> too — verify that traffic drains from instances correctly before they are deregistered, preventing dropped connections.',
+              'The most common failure mode: new instance bootstrap time (downloading configs, warming caches) exceeds the scale-out margin and the SLO is breached anyway.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Cloud Provider Monitoring', text: 'How do you detect cloud provider degradation before customers notice?',
+            hints: [
+              'Subscribe to the <b>AWS Health API or Azure Service Health Events</b> and pipe those events directly into your alerting pipeline.',
+              'Run <b>synthetic canary transactions</b> from multiple regions that call cloud APIs independently of your own service — these detect platform-level issues directly.',
+              'When provider health events correlate with rising error rates in your own services, that combination is a strong leading indicator to act on before customers report it.',
+              'Use anomaly detection on baseline latency to catch provider-side degradation early, before it crosses the error threshold that would trigger a standard alert.',
+              'Ensure your monitoring infrastructure is not hosted in the same AZ or region it is monitoring — otherwise the monitor goes blind exactly when you need it most.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Capacity Planning', text: 'Does your team use test data to drive capacity decisions, or mostly estimation?',
+            hints: [
+              'Mature teams hold a quarterly capacity review that combines traffic forecasts, cost data, and actual load test results.',
+              'Load test results show the real headroom at current provisioning — not the guessed headroom — against the projected peak for the next quarter.',
+              'Chaos test results show the failure point: at what scale does the system actually start to degrade?',
+              'Capacity should be sized for <b>next quarter\'s projected traffic</b>, not last quarter\'s actuals, which are already in the past.',
+              'A strong answer names a specific capacity decision that test data changed — not just "yes we do reviews."'
+            ]
+          },
+          {
+            type: 'open', topic: 'Graceful Degradation', text: 'Your service hits 100% capacity under a surprise spike. What should it do, layer by layer?',
+            hints: [
+              'Layer 1: <b>bounded request queuing</b> — accept requests into a queue rather than rejecting them immediately, increasing latency but preventing immediate errors.',
+              'Layer 2: <b>rate limiting</b> — respond with 429 Too Many Requests to lower-priority callers, protecting capacity for the critical user journey.',
+              'Layer 3: <b>feature shedding</b> — disable non-essential features like recommendations or analytics to free resources for the core flow.',
+              'Layer 4: <b>graceful 503</b> with a Retry-After header — an honest signal to clients telling them when to try again, rather than silently dropping requests.',
+              'Test each layer explicitly by load testing to the threshold and confirming each degradation behaviour activates in the correct sequence.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Cloud Migration', text: 'When migrating a stateful on-prem app to cloud, what resilience assumptions break?',
+            hints: [
+              'On-premises assumptions that break in cloud: local disk persists across reboots, IP addresses are fixed, and the internal network is low-latency and reliable.',
+              'New failure modes to test: instances can be terminated at any time without warning, entire AZs can fail, and VPC and NAT gateway limits can be hit.',
+              'Test the application in the cloud environment with production-mirrored data and realistic synthetic traffic <b>before</b> committing to the cutover.',
+              'Run chaos experiments specific to cloud environments: random instance termination, AZ failure simulation, and network partition between tiers.',
+              'De-risk the cutover with a <b>parallel run period</b> where both environments serve traffic and their responses are compared, before switching DNS.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Load Test Automation', text: 'Are performance tests automated on every deployment, or triggered manually before big releases?',
+            hints: [
+              'Continuous performance testing catches regressions that occur between major releases — ad hoc pre-release testing misses everything in between.',
+              'Integrate load tests in the staging pipeline: run automatically after each deployment and compare results against the previous baseline automatically.',
+              'Regression detection should compare P95/P99 latency, throughput, and error rate — not just whether the test completed without crashing.',
+              'Common tools for CI integration: <b>k6, Gatling CI plugin, Artillery in GitHub Actions</b>.',
+              'A strong answer describes a specific performance regression that the pipeline caught before it reached production.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Quota Exhaustion Handling', text: 'How do you test that your app handles a cloud quota being exhausted gracefully?',
+            hints: [
+              'First identify which quotas could realistically be hit at peak load — Lambda concurrency, DynamoDB TPS, SQS message throughput, and RDS connections are common candidates.',
+              'Test by deliberately approaching or exceeding the quota in a safe test environment and observing exactly what the application does.',
+              'Expected behaviour: the application retries with backoff, activates a fallback path, or surfaces a clear, meaningful error to the user — not an unhandled exception.',
+              'Check whether the application logs and metrics distinguish quota errors from other error types — you need to be able to identify this in production.',
+              'Verify that an alert fires <b>before</b> the quota is exhausted — detecting the trend early, not after users are already experiencing errors.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'disaster-recovery', title: 'Disaster Recovery Preparedness', icon: '🛡️',
+        questions: [
+          {
+            type: 'open', topic: 'DR Test Design', text: 'How do you design a DR test that produces real evidence, not just a pass/fail?',
+            hints: [
+              'Define the measurable outcomes <b>before</b> the test runs: actual RTO in minutes, actual RPO in data records lost, and error rate during the transition.',
+              'Run the test under representative load — not at 2am when traffic is near zero, which produces optimistic results that do not reflect reality.',
+              'Structure the test in stages: healthy baseline → inject failure → failover → validate → recover → post-test analysis.',
+              'Measure continuously throughout: how fast monitoring detected the failure, how long the transition took, and the error rate during the window.',
+              'Export time-stamped metrics as a permanent evidence artefact — screenshots and exported dashboards for audit and stakeholder review.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Runbook Quality', text: 'Have you followed a DR runbook during a real incident and found it was wrong?',
+            hints: [
+              'Runbooks rot when written once and never retested — the system changes around them, and the runbook silently becomes incorrect.',
+              'The operational impact of a wrong runbook is real: added minutes to MTTR, or unexpected escalations to senior engineers the runbook was supposed to avoid.',
+              'The fix is to <b>execute runbooks in quarterly DR drills</b> — any step that fails is treated as a defect to be fixed, not just noted.',
+              'Each step should have a documented expected output and an explicit escalation trigger for when that output is not observed.',
+              'A strong answer describes introducing a runbook-testing discipline as a direct result of the gap found — turning a failure into a process improvement.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Backup Verification', text: 'How do you prove your backup meets your RPO — not just that the backup job ran?',
+            hints: [
+              'A backup job completing successfully only proves the backup ran — it says nothing about whether the data can actually be restored and used.',
+              'The real test is an <b>automated restore</b> to an isolated environment, followed by structural integrity checks and logical consistency validation.',
+              'RPO validation: restore to the backup taken N minutes before a simulated failure and measure the actual data delta — not the theoretical RPO.',
+              'Restore duration is also critical: a backup is effectively useless if the restore itself takes longer than the RTO budget allows.',
+              'A common failure mode: backup encryption key mismatch or missing IAM permissions that prevent restore — only discovered during an actual restore test.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Active-Active vs Passive', text: 'What are the resilience trade-offs between active-active and active-passive multi-region designs?',
+            hints: [
+              'Active-active is continuously exercised by production traffic, so resilience is proven daily — the system is always failing over at small scale.',
+              'The main challenge with active-active is <b>data consistency under split-brain</b>: if both regions accept writes during a partition, reconciliation becomes complex.',
+              'Active-passive is architecturally simpler, but the passive region is rarely exercised — leading to config drift, stale data, and components that have not been tested.',
+              'When testing active-passive failover, always include a <b>full data comparison after failover</b> — not just checking that the service responds.',
+              'Warm standby (a partially provisioned and running passive region) sits between the two extremes and has its own distinct test implications worth discussing.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Network Redundancy', text: 'How do you test for SPOFs across DNS, CDN, and load balancer layers?',
+            hints: [
+              'DNS: verify that health-check-driven failover completes within the configured TTL by testing with an external resolver, not an internal one.',
+              'CDN: disable the origin server and measure how quickly the edge serves cached content and how fast the CDN detects and routes around the origin failure.',
+              'Load balancer: inject unhealthy backend instances and time how long deregistration takes and how quickly traffic is rerouted to healthy instances.',
+              'Use chaos tooling to <b>black-hole network paths</b> between layers and verify that automatic rerouting occurs without manual intervention.',
+              'Always test from <b>external network vantage points</b> — internal health checks may succeed even when users outside the network cannot reach the service.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'DR Automation', text: 'Can a first-responder on your team trigger regional failover without a senior architect?',
+            hints: [
+              'Best practice: any trained on-call engineer should be able to execute the DR runbook — it should not require a senior architect to be woken up.',
+              'Fully automated failover is fast and consistent but carries risk if triggered incorrectly — robust safeguards and a clear abort mechanism are essential.',
+              'Guided-manual runbooks — where the engineer follows clear steps with explicit decision points — often strike the best balance between speed and human judgment.',
+              'A useful way to measure the gap: at what point in a real incident does the first senior engineer get paged? That handoff point is the automation boundary.',
+              'A strong answer describes specific steps taken to reduce senior-engineer escalation dependency — through better documentation, practice drills, and automation.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Incremental DR Validation', text: 'How do you build DR confidence progressively with chaos, rather than one big annual drill?',
+            hints: [
+              'Decompose DR into runnable sub-scenarios of increasing scope: single AZ failure, then multi-service failure, then full regional failure.',
+              'Run component-level tests monthly, service-level tests quarterly, and a full regional test annually — evidence accumulates progressively.',
+              'Use <b>LitmusChaos workflow chaining or Gremlin scenarios</b> to compose multi-step failure sequences that simulate realistic DR conditions.',
+              'Each experiment should produce measurable evidence: RTO achieved, RPO achieved, and how many manual steps were required.',
+              'Document a maturity ladder showing the current level with evidence, the target level, and the specific gaps between them.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'In-Flight Transactions', text: 'How do you test that a database failover does not cause data loss or duplicates in-flight?',
+            hints: [
+              'Trigger the failover during an <b>active write workload</b> — never when the system is idle, which produces optimistic results.',
+              'Observe carefully: do in-flight transactions complete successfully, roll back cleanly, or produce duplicate records in the database?',
+              'Check application retry logic: when the connection resets, does the application retry the transaction correctly, or does it submit the same transaction twice?',
+              'Idempotency check: submitting the same transaction twice must produce exactly one result in the database — not two.',
+              'The replication lag at the moment of failover determines the <b>actual RPO achieved</b> — this is the real number, not the theoretical target.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Restore Testing', text: 'Do you run automated restore tests on a schedule, or rely on backup job success messages?',
+            hints: [
+              'A backup job success message only proves the backup ran — it says nothing about whether the restore will actually work when needed.',
+              'Best practice is an <b>automated weekly restore</b> to an isolated environment, followed by data integrity checks.',
+              'Integrity checks should include: row counts, referential integrity validation, and application-level smoke tests against the restored data.',
+              'Restore test failures should trigger alerts with the same urgency as production incidents — not be quietly logged and ignored.',
+              'A strong answer describes finding a broken restore before it became a real crisis — exactly because this testing practice was in place.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Runbook Design', text: 'What separates a DR runbook that holds up at 3am from one that falls apart?',
+            hints: [
+              'Every step documents its <b>expected output</b> and an explicit escalation trigger for when the observed output does not match.',
+              'Commands are copy-paste ready — no ambiguity about which cluster name, which CLI flag, or which endpoint to update.',
+              'A decision tree handles branches: if step 3 fails, the runbook tells the engineer which alternative path to take — it does not leave them guessing.',
+              'Each step carries a time budget so the engineer knows whether they are on pace to meet the RTO or are falling behind and need to escalate.',
+              'Direct links to the relevant dashboards, cloud console pages, and escalation contacts are embedded in the runbook — not stored separately somewhere else.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'app-platform', title: 'Application Platform Reliability', icon: '⚙️',
+        questions: [
+          {
+            type: 'open', topic: 'Stateless Architecture', text: 'Why does stateful application design hurt resilience, and what breaks when you move state out?',
+            hints: [
+              'Stateful instances hold session data locally — when one fails, that user\'s session is lost and they must start over, which requires sticky-session routing to avoid.',
+              'Stateless design externalises state to Redis, DynamoDB, or a similar store — any instance can serve any request, making horizontal scaling and instance replacement trivial.',
+              'What typically breaks during migration: assumptions about local file storage, in-memory caches that need rebuilding, and background jobs scoped to a single session.',
+              'What improves: you can kill any instance during a chaos test without user impact, and deployments become much safer because instances are interchangeable.',
+              'The new risk introduced: the external state store is now a critical dependency that must itself be resilience-tested — it becomes the new potential SPOF.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Health Checks', text: 'Have you seen health checks report healthy while users were experiencing failures?',
+            hints: [
+              'A classic gap: the health endpoint returns 200 but an underlying dependency — database, cache, or downstream API — is broken or slow.',
+              'Diagnosis: compare what the health check reports against the actual transaction success rate visible in APM — the gap between them reveals the problem.',
+              'Fix: deepen the health check to probe actual dependencies, not just whether the process is alive and listening on the correct port.',
+              'Understand the distinction: a <b>liveness probe</b> checks whether the process is running; a <b>readiness probe</b> checks whether it can correctly serve requests. Both are needed.',
+              'Over-engineering risk: a health check that probes too aggressively and starts failing during minor transient issues will take instances out of rotation unnecessarily, cascading the outage.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Circuit Breakers', text: 'How do you pick the right trip threshold for a circuit breaker, and test it is correct?',
+            hints: [
+              'Setting the threshold without baseline data is a mistake: too sensitive causes false positives that degrade the system unnecessarily; too lenient lets cascades through unchecked.',
+              'Establish a baseline by measuring the normal error rate for this dependency under production load — it is often as low as 0.1–0.5%.',
+              'Set the trip threshold meaningfully above the baseline to tolerate normal variance — for example, trip at 20% error rate sustained over 10 seconds.',
+              'Validate by injecting increasing error rates (5%, 10%, 20%, 30%) in sequence and verifying the circuit opens at exactly the configured threshold.',
+              'Validate the <b>half-open state</b>: after the recovery interval, the circuit should probe with limited traffic and close again if the dependency has recovered.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Kubernetes Resilience', text: 'What Kubernetes failure modes matter most in a chaos programme, and why does each need a different approach?',
+            hints: [
+              '<b>Pod OOMKill</b>: inject memory pressure to trigger the OOM killer, then verify the pod restarts cleanly, a new pod schedules, and traffic reroutes in time.',
+              '<b>Node failure</b>: drain or terminate a node and verify that affected pods reschedule on remaining nodes within the constraints set by PodDisruptionBudgets.',
+              '<b>Control plane degradation</b>: simulate limited API server access and verify that existing pods continue serving traffic even when Kubernetes cannot schedule new ones.',
+              'Each scenario requires different LitmusChaos experiments: <b>pod-delete, node-drain, and network-chaos</b> are distinct experiment types with different parameters.',
+              'Critically: the chaos tool must respect PodDisruptionBudget limits — if it does not, the experiment can take a service completely offline, which is unsafe for production use.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Traffic Failover', text: 'How do you test that traffic fails over cleanly when an instance dies mid-request?',
+            hints: [
+              'Start by defining the acceptable error window: how many user-facing errors are tolerable while an instance fails over? This sets the pass/fail criterion.',
+              'Kill an instance while it is actively serving live traffic, then measure both the count of errors and the duration of the error window from the user\'s perspective.',
+              'Validate <b>connection draining</b>: the load balancer should stop sending new requests to the instance before it terminates, allowing in-flight requests to complete.',
+              'Determine what happens to requests in flight at the moment of termination: do they complete, get retried, or get dropped — and is that behaviour acceptable?',
+              'Health check deregistration time directly controls the size of the error window — faster health checks detect failure sooner and reduce the number of failed requests.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Auto-Scaling', text: 'Has auto-scaling ever failed to trigger fast enough to prevent user-facing degradation?',
+            hints: [
+              'Common cause: the scaling metric was averaged over 5 minutes, which masked a sharp 30-second traffic spike that was over before the alarm even fired.',
+              'Common cause: the scale-out cooldown period prevented a second scaling action when the first scaling step was not enough to absorb the load.',
+              'Common cause: new instance bootstrap time of 2–5 minutes exceeded the scale-out margin, so new instances became ready after the damage was already done.',
+              'Common cause: the maximum instance limit was hit — either an AWS account quota or an ASG cap set too conservatively.',
+              'Fixes include: shorter metric evaluation windows, reduced cooldown periods, pre-warmed AMIs or container images, and predictive scaling for known traffic patterns.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Message Queue Resilience', text: 'What fault injection tests prove an event-driven Kafka or SQS system is resilient?',
+            hints: [
+              'Consumer group failure: kill all consumers simultaneously and verify that messages queue safely without loss during the outage, then drain correctly on recovery.',
+              'Poison message: send a malformed message and verify it is routed to the Dead Letter Queue without blocking the processing of subsequent valid messages.',
+              'Broker failure (Kafka): kill a broker and verify that partition leader election completes and no messages are lost during the leadership transition.',
+              'Consumer lag injection: slow down consumers artificially and verify that the producer is not blocked and that backpressure is handled gracefully.',
+              'Duplicate delivery: replay the same message twice and verify that consumer idempotency ensures exactly one outcome is produced — not two.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Resilience Pattern Failures', text: 'Describe a time a resilience pattern was misconfigured and made an incident worse.',
+            hints: [
+              'Retry without backoff: when a service went down, every client retried immediately and continuously — the recovering service received 10x its normal load and could not stabilise.',
+              'Circuit breaker too sensitive: the threshold was set too low, causing false positives that circuit-broke healthy dependencies and cascaded a small problem into a larger outage.',
+              'Timeout too long: requests to a failed dependency were allowed to wait 60 seconds, exhausting the thread pool and causing the calling service to become unresponsive too.',
+              'Every resilience pattern has its own failure mode when misconfigured — the lesson is that patterns themselves need to be tested with fault injection, not just deployed.',
+              'A strong answer names the specific configuration value that was wrong and describes the chaos test that would have caught the misconfiguration before production.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Feature Flags', text: 'Have you used a feature flag killswitch during an incident, and was it tested beforehand?',
+            hints: [
+              'Killswitch flag paths must be tested in staging before you rely on them during a real incident — the worst time to discover the flag does not work is mid-outage.',
+              'Test the full cycle: disable the flag, verify the feature degrades gracefully without errors, re-enable the flag, verify the feature restores without restarting the service.',
+              'Propagation latency matters: how quickly does a flag change reach all running instances? This latency sets the floor on how fast you can respond to an incident.',
+              'Flag state should be visible on incident dashboards alongside service health metrics — so the on-call engineer can see at a glance whether a flag is active.',
+              'A weak answer: "we have LaunchDarkly." A strong answer: "we tested each killswitch path produces the correct degraded user experience and measured propagation time."'
+            ]
+          },
+          {
+            type: 'open', topic: 'Service Mesh', text: 'What does a service mesh like Istio add to resilience testing that was not possible before?',
+            hints: [
+              'A service mesh enables <b>fault injection at the proxy layer</b> — you can inject latency and HTTP errors into specific service-to-service calls without changing any application code.',
+              'Istio\'s <b>httpFault VirtualService rules</b> support per-route abort and delay injection, giving fine-grained control over exactly which traffic is affected.',
+              'New failure scenarios become testable: mTLS negotiation failures, service discovery failures, and traffic routing policy failures — all previously hard to simulate.',
+              'Envoy sidecar metrics and distributed traces provide richer observability data during experiments compared to what application-only instrumentation can offer.',
+              'Important risk: the mesh control plane can itself be a SPOF — if it fails, routing policies cannot be updated. The mesh should be included in the chaos testing programme.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'data-platform', title: 'Data Platform Reliability', icon: '🗄️',
+        questions: [
+          {
+            type: 'open', topic: 'Database Failover', text: 'What happens step by step during a managed database failover, and where do apps typically break?',
+            hints: [
+              'The sequence: primary failure is detected → standby is promoted → the DNS endpoint is updated → application must reconnect to the new primary.',
+              'Managed service failovers typically take 60–120 seconds — applications must handle the gap gracefully, as user requests continue arriving throughout.',
+              'The most common application failure: a database connection opened at startup and never refreshed. After failover, the old connection is stale and requests fail silently.',
+              'DNS TTL set too high means the application resolves the old primary\'s IP long after promotion, extending the outage window unnecessarily.',
+              'Fix: configure the connection pool with reconnection logic, use a short TTL for the DB endpoint, and implement retry with backoff in the application layer.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Replication Lag', text: 'Have you discovered replication lag exceeding your RPO threshold with no alert firing?',
+            hints: [
+              'Replication lag is often invisible until a DR drill or actual failover reveals that the standby data is significantly behind the primary.',
+              'The monitoring gap: no alert on the replication lag metric, or the threshold was set too conservatively and was never actually tested.',
+              'The fix: add a replication lag alert set at a threshold that provides headroom before the RPO is breached — for example, alert at 50% of the RPO value.',
+              'Replication lag should be a <b>first-class metric on the primary database dashboard</b>, reviewed regularly alongside query performance and connection counts.',
+              'A strong answer names the specific threshold chosen, explains how it was calibrated, and describes a lag event it successfully caught before becoming a problem.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Eventual Consistency', text: 'Give an example of eventual consistency causing a user-visible bug, and how you would test for it.',
+            hints: [
+              'Classic example: a user updates their profile, immediately navigates to their profile page, and sees the old data — because the read was served by a replica that had not yet caught up.',
+              'Systematic test: write a record, immediately read it from the replica, compare the values, and measure how often the read returns stale data and by how much.',
+              'Inject replication lag using chaos tooling and observe how the application behaves — does it show stale data, show an error, or detect and handle the lag gracefully?',
+              'Application fix: <b>read-your-writes consistency</b> — route reads to the primary for a short window immediately after a write, guaranteeing the user sees their own changes.',
+              'Track the <b>stale read rate</b> as an application-level metric, not just a database-level replication metric, so it surfaces in your SLO dashboards.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'RPO Validation', text: 'Your data warehouse claims a 4-hour RPO. Design a test to prove or disprove it.',
+            hints: [
+              'Test setup: take a known-good snapshot, generate 3.5 hours of synthetic transactions to represent data that should be recoverable, then simulate a failure and attempt restore.',
+              'Measure the actual data age in the restored dataset — is all the expected data present, or does the real RPO turn out to be longer than 4 hours?',
+              'Restore duration is a separate concern: if the restore itself takes 6 hours, the system cannot meet a 4-hour RPO even if the data is theoretically there.',
+              'Validate completeness: confirm all transactions generated in the pre-failure window are present and correct in the restored dataset.',
+              'If RPO is met, produce a time-stamped evidence document. If it is not met, raise a severity-1 finding with a clear remediation timeline.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Read Replica Failure', text: 'What happens to your primary when all read replicas fail and reads are rerouted — and how do you test it?',
+            hints: [
+              'Rerouting all reads to the primary is a common and often overlooked cascade failure mode — the primary was sized for writes, not for combined read and write load.',
+              'Test: kill all read replicas simultaneously and measure the impact on the primary — CPU utilisation, connection count, and query latency.',
+              'Validate that read fallback to the primary actually occurs in the application code — a silent failure where reads just return errors is worse than a visible fallback.',
+              'Check whether the primary connection pool is large enough to absorb the combined read and write traffic without exhausting connections.',
+              'Recovery test: restore replicas and verify that traffic gradually shifts back to them without requiring a full application restart.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Multi-AZ DB', text: 'Have you actually triggered a Multi-AZ failover and timed the full recovery?',
+            hints: [
+              'Assuming Multi-AZ failover works without ever testing it is a significant risk — "we assumed it works" is a red flag in an interview.',
+              'What to measure: the time from failure trigger to the last application-layer error, then to confirmed normal traffic — not just the time the database promotion takes.',
+              'A typical finding: the database failover completes in 60–120 seconds, but the application\'s connection retry logic adds another 2–3 minutes on top.',
+              'The candidate should know the <b>actual measured recovery time</b> — not the cloud provider\'s SLA, which describes only the database promotion, not the full application recovery.',
+              'A strong answer describes a specific tuning change made to the application or connection pool as a direct result of timing the test.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Zero-Downtime Migration', text: 'How do you test resilience and data integrity during a live database migration with no downtime tolerance?',
+            hints: [
+              'Use the <b>expand-contract pattern</b>: add the new schema alongside the old one, migrate data in the background while both schemas are live, then gradually switch reads over.',
+              'Run both schemas in parallel during a shadow period, comparing outputs from both to verify the new schema produces identical results to the old one.',
+              'Rollback test: deliberately trigger the rollback condition in staging and verify the old schema is still complete and consistent after the rollback.',
+              'Data integrity checks at each stage of the migration: row counts, checksums, and application-level smoke tests that exercise the business logic.',
+              'Monitor application error rate throughout the migration — any spike above baseline is an immediate trigger to roll back rather than continue.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'CQRS Consistency', text: 'In a CQRS system, how do you test the read model under event processor failure?',
+            hints: [
+              'In CQRS, the write model updates immediately while the read model (projection) updates asynchronously — a lag between them is inherent by design, not a bug.',
+              'Test: kill the projection processor mid-stream and measure how stale the read model becomes over time while the processor is down.',
+              'After restart, events are replayed to rebuild the projection — verify the projection reaches the <b>correct final state</b> and that replaying events is idempotent.',
+              'Define the accepted user experience during the lag: show stale data with a "refreshing" indicator, or block rendering until the projection catches up — both are valid choices.',
+              'Set a projection lag alert threshold that fires before the lag becomes large enough to noticeably affect users — define this threshold explicitly in monitoring.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Backup Encryption', text: 'Have you tested restoring an encrypted backup and found a key access problem?',
+            hints: [
+              'A very common finding: the backup was encrypted with a KMS key that the restore IAM role does not have permission to use — discovered only when restoration is attempted.',
+              'Also common: the KMS key was deleted or rotated after the backup was taken, making the backup permanently unrecoverable.',
+              'Test: attempt a restore in an isolated account using only the documented minimum permissions — does it succeed, or does it fail on key access?',
+              'Multi-account DR: if the DR account differs from the production account, cross-account KMS key grants must be explicitly configured and tested.',
+              'A strong answer describes finding exactly this issue in a restore test — not during a real disaster recovery event.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Connection Pool Resilience', text: 'How do you test that your database connection pool recovers cleanly after a failure?',
+            hints: [
+              'Instrument the pool with real-time metrics: active connections, idle connections, wait time, and timeout rate — visible in Datadog or Dynatrace.',
+              'Test: kill the database and observe pool behaviour. Do connections drain quickly as requests time out, or do they hang open indefinitely waiting for a response?',
+              'Validate <b>stale connection eviction</b>: after failover, the pool should detect that existing connections are invalid and replace them with fresh connections to the new primary.',
+              'Connection leak test: under sustained high load, confirm connections are returned to the pool correctly — a gradual depletion of available connections indicates a leak.',
+              'Pool size limits prevent DB connection exhaustion at peak load — validate the limit is correct using combined load testing and chaos testing together.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'exception-handling', title: 'Exception & Error Handling', icon: '⚠️',
+        questions: [
+          {
+            type: 'open', topic: 'Retry Strategy', text: 'What makes a retry strategy safe in production, and how do you test it does not worsen an outage?',
+            hints: [
+              'Distinguish retryable errors from permanent ones: 503 and 429 are worth retrying; 400, 401, and 403 are not — retrying permanent errors wastes capacity and delays recovery.',
+              '<b>Exponential backoff with jitter</b> spreads retry attempts across time, preventing the thundering herd problem where every client retries at exactly the same moment.',
+              'Set a maximum retry count and a total timeout to bound the retry window — without limits, a stuck retry loop can hold resources past the RTO.',
+              'For payments and other state-changing operations, use an <b>idempotency key</b> so retrying the same operation never creates duplicate records or charges.',
+              'Test under load: restart a service while clients are retrying and observe the retry curve shape — it should spread out gradually, not spike in a single burst.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Distributed Tracing', text: 'Can your traces explain an intermittent error that only appears under concurrent production load?',
+            hints: [
+              'Concurrent-load bugs are invisible at low traffic — the race condition or contention only manifests when enough requests are in flight simultaneously.',
+              'Traces must carry the right context to be useful: trace ID, span ID, endpoint, error type, and business identifiers like user ID or order ID.',
+              'Race conditions appear in distributed traces as <b>parallel spans that interact with the same resource</b> — visible in the waterfall view at high concurrency.',
+              'Use Datadog APM or Dynatrace to filter spans by error status and sort by duration — outlier traces at P99 are where concurrent bugs hide.',
+              'A strong answer names a <b>specific bug</b> found only via trace data — not just a general description of how the tooling works.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Graceful Degradation', text: 'How do you design and test a fallback for a non-critical feature that shares infra with a critical journey?',
+            hints: [
+              'The non-critical feature\'s failure path must be completely isolated from the critical path — its failure should not propagate to the main user journey at all.',
+              'Implementation options: a try/catch block with an explicit fallback response, a feature flag killswitch, or a circuit breaker on the non-critical dependency.',
+              'Test: disable the non-critical dependency using chaos injection and verify the critical user journey completes without any error or degradation.',
+              'The degradation should be <b>visible to users</b> — a message explaining the feature is temporarily unavailable is better than a silent disappearance.',
+              'Recovery test: re-enable the dependency and verify the feature restores automatically without requiring a service restart or manual intervention.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Retry Storms', text: 'What is a retry storm, how does it show up in observability, and what prevents it?',
+            hints: [
+              'A retry storm occurs when many clients all retry at the same interval after a shared failure — the recovering service receives a burst that is 10x its normal load.',
+              'In observability: the pattern looks like an error spike, followed by a brief recovery, followed immediately by another error spike — the service oscillates because each recovery attempt triggers a new retry burst.',
+              'The root cause is typically no jitter in the retry interval, or retries firing too quickly relative to the recovery time of the downstream service.',
+              'Prevention: <b>exponential backoff with random jitter</b> spreads retries across time so the recovering service receives a gradual trickle, not a simultaneous burst.',
+              'A circuit breaker that opens when the downstream is failing also prevents retry storms — clients stop retrying while the circuit is open, giving the dependency time to recover.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Error Classification', text: 'How do you ensure every error type is handled, alerted on, or explicitly accepted as normal?',
+            hints: [
+              'Define a three-tier error taxonomy: <b>expected errors</b> (auth failures, validation rejections), <b>transient errors</b> (timeouts, 503s), and <b>unexpected errors</b> (bugs, panics).',
+              'Expected errors should be handled cleanly in code with no alert — but counted as a metric so anomalous spikes are detectable.',
+              'Transient errors are retry-eligible, count toward the error budget, and should alert if their rate exceeds the established baseline.',
+              'Unexpected errors — panics, unhandled exceptions, and out-of-memory crashes — should trigger an immediate alert, always log with full context, and be treated as incidents.',
+              'Any error category appearing as "unknown" or "other" in your observability tooling is a gap — it means something is happening that nobody has classified yet.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Exception Traceability', text: 'Can every production exception be traced to the exact request, user, and code path?',
+            hints: [
+              'OpenTelemetry injects trace context into every exception log, linking the exception to the originating request trace — enabling cross-service root cause analysis.',
+              'Exception grouping tools like <b>Datadog Error Tracking or Sentry</b> aggregate similar exceptions so you see frequency trends, not just individual occurrences.',
+              'Every stack trace should include: exception type, message, the specific code location, and the correlated trace ID for looking up the full request context.',
+              'Gap test: deliberately trigger a known exception in production and verify it appears in the observability tool with full context within 60 seconds.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Bulkhead Testing', text: 'How do you use load testing and fault injection to prove a bulkhead prevents batch jobs starving users?',
+            hints: [
+              'Configure separate resource boundaries for batch and interactive workloads — separate thread pools in a monolith, or separate K8s resource quotas in a cluster.',
+              'Drive the batch workload to 100% of its allocated resource pool while simultaneously running realistic interactive user traffic.',
+              'Measure interactive P95/P99 latency throughout — it must remain within SLO bounds even while the batch pool is completely saturated.',
+              'Push further: inject additional load beyond the batch pool limit and verify that isolation still holds under extreme batch pressure.',
+              'If interactive latency degrades while batch is saturated, the bulkhead is not correctly implemented — the resource boundaries are leaking.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'OpenTelemetry', text: 'What are the key implementation decisions when instrumenting a service with OpenTelemetry for Datadog?',
+            hints: [
+              'Choose between auto-instrumentation (covers most frameworks with minimal code changes) and manual SDK instrumentation (required for custom business logic spans).',
+              'Trace context propagation: <b>W3C TraceContext headers</b> must be forwarded on every outbound HTTP call and on every async message published to a queue.',
+              'Log correlation: inject the trace ID and span ID into structured log output using the OTel log bridge API — this links logs to the trace in Datadog.',
+              'Add custom spans around critical business operations — payment processing, inventory reservation — so they appear distinctly in the trace waterfall.',
+              'Test: trigger a known multi-service transaction and verify the complete end-to-end trace appears in Datadog with spans from all participating services.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Feature Flag Safety', text: 'Have you tested a feature flag rollback under live traffic — toggling off while users are active?',
+            hints: [
+              'In-flight requests at the moment of a flag toggle may complete under either the old or the new code path, depending on when the flag is checked in the request lifecycle.',
+              'SDK-based flags are evaluated per request, so changes propagate without restarting; restart-based flags are slower and leave a window where instances disagree.',
+              'Test: toggle the flag off while 100 concurrent users are actively using the feature and observe the error rate and latency during propagation.',
+              'Expected result: zero errors if the flag is checked per request and the fallback path is correct — errors indicate the flag is checked at startup rather than at runtime.',
+              'A strong answer describes the specific propagation mechanism used and a measured propagation latency — not just the expected behaviour.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Error Budget Classification', text: 'Which error types consume your error budget and which do not — and why does it matter for alerting?',
+            hints: [
+              'Budget-consuming errors are those the user actually experiences as failures: 5xx responses, timeouts, and data corruption.',
+              'Non-budget errors are correct service behaviour: a 400 Bad Request or 401 Unauthorized means the client sent an invalid request, not that the service failed.',
+              'If every 400 consumes error budget, the SLO burns on normal client errors — the service appears to be failing when it is actually working correctly.',
+              'The SLI is computed as: budget-consuming errors divided by total requests. Only budget-consuming errors appear in the numerator.',
+              'Burn rate alerts must be keyed to the budget-consuming error rate specifically — alerting on the total error rate will cause constant noise from expected client errors.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'resilience-testing', title: 'Resilience Testing Approach & Maturity', icon: '🔬',
+        questions: [
+          {
+            type: 'open', topic: 'Chaos Philosophy', text: 'What is chaos engineering trying to prove, and how do you tell real practice from chaos theatre?',
+            hints: [
+              'The goal is to build <b>verifiable confidence</b> that the system behaves correctly under the failure conditions it will eventually face in production.',
+              'Chaos engineering is hypothesis-driven: you define the expected system behaviour before injecting the fault, then check whether reality matches the hypothesis.',
+              'Chaos theatre: experiments are run, nothing breaks, the team declares success — but no learning occurred, no backlog items were created, and nothing was improved.',
+              'Genuine practice: every experiment either <b>confirms confidence</b> (valuable) or <b>produces a finding</b> (also valuable) — both outcomes justify the effort.',
+              'A maturity indicator: findings from chaos experiments create backlog items that get fixed, and then the experiment is re-run to confirm the fix holds.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Gremlin', text: 'Have you used Gremlin in production — which attacks and what safeguards?',
+            hints: [
+              'Resource attacks — CPU, memory, disk I/O exhaustion — validate that the system degrades gracefully when infrastructure resources are fully consumed.',
+              'Network attacks — latency injection, packet loss, blackhole — are most useful for proving that dependency resilience patterns like circuit breakers work correctly.',
+              'State attacks — process kill and shutdown — validate that pod restart automation and recovery runbooks execute correctly under realistic conditions.',
+              'Production safeguards: always set a blast radius limit targeting a fraction of instances, configure automatic abort if an SLO breach is detected, and run during low-traffic windows.',
+              'A strong answer describes a <b>specific experiment</b> — its hypothesis, the fault injected, what was observed, and what was learned or confirmed.'
+            ]
+          },
+          {
+            type: 'open', topic: 'LitmusChaos', text: 'How do you wire LitmusChaos into a CI/CD pipeline as a deployment gate?',
+            hints: [
+              'A <b>ChaosEngine custom resource</b> links the target application (by label selector) to a list of ChaosExperiment types with their configured parameters.',
+              'Probes act as the pass/fail gate: <b>HTTPProbe</b> checks the service responds correctly, <b>K8sProbe</b> checks replica counts remain healthy, <b>CMDProbe</b> runs custom validation logic.',
+              'Pipeline integration: apply the ChaosEngine as a Kubernetes Job in the deployment stage and configure the pipeline to wait for the ChaosResult resource to be created.',
+              'Pass criteria: ChaosResult verdict equals Pass. Fail criteria: any probe fails or the verdict is Fail — in either case, the pipeline blocks promotion to the next environment.',
+              'Run experiments targeted only at the components changed in the deployment — not the full chaos suite on every commit, which would make the pipeline prohibitively slow.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Harness CE', text: 'How does Harness CE in a deployment pipeline change what deployment verification means?',
+            hints: [
+              'A traditional smoke test answers only one question: does the service start and respond? It is a binary liveness check with no signal about resilience.',
+              'Harness CE deployment verification asks: does the service respond <b>correctly while under fault conditions</b>? This is a resilience signal, not just a liveness signal.',
+              '<b>Chaos guards</b> in Harness set a resilience score threshold — the deployment must achieve that score before promotion is allowed, not just pass a liveness check.',
+              'Running fault injection mid-deployment catches resilience regressions introduced by the new version — bugs that a smoke test would never surface.',
+              'A strong answer describes a specific resilience score threshold set for a service and what happened when a deployment failed to meet it.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Steady State Hypothesis', text: 'Why is defining a steady-state hypothesis the most important step in a chaos experiment?',
+            hints: [
+              'The steady-state hypothesis defines normal: specific, measurable values for error rate, P99 latency, and throughput that must hold before, during, and after the fault.',
+              'Without it, you inject chaos and observe metrics but have no principled basis for declaring whether the outcome is acceptable or a failure.',
+              'Risk of vague hypothesis: the system stays "up" but P99 latency spikes from 50ms to 500ms — a vague uptime-only hypothesis would pass this, even though users are badly affected.',
+              'Risk of over-strict hypothesis: minor natural metric variance triggers "failure" even when the system is functioning correctly — producing false negatives.',
+              'Validate steady state both <b>before the fault</b> (to confirm the test starts from a good baseline) and <b>after the fault resolves</b> (to confirm full recovery).'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Production Chaos', text: 'Have you run chaos experiments in production — what did you require to be in place first?',
+            hints: [
+              'Full observability is a hard prerequisite: traces, metrics, and alerts must all be in place before production chaos begins — running blind is irresponsible.',
+              'Governance: the experiment plan must be reviewed by the SRE lead, the product owner must be informed, and the rollback mechanism must be defined and tested.',
+              'Safeguards required: blast radius limited to a fraction of instances, automatic abort if an SLO breach is detected, and a manual abort button always available.',
+              'The first production experiment should be deliberately simple with a highly predictable outcome — this builds team confidence in the process and tooling.',
+              'A strong answer describes the <b>specific readiness checklist</b> that had to be completed before the first production experiment was approved.'
+            ]
+          },
+          {
+            type: 'open', topic: 'CI/CD Chaos', text: 'Describe a CI/CD pipeline architecture with chaos as a deployment gate, from commit to production.',
+            hints: [
+              'Commit stage: fast resilience checks — dependency mock failures and error handler validation run in seconds and give immediate feedback to the developer.',
+              'Staging stage: targeted chaos experiments on the component changed by the commit — pod delete, network latency, dependency failure — taking minutes.',
+              'Pre-production stage: broader scenario tests — AZ failure simulation, multi-service fault injection — taking 10–30 minutes for higher confidence.',
+              'Each stage has a gate: a resilience score threshold or specific probe pass criteria that must be met before the deployment is promoted to the next environment.',
+              'Chaos experiment results are stored per deployment as a permanent artefact — enabling audit trail review and trend analysis over time.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Chaos Under Load', text: 'Why do chaos experiments at low traffic give misleading results?',
+            hints: [
+              'At low traffic, connection pools are mostly idle, auto-scaling has not triggered, and there is abundant slack capacity — the system absorbs faults that would be catastrophic under load.',
+              'Example: killing a database connection at 5% load has near-zero impact because the pool has plenty of idle connections. At 95% load, the same action exhausts the pool and causes cascading failures.',
+              'Structure: use a load tool to establish the target traffic level first, confirm steady state, and only then inject the fault — in that order.',
+              'Observe traffic metrics and chaos impact metrics on the <b>same dashboard and same time axis</b> — this makes it easy to see the causal relationship.',
+              'Run experiments at 50%, 100%, and 150% of expected peak — each load level exposes qualitatively different failure modes.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Resilience Maturity', text: 'How do you assess resilience testing maturity, and what does Level 1 vs Level 4 look like?',
+            hints: [
+              'Level 1: chaos experiments are run ad hoc, triggered only in reaction to incidents — no proactive testing programme exists.',
+              'Level 2: scheduled game days in staging on a regular cadence — planned, with post-event analysis and backlog items.',
+              'Level 3: chaos integrated into CI/CD — experiments run automatically on every staging deployment and gate promotion to production.',
+              'Level 4: continuous chaos in production with safeguards in place — resilience score tracked over time as a key engineering metric.',
+              'Maturity indicators to track: experiment coverage percentage, findings-to-fix rate, MTTR trend, and resilience score trend across deployments.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Regulated Chaos', text: 'How do you run meaningful chaos experiments for a payment flow under strict compliance requirements?',
+            hints: [
+              'Data protection: never use real PII in chaos experiments — use synthetic transaction data that is structurally identical to production data but contains no real customer information.',
+              'Change management: submit chaos experiments as formal change requests with a rollback plan, approval sign-off, and a defined time window for the experiment.',
+              'Audit trail: both Gremlin and LitmusChaos produce structured experiment reports logging the hypothesis, parameters, results, and any remediation — keep these as compliance evidence.',
+              'Scope limitation in regulated environments: target infrastructure-layer faults (CPU stress, network latency) rather than data mutation experiments.',
+              'A strong answer describes direct experience in a regulated environment — specific governance processes, approval workflows, and the tooling used to satisfy compliance requirements.'
+            ]
+          },
+        ]
+      },
+      {
+        id: 'monitoring-maturity', title: 'Monitoring Maturity', icon: '📡',
+        questions: [
+          {
+            type: 'open', topic: 'Observability vs Monitoring', text: 'What is the difference between a monitorable system and an observable one?',
+            hints: [
+              'A monitorable system has predefined checks for known failure modes — it can answer the questions you thought to ask in advance, but nothing more.',
+              'An observable system allows you to answer <b>any</b> question about its internal state from its external outputs — including questions you have not thought of yet.',
+              'Observable systems handle unknown unknowns; monitorable systems can only detect what someone anticipated when writing the alerts.',
+              'Practical steps to move from one to the other: structured logging, distributed tracing, clearly defined SLIs, and SLO dashboards.',
+              'Cultural shift required: the team must move from "is it up?" dashboards to "is it behaving correctly for users?" as the primary question.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Alert Fatigue', text: 'Have you inherited an alerting setup causing hundreds of pages per on-call shift?',
+            hints: [
+              'Root causes of alert fatigue: thresholds set too low, no minimum-duration windows before paging, and no deduplication or grouping of related alerts.',
+              'Fix: raise thresholds to reduce false positives on normal variance, and add a 5-minute minimum duration so transient spikes do not page before self-resolving.',
+              'Group related alerts into single incidents using <b>Datadog Composite Monitors</b> or PagerDuty alert grouping to reduce noise during complex outages.',
+              'Flap suppression: an alert that oscillates should have to resolve and re-trigger before it pages again — this prevents repeated pages from a single underlying issue.',
+              'Measure the outcome with a concrete metric: pages per on-call shift, tracked and trended over time. "It feels better" is not evidence of improvement.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Distributed Tracing Value', text: 'Describe a latency problem infrastructure metrics could not explain, and how tracing found it.',
+            hints: [
+              'Infrastructure metrics — CPU, memory, network — were all normal, giving no clue about where the latency was coming from.',
+              'The trace waterfall revealed a single specific database query accounting for 80% of P99 latency — completely invisible in any infrastructure metric.',
+              'Without traces, the problem would have been attributed to "the service is slow" with no actionable root cause and no clear owner.',
+              'Filtering spans by duration and looking for outliers — N+1 query patterns, missing indexes — surfaces the root cause in minutes rather than hours.',
+              'A strong answer describes a <b>specific real diagnosis</b> that was only possible because distributed trace data existed — not a hypothetical example.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'SLO-Based Alerting', text: 'Why does threshold alerting miss user impact, and how does SLO burn rate alerting fix that?',
+            hints: [
+              'Threshold alerting fires on transient spikes that self-resolve before anyone acts — and simultaneously misses slow degradations that never cross the threshold but affect users for hours.',
+              'It also misses partial failures: if 10% of users are experiencing errors but the overall error rate is below the alert threshold, the alert never fires.',
+              'Burn rate alerting fires based on how fast the error budget is being consumed — directly tied to the rate of user-experienced failures, not an arbitrary metric threshold.',
+              '<b>Multi-window burn rate</b> uses a short window to detect fast burns quickly and a long window to detect slow smouldering degradations — covering both failure modes.',
+              'Implementation: <b>Datadog SLO burn rate alerts</b> or <b>Dynatrace SLO management</b> both support multi-window burn rate configuration.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Log Correlation', text: 'How do you design logging so an on-call engineer reconstructs a failing request across 10 services in 5 minutes?',
+            hints: [
+              'All logs must be structured JSON with mandatory fields: trace_id, span_id, service name, log level, timestamp, and message.',
+              'The same trace ID must appear in every log line from every service involved in handling that single request — this is what enables a single-query reconstruction.',
+              'Include business context fields: user ID, session ID, and request ID — so the engineer can scope to a specific user\'s experience instantly.',
+              'Centralise logs in <b>Datadog Log Management or Dynatrace Logs</b> with cross-service search so a single trace_id query returns all relevant logs in chronological order.',
+              'Test the design: trigger a known error and time how long it takes a fresh engineer to reconstruct the full sequence. Five minutes is the target.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Observability as Code', text: 'Are your dashboards and monitors defined in version control, and has it ever prevented a monitoring gap?',
+            hints: [
+              'Observability as code: monitor and dashboard definitions managed via the <b>Terraform Datadog or Dynatrace provider</b>, stored in Git like application code.',
+              'Changes to monitors go through pull request review — the same quality gate as application code changes.',
+              'Prevention story: a service renamed an endpoint; the OaC templates detected the change and automatically updated the affected monitors, preventing a silent monitoring gap.',
+              'Without OaC: monitors silently break when services change — the gap is often not discovered until an incident goes undetected.',
+              'A strong answer describes a <b>specific monitoring gap</b> that OaC either prevented from forming or surfaced immediately when it appeared.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Metrics Frameworks', text: 'When should a team use RED vs USE vs the Four Golden Signals?',
+            hints: [
+              '<b>RED</b> (Rate, Errors, Duration) is designed for request-driven services — it directly measures whether APIs and microservices are serving users correctly.',
+              '<b>USE</b> (Utilisation, Saturation, Errors) is designed for infrastructure and resources — CPU, disk, network, thread pools, and database connections.',
+              '<b>Four Golden Signals</b> (Google SRE) — Latency, Traffic, Errors, Saturation — are comprehensive but largely overlap with RED and USE combined.',
+              'Practical guidance: start with RED for immediate user-impact visibility, then add USE metrics as infrastructure complexity grows and capacity planning becomes important.',
+              'All three frameworks are complementary rather than competing — a mature system applies elements of each at the appropriate layer of abstraction.'
+            ]
+          },
+          {
+            type: 'mixed', topic: 'Incident Dashboards', text: 'What separates a dashboard that helps during a live incident from one that slows diagnosis down?',
+            hints: [
+              'Helpful: the most critical signal — request error rate — is visible <b>above the fold</b> without scrolling, because engineers under stress should not hunt for information.',
+              'Helpful: request rate, error rate, and latency are plotted on the same time axis with the same time range — correlation is immediate and visual.',
+              'Helpful: direct links to relevant traces, logs, and the on-call runbook are embedded in the dashboard — not stored separately on a wiki page.',
+              'Unhelpful: 40 panels of individual metrics with no clear hierarchy — cognitive overload at the moment when clear thinking matters most.',
+              'Unhelpful: default time range set to 30 days when an incident is unfolding right now — the engineer must remember to change it under stress.'
+            ]
+          },
+          {
+            type: 'closed', topic: 'Threshold Calibration', text: 'Have you set an alert threshold that was wrong — too noisy or missing incidents — and how did you fix it?',
+            hints: [
+              'Too noisy: the threshold was set without baseline data, causing it to fire constantly on normal metric variance — training engineers to ignore it.',
+              'Missing incidents: the threshold was set too conservatively to avoid noise, so real degradation went undetected until customers reported it.',
+              'Recalibration: gather 30 days of baseline data and set the threshold at the mean plus 3 standard deviations, or switch to anomaly detection for metrics with seasonal patterns.',
+              'Post-mortem driven: whenever an incident is detected late, trigger a threshold review for the metric that should have fired earlier.',
+              'Verify calibration by running a chaos experiment that should trigger the alert, then measuring the actual time between fault injection and alert firing.'
+            ]
+          },
+          {
+            type: 'open', topic: 'Observability Roadmap', text: 'A team has only app logs and an uptime check. What is your 90-day observability improvement plan?',
+            hints: [
+              'Days 1–30: introduce <b>structured JSON logging</b>, define the first SLIs for the two or three highest-impact user journeys, and deploy an APM agent.',
+              'Days 30–60: introduce <b>distributed tracing</b>, correlate logs with trace IDs, and create the first Datadog or Dynatrace SLO with a real measurement.',
+              'Days 60–90: switch from threshold alerts to <b>SLO-based burn rate alerting</b>, link on-call runbooks from dashboards, and establish an observability-as-code baseline.',
+              'Each milestone should be measurable: percentage of services with structured logs, MTTD trend week over week, and number of SLOs with real measurements.',
+              'Run alongside this: a lunch-and-learn series so the team understands <b>why</b> each change matters — not just what to deploy — otherwise the changes will not be maintained.'
+            ]
+          },
+        ]
+      }
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════════════════════
+    let state = { activeSection: 0, asked: {}, hints: {}, notes: {} };
+    let autosaveTimer = null;
+    let lastVerdict = '';
+    let sidebarCollapsed = false;
+
+    function qid(s, q) { return `s${s}q${q}`; }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BUILD UI
+    // ═══════════════════════════════════════════════════════════════
+    function buildUI() {
+      buildNav();
+      buildSections();
+      updateAll();
+    }
+
+    function buildNav() {
+      const list = document.getElementById('navList');
+      SECTIONS.forEach((sec, si) => {
+        const wrap = document.createElement('div');
+
+        const item = document.createElement('div');
+        item.className = `nav-item s${si}${si === 0 ? ' active' : ''}`;
+        item.id = `nav-${si}`;
+        item.onclick = () => switchSection(si);
+        item.innerHTML = `
+      <div class="nav-icon">${sec.icon}</div>
+      <div class="nav-text-wrap">
+        <span class="nav-title">${sec.title}</span>
+      </div>
+      <span class="nav-counter" id="nc-${si}">0/10</span>
+    `;
+
+        const prog = document.createElement('div');
+        prog.className = 'nav-prog';
+        prog.innerHTML = `<div class="nav-prog-fill s${si}" id="np-${si}" style="width:0%"></div>`;
+
+        wrap.appendChild(item);
+        wrap.appendChild(prog);
+        list.appendChild(wrap);
+      });
+    }
+
+    function buildSections() {
+      const main = document.getElementById('mainContent');
+      SECTIONS.forEach((sec, si) => {
+        const panel = document.createElement('div');
+        panel.className = `section-panel s${si}${si === 0 ? ' active' : ''}`;
+        panel.id = `sp-${si}`;
+        panel.innerHTML = `
+      <div class="sec-hdr">
+        <div class="sec-icon s${si}">${sec.icon}</div>
+        <div class="sec-title-wrap">
+          <div class="sec-title s${si}">${sec.title}</div>
+          <div class="sec-meta">AREA ${si + 1} OF ${SECTIONS.length} · ${sec.questions.length} QUESTIONS</div>
+        </div>
+        <div class="sec-badge s${si}" id="sb-${si}">0 / ${sec.questions.length} asked</div>
+      </div>
+      <div id="sq-${si}"></div>
+    `;
+        const qc = panel.querySelector(`#sq-${si}`);
+        sec.questions.forEach((q, qi) => qc.appendChild(buildCard(si, qi, q)));
+        main.appendChild(panel);
+      });
+    }
+
+    function buildCard(si, qi, q) {
+      const id = qid(si, qi);
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      card.id = `card-${id}`;
+
+      const tc = q.type === 'open' ? 'open' : q.type === 'closed' ? 'closed' : 'mixed';
+      const tl = q.type === 'open' ? 'OPEN' : q.type === 'closed' ? 'CLOSED' : 'MIXED';
+
+      const hintsHtml = q.hints.map((h, hi) => `
+    <div class="hint-row">
+      <input type="checkbox" class="hint-cb" id="hcb-${id}-${hi}" onchange="onHint('${id}',${hi},${q.hints.length})">
+      <label class="hint-text" for="hcb-${id}-${hi}">${h}</label>
+    </div>
+  `).join('');
+
+      card.innerHTML = `
+    <div class="q-hdr" onclick="toggleCard('${id}')">
+      <div class="q-cb-wrap" onclick="event.stopPropagation()">
+        <input type="checkbox" class="q-cb" id="qcb-${id}" onchange="onAsked('${id}',${si})">
+      </div>
+      <div class="q-body">
+        <div class="q-meta">
+          <span class="q-num">Q${qi + 1}</span>
+          <span class="q-type ${tc}">${tl}</span>
+          <span class="q-topic">${q.topic}</span>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-expand" id="qexp-${id}">▼</div>
+    </div>
+    <div class="q-lower" id="ql-${id}">
+      <div class="hints-row" onclick="toggleHints('${id}',${q.hints.length})">
+        <span class="hints-label">💡 ANSWER HINTS</span>
+        <div class="hmb-track"><div class="hmb-fill" id="hmb-${id}"></div></div>
+        <span class="hmc" id="hmc-${id}">0/${q.hints.length}</span>
+        <span class="hchev" id="hchev-${id}">▼</span>
+      </div>
+      <div class="hints-panel" id="hp-${id}">${hintsHtml}</div>
+      <span class="notes-lbl">INTERVIEWER NOTES</span>
+      <textarea class="notes-ta" id="nta-${id}" placeholder="Record candidate observations, quotes, and follow-ups…" oninput="onNotes('${id}')"></textarea>
+    </div>
+  `;
+      return card;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // INTERACTIONS
+    // ═══════════════════════════════════════════════════════════════
+    function switchSection(si) {
+      document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(`sp-${si}`).classList.add('active');
+      document.getElementById(`nav-${si}`).classList.add('active');
+      state.activeSection = si;
+      // on mobile, close sidebar after selection
+      if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mob-open');
+    }
+
+    function toggleCard(id) {
+      const lower = document.getElementById(`ql-${id}`);
+      const exp = document.getElementById(`qexp-${id}`);
+      const open = lower.classList.toggle('open');
+      exp.textContent = open ? '▲' : '▼';
+    }
+
+    function toggleHints(id, total) {
+      const panel = document.getElementById(`hp-${id}`);
+      const chev = document.getElementById(`hchev-${id}`);
+      const open = panel.classList.toggle('open');
+      chev.classList.toggle('open', open);
+    }
+
+    function onAsked(id, si) {
+      const cb = document.getElementById(`qcb-${id}`);
+      state.asked[id] = cb.checked;
+      document.getElementById(`card-${id}`).classList.toggle('asked', cb.checked);
+      updateAll();
+      scheduleAutosave();
+    }
+
+    function onHint(id, hi, total) {
+      state.hints[`${id}_${hi}`] = document.getElementById(`hcb-${id}-${hi}`).checked;
+      updateHintBar(id, total);
+      updateScore();
+      scheduleAutosave();
+    }
+
+    function onNotes(id) {
+      state.notes[id] = document.getElementById(`nta-${id}`).value;
+      scheduleAutosave();
+    }
+
+    function updateHintBar(id, total) {
+      let count = 0;
+      for (let i = 0; i < total; i++) if (state.hints[`${id}_${i}`]) count++;
+      const pct = total > 0 ? count / total * 100 : 0;
+      document.getElementById(`hmb-${id}`).style.width = pct + '%';
+      document.getElementById(`hmc-${id}`).textContent = `${count}/${total}`;
+    }
+
+    function updateAll() {
+      let totalAsked = 0;
+      const totalQ = SECTIONS.reduce((s, sec) => s + sec.questions.length, 0);
+
+      SECTIONS.forEach((sec, si) => {
+        let asked = 0;
+        sec.questions.forEach((_, qi) => { if (state.asked[qid(si, qi)]) asked++; });
+        totalAsked += asked;
+        const pct = sec.questions.length > 0 ? asked / sec.questions.length * 100 : 0;
+        const done = asked === sec.questions.length;
+        const nc = document.getElementById(`nc-${si}`);
+        const np = document.getElementById(`np-${si}`);
+        const sb = document.getElementById(`sb-${si}`);
+        const ni = document.getElementById(`nav-${si}`);
+        if (nc) nc.textContent = done ? '✓' : `${asked}/${sec.questions.length}`;
+        if (np) np.style.width = pct + '%';
+        if (sb) sb.textContent = `${asked} / ${sec.questions.length} asked`;
+        if (ni) ni.classList.toggle('complete', done);
+      });
+
+      document.getElementById('gCount').textContent = `${totalAsked} / ${totalQ}`;
+      document.getElementById('gBar').style.width = (totalAsked / totalQ * 100) + '%';
+      updateScore();
+    }
+
+    function updateScore() {
+      let total = 0, covered = 0;
+      SECTIONS.forEach((sec, si) => {
+        sec.questions.forEach((q, qi) => {
+          const id = qid(si, qi);
+          total += q.hints.length;
+          q.hints.forEach((_, hi) => { if (state.hints[`${id}_${hi}`]) covered++; });
+        });
+      });
+      const pct = total > 0 ? Math.round(covered / total * 100) : 0;
+      const circ = 2 * Math.PI * 19; // r=19
+      const offset = circ - (pct / 100) * circ;
+
+      document.getElementById('ringPct').textContent = pct + '%';
+      document.getElementById('verdictSub').textContent = `${covered} / ${total} hints`;
+
+      const ring = document.getElementById('ringFg');
+      const verd = document.getElementById('verdict');
+      let colour, text;
+      if (pct < 40) { colour = '#ef4444'; text = 'No Hire'; }
+      else if (pct < 70) { colour = '#f59e0b'; text = 'Can Consider'; }
+      else { colour = '#22c55e'; text = 'Sure Hire ✓'; }
+
+      ring.style.stroke = colour;
+      ring.style.strokeDashoffset = offset;
+      verd.style.color = colour;
+      if (text !== lastVerdict) {
+        verd.classList.remove('pop');
+        void verd.offsetWidth;
+        verd.classList.add('pop');
+        lastVerdict = text;
+      }
+      verd.textContent = text;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SIDEBAR
+    // ═══════════════════════════════════════════════════════════════
+    function toggleSidebar() {
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.toggle('mob-open');
+      } else {
+        sidebarCollapsed = !sidebarCollapsed;
+        document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // THEME
+    // ═══════════════════════════════════════════════════════════════
+    function toggleTheme() {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+    function initTheme() {
+      const saved = localStorage.getItem('theme');
+      const pref = window.matchMedia('(prefers-color-scheme:light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', saved || pref);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // AUTOSAVE
+    // ═══════════════════════════════════════════════════════════════
+    function scheduleAutosave() {
+      const dot = document.getElementById('autosaveDot');
+      dot.classList.add('pulsing');
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(() => {
+        doAutosave();
+        dot.classList.remove('pulsing');
+      }, 1500);
+    }
+    function doAutosave() {
+      localStorage.setItem('resilience_autosave', JSON.stringify({ state, ts: new Date().toISOString() }));
+      const pill = document.getElementById('savePill');
+      pill.textContent = 'Auto-saved';
+      pill.classList.add('show');
+      setTimeout(() => pill.classList.remove('show'), 2500);
+    }
+    function loadAutosave() {
+      const raw = localStorage.getItem('resilience_autosave');
+      if (raw) { try { applyState(JSON.parse(raw).state); } catch (e) { } }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // STATE APPLY
+    // ═══════════════════════════════════════════════════════════════
+    function applyState(s) {
+      state.asked = s.asked || {};
+      state.hints = s.hints || {};
+      state.notes = s.notes || {};
+      SECTIONS.forEach((sec, si) => {
+        sec.questions.forEach((q, qi) => {
+          const id = qid(si, qi);
+          const cb = document.getElementById(`qcb-${id}`);
+          if (cb) { cb.checked = !!state.asked[id]; document.getElementById(`card-${id}`).classList.toggle('asked', !!state.asked[id]); }
+          q.hints.forEach((_, hi) => { const hEl = document.getElementById(`hcb-${id}-${hi}`); if (hEl) hEl.checked = !!state.hints[`${id}_${hi}`]; });
+          updateHintBar(id, q.hints.length);
+          const ta = document.getElementById(`nta-${id}`);
+          if (ta) ta.value = state.notes[id] || '';
+        });
+      });
+      updateAll();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SESSIONS
+    // ═══════════════════════════════════════════════════════════════
+    function getSessions() { try { return JSON.parse(localStorage.getItem('resilience_sessions') || '[]'); } catch (e) { return []; } }
+    function setSessions(s) { localStorage.setItem('resilience_sessions', JSON.stringify(s)); }
+
+    function openModal(id) {
+      if (id === 'saveMod') populateSaveModal();
+      if (id === 'loadMod') populateLoadModal();
+      document.getElementById(id).classList.add('open');
+    }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-bd').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+
+    function populateSaveModal() {
+      const sessions = getSessions(), list = document.getElementById('saveList');
+      list.innerHTML = '';
+      const wrap = document.getElementById('existWrap');
+      if (!sessions.length) { wrap.style.display = 'none'; return; }
+      wrap.style.display = '';
+      sessions.forEach((s, i) => {
+        const el = document.createElement('div');
+        el.className = 'sess-item';
+        el.innerHTML = `<div class="sess-info" onclick="document.getElementById('saveNameInput').value='${s.name.replace(/'/g, "\\'")}'"><div class="sess-name">${s.name}</div><div class="sess-ts">${new Date(s.ts).toLocaleString()}</div></div><button class="sess-del" onclick="delSession(${i})">✕</button>`;
+        list.appendChild(el);
+      });
+    }
+
+    function saveSession() {
+      const name = document.getElementById('saveNameInput').value.trim();
+      if (!name) { alert('Please enter a session name.'); return; }
+      const sessions = getSessions();
+      const idx = sessions.findIndex(s => s.name === name);
+      const entry = { name, state: JSON.parse(JSON.stringify(state)), ts: new Date().toISOString() };
+      if (idx >= 0) sessions[idx] = entry; else sessions.push(entry);
+      setSessions(sessions);
+      const pill = document.getElementById('savePill');
+      pill.textContent = `Saved: ${name}`; pill.classList.add('show');
+      setTimeout(() => pill.classList.remove('show'), 3000);
+      closeModal('saveMod');
+    }
+
+    function delSession(i) {
+      const s = getSessions(); s.splice(i, 1); setSessions(s); populateSaveModal();
+    }
+
+    function populateLoadModal() {
+      const sessions = getSessions(), list = document.getElementById('loadList');
+      list.innerHTML = '';
+      const as = localStorage.getItem('resilience_autosave');
+      if (as) { const d = JSON.parse(as); list.appendChild(mkLoadItem('⚡ Auto-save', d.ts, () => { applyState(d.state); closeModal('loadMod'); })); }
+      if (!sessions.length && !as) { list.innerHTML = '<div style="color:var(--text3);font-size:.82rem;padding:8px 0">No saved sessions found.</div>'; return; }
+      sessions.forEach(s => list.appendChild(mkLoadItem(s.name, s.ts, () => { applyState(s.state); closeModal('loadMod'); })));
+    }
+
+    function mkLoadItem(name, ts, fn) {
+      const el = document.createElement('div'); el.className = 'sess-item';
+      el.innerHTML = `<div class="sess-info"><div class="sess-name">${name}</div><div class="sess-ts">${new Date(ts).toLocaleString()}</div></div><span style="color:var(--text3);font-size:.73rem">Load →</span>`;
+      el.onclick = fn; return el;
+    }
+
+    function importSession(e) {
+      const file = e.target.files[0]; if (!file) return;
+      const r = new FileReader();
+      r.onload = ev => { try { const d = JSON.parse(ev.target.result); if (d.state) { applyState(d.state); closeModal('loadMod'); } else alert('Invalid session file.'); } catch (err) { alert('Could not parse JSON.'); } };
+      r.readAsText(file); e.target.value = '';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // EXPORT
+    // ═══════════════════════════════════════════════════════════════
+    function exportTxt() {
+      let total = 0, covered = 0;
+      SECTIONS.forEach((sec, si) => sec.questions.forEach((q, qi) => { const id = qid(si, qi); total += q.hints.length; q.hints.forEach((_, hi) => { if (state.hints[`${id}_${hi}`]) covered++; }); }));
+      const pct = total > 0 ? Math.round(covered / total * 100) : 0;
+      const verdict = pct < 40 ? 'No Hire' : pct < 70 ? 'Can Consider' : 'Sure Hire ✓';
+
+      const lines = ['═'.repeat(65), '  RESILIENCE TEST ENGINEER — INTERVIEW EXPORT', '═'.repeat(65),
+      `  Exported : ${new Date().toLocaleString()}`,
+      `  Score    : ${pct}% (${covered}/${total} hints covered)`,
+      `  Verdict  : ${verdict}`, '═'.repeat(65)];
+
+      SECTIONS.forEach((sec, si) => {
+        lines.push(`\n▌ AREA ${si + 1}: ${sec.title.toUpperCase()}`, '─'.repeat(60));
+        sec.questions.forEach((q, qi) => {
+          const id = qid(si, qi);
+          lines.push(`\n  ${state.asked[id] ? '[ASKED]' : '[SKIP ]'} Q${qi + 1}. [${q.type.toUpperCase()}] ${q.text}`, `         Topic: ${q.topic}`, '         Hints:');
+          q.hints.forEach((h, hi) => lines.push(`           ${state.hints[`${id}_${hi}`] ? '✓' : '○'} ${h.replace(/<[^>]+>/g, '')}`));
+          const n = state.notes[id]; if (n && n.trim()) { lines.push('         Notes:'); n.split('\n').forEach(l => lines.push(`           ${l}`)); }
+        });
+      });
+      lines.push('\n' + '═'.repeat(65), `  FINAL SCORE: ${pct}% — ${verdict}`, '═'.repeat(65));
+
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain' }));
+      a.download = `resilience-interview-${new Date().toISOString().slice(0, 10)}.txt`;
+      a.click();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════════
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      buildUI();
+      loadAutosave();
+      switchSection(0);
+
+      // Keep sidebar top aligned with header height
+      const hdr = document.getElementById('appHdr');
+      const sidebar = document.getElementById('sidebar');
+      const ro = new ResizeObserver(() => {
+        const h = hdr.offsetHeight;
+        sidebar.style.top = h + 'px';
+        sidebar.style.height = `calc(100vh - ${h}px)`;
+      });
+      ro.observe(hdr);
+    });
+  </script>
+</body>
+
+</html>

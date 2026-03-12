@@ -1,0 +1,118 @@
+﻿Areas of Resilience,Data Points Needed,Documentation #1 (Azure)
+Reliability Targets & Metrics,"Recovery Metrics: RTO, RPO",https://learn.microsoft.com/en-us/azure/well-architected/reliability/metrics
+Reliability Targets & Metrics,"Recovery Metrics: RTO, RPO",https://docs.aws.amazon.com/resilience-hub/latest/userguide/setup-resiliency-policy.html
+Reliability Targets & Metrics,Availability Metrics,https://learn.microsoft.com/en-us/azure/well-architected/reliability/metrics
+Reliability Targets & Metrics,"Application SLx Metrics: SLA, SLO",https://learn.microsoft.com/en-us/azure/well-architected/reliability/metrics
+Reliability Targets & Metrics,"Operational Response Metrics: MTTx: MTTR, MTBF",https://learn.microsoft.com/en-us/azure/well-architected/reliability/metrics
+Reliability Targets & Metrics,"Operational Response Metrics: MTTx: MTTR, MTBF",https://docs.aws.amazon.com/whitepapers/latest/availability-and-beyond-improving-resilience/designing-highly-available-distributed-systems-on-aws.html
+Resilient Architecture,Multi-Region Deployment,https://learn.microsoft.com/en-us/azure/well-architected/reliability/highly-available-multi-region-design
+Resilient Architecture,Multi-Region Deployment,https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/
+Resilient Architecture,Multi-Availability Zone Deployment,https://learn.microsoft.com/en-us/azure/well-architected/reliability/highly-available-multi-region-design
+Resilient Architecture,Multi-Availability Zone Deployment,https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/
+Resilient Architecture,Single Points of Failure,https://learn.microsoft.com/en-us/azure/well-architected/reliability/failure-mode-analysis
+Resilient Architecture,Single Points of Failure,https://aws.amazon.com/blogs/architecture/verify-the-resilience-of-your-workloads-using-chaos-engineering/
+Resilient Architecture,Failure Mode and Effect Analysis (FMEA),https://learn.microsoft.com/en-us/azure/well-architected/reliability/failure-mode-analysis
+Resilient Architecture,Failure Mode and Effect Analysis (FMEA),https://adrianco.medium.com/failure-modes-and-continuous-resilience-6553078caad5
+Resilient Architecture,System Failure Analysis,https://learn.microsoft.com/en-us/azure/well-architected/reliability/failure-mode-analysis
+Resilient Architecture,System Failure Analysis,https://adrianco.medium.com/failure-modes-and-continuous-resilience-6553078caad5
+Resilient Architecture,Component Failures Analysis,https://learn.microsoft.com/en-us/azure/well-architected/reliability/failure-mode-analysis
+Resilient Architecture,Component Failures Analysis,https://adrianco.medium.com/failure-modes-and-continuous-resilience-6553078caad5
+Resilient Architecture,Dependency Failure Analysis,https://learn.microsoft.com/en-us/azure/well-architected/reliability/failure-mode-analysis
+Resilient Architecture,Dependency Failure Analysis,https://adrianco.medium.com/failure-modes-and-continuous-resilience-6553078caad5
+Service and Capacity Availability,Capacity Modeling,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/capacity-planning
+Service and Capacity Availability,Typical Business Workloads (Usage Pattern),https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/capacity-planning
+Service and Capacity Availability,Cloud Availability (Region) in Business Region,https://learn.microsoft.com/en-us/azure/well-architected/reliability/highly-available-multi-region-design
+Service and Capacity Availability,Cloud Availability (Region) in Business Region,https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/
+Service and Capacity Availability,Cloud Availability (AZ) in Business Region,https://learn.microsoft.com/en-us/azure/well-architected/reliability/highly-available-multi-region-design
+Service and Capacity Availability,Cloud Availability (AZ) in Business Region,https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/
+Service and Capacity Availability,Cloud Service Limits,https://learn.microsoft.com/en-us/azure/well-architected/reliability/identify-flows
+Service and Capacity Availability,Cloud Service Limits,https://wa.aws.amazon.com/wat.concept.service-limits.en.html
+Service and Capacity Availability,Potential Cloud Migration,https://docs.aws.amazon.com/wellarchitected/latest/migration-lens/reliability.html
+Disaster Recovery Preparedness,Active-Active Load Balancing,https://learn.microsoft.com/en-us/azure/reliability/disaster-recovery-overview
+Disaster Recovery Preparedness,Active-Active Load Balancing,https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/
+Disaster Recovery Preparedness,Active-Passive Load Balancing,https://learn.microsoft.com/en-us/azure/reliability/disaster-recovery-overview
+Disaster Recovery Preparedness,Active-Passive Load Balancing,https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/
+Disaster Recovery Preparedness,Disaster Recovery - Regional Failure,https://learn.microsoft.com/en-us/azure/well-architected/reliability/disaster-recovery
+Disaster Recovery Preparedness,Disaster Recovery - Backup Strategy,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/optimize-operational-tasks
+Disaster Recovery Preparedness,Disaster Recovery - Runbooks,https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/automate-tasks
+Disaster Recovery Preparedness,Disaster Recovery - Automated Runbooks,https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/automate-tasks
+Disaster Recovery Preparedness,Disaster Recovery - Test Approach,https://learn.microsoft.com/en-us/azure/well-architected/reliability/testing-strategy
+Disaster Recovery Preparedness,Disaster Recovery - Service Decomposition,https://learn.microsoft.com/en-us/azure/well-architected/reliability/background-jobs
+Disaster Recovery Preparedness,Disaster Recovery - Network Redundancy,https://learn.microsoft.com/en-us/azure/well-architected/reliability/redundancy
+Application Platform Meets Reliability Requirements,Stateless Architecture,https://learn.microsoft.com/en-us/azure/well-architected/reliability/scaling
+Application Platform Meets Reliability Requirements,Resilience Design Patterns,https://learn.microsoft.com/en-us/azure/well-architected/reliability/design-patterns
+Application Platform Meets Reliability Requirements,Using Cache DB for Session State Storage,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/scale-partition
+Application Platform Meets Reliability Requirements,Use of Chef/Puppet/Ansible,https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/automate-tasks
+Application Platform Meets Reliability Requirements,Containerization & Service Bus/Meshes,https://learn.microsoft.com/en-us/azure/well-architected/mission-critical/mission-critical-application-platform
+Application Platform Meets Reliability Requirements,Multi AZ Deployments,https://learn.microsoft.com/en-us/azure/well-architected/reliability/highly-available-multi-region-design
+Application Platform Meets Reliability Requirements,Platform Service - Multi AZ Discovery,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/scale-partition
+Application Platform Meets Reliability Requirements,Platform Service - Multi Region Discovery,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/scale-partition
+Application Platform Meets Reliability Requirements,Container Load Balancing,https://learn.microsoft.com/en-us/azure/well-architected/cost-optimization/optimize-scaling-costs
+Application Platform Meets Reliability Requirements,Health Check Monitoring,https://learn.microsoft.com/en-us/azure/well-architected/reliability/monitoring-alerting-strategy
+Application Platform Meets Reliability Requirements,Queuing and Messaging,https://learn.microsoft.com/en-us/azure/well-architected/cost-optimization/optimize-scaling-costs
+Application Platform Meets Reliability Requirements,Traffic Routing - Failover,https://learn.microsoft.com/en-us/azure/well-architected/reliability/regions-availability-zones
+Application Platform Meets Reliability Requirements,Auto-Scaling,https://learn.microsoft.com/en-us/azure/well-architected/reliability/scaling
+Data Platform meets Reliability Requirements,Data Consistency,https://learn.microsoft.com/en-us/azure/well-architected/reliability/redundancy
+Data Platform meets Reliability Requirements,Resilience Design Patterns,https://learn.microsoft.com/en-us/azure/well-architected/reliability/design-patterns
+Data Platform meets Reliability Requirements,Data Platform - High Availability,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Data Platform - Multi Region Deployments,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Data Platform - Multi AZ Deployments,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Data Platform - Multi AZ Backups,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Data Platform - Multi AZ Replication,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Traffic Routing - Failover,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Read Replicas,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Health Check Monitoring,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Data Platform meets Reliability Requirements,Data Platform - Restoration,https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-sql-database-well-architected-framework
+Exception and Error Handing Capabilities,Resilient Application Design Patterns,https://learn.microsoft.com/en-us/azure/well-architected/reliability/design-patterns
+Exception and Error Handing Capabilities,Retry Design Patterns,https://learn.microsoft.com/en-us/azure/well-architected/reliability/design-patterns
+Exception and Error Handing Capabilities,Observability - Context Driven Tracing,https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/observability
+Resilience Testing Approach & Maturity,Performance Testing,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/performance-test
+Resilience Testing Approach & Maturity,Peak Load Tests,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/performance-test
+Resilience Testing Approach & Maturity,Chaos Injection (Fault Identification),https://learn.microsoft.com/en-us/azure/well-architected/reliability/testing-strategy
+Resilience Testing Approach & Maturity,Chaos Engineering Fundamentals,https://medium.com/the-cloud-architect/chaos-engineering-ab0cc9fbd12a
+Resilience Testing Approach & Maturity,Chaos Engineering Fundamentals,https://medium.com/the-cloud-architect/chaos-engineering-part-2-b9c78a9f3dde
+Resilience Testing Approach & Maturity,Chaos Engineering Fundamentals,https://medium.com/the-cloud-architect/chaos-engineering-part-3-61579e41edd8
+Resilience Testing Approach & Maturity,Gremlin - Discipline of Chaos Engineering,https://www.gremlin.com/blog/the-discipline-of-chaos-engineering
+Resilience Testing Approach & Maturity,Gremlin - Principles of Chaos Engineering,https://www.gremlin.com/community/tutorials/chaos-engineering-the-history-principles-and-practice
+Resilience Testing Approach & Maturity,Principles of Chaos Engineering,https://principlesofchaos.org/
+Resilience Testing Approach & Maturity,Gremlin - Kubernetes Failure Modes,https://www.gremlin.com/blog/ten-most-common-kubernetes-reliability-risks
+Resilience Testing Approach & Maturity,Gremlin - Reliability Management,https://www.gremlin.com/blog/what-is-reliability-management
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection in Release Automation,https://www.gremlin.com/blog/fault-injection-in-your-release-automation
+Resilience Testing Approach & Maturity,Gremlin - Chaos Engineering with Financial Services,https://www.gremlin.com/community/tutorials/improving-the-reliability-of-financial-services-with-chaos-engineering
+Resilience Testing Approach & Maturity,Gremlin - Testing Disaster Recovery with Chaos Engineering,https://www.gremlin.com/community/tutorials/testing-disaster-recovery-with-chaos-engineering
+Resilience Testing Approach & Maturity,Gremlin - Testing Disaster Recovery with Chaos Engineering,https://www.gremlin.com/community/tutorials/chaos-engineering-guide-mongodb
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on Document Databases,https://www.gremlin.com/community/tutorials/chaos-engineering-with-documentdb
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on Relational Databases,https://www.gremlin.com/community/tutorials/how-to-use-gremlin-with-amazon-rds
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on Cache Databases,https://www.gremlin.com/community/tutorials/chaos-engineering-with-redis
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on Big Databases,https://www.gremlin.com/community/tutorials/chaos-engineering-with-cassandra
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on Key Value Databases,https://www.gremlin.com/community/tutorials/chaos-engineering-guide-dynamodb
+Resilience Testing Approach & Maturity,Gremlin - Mapping Critical Paths,https://www.gremlin.com/community/tutorials/how-to-map-out-your-applications-critical-path
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on HA K8s Cluster,https://www.gremlin.com/community/tutorials/how-to-test-your-high-availability-ha-kubernetes-cluster-using-gremlin
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on Serverless (Java),https://www.gremlin.com/community/tutorials/how-to-run-a-chaos-engineering-experiment-on-aws-lambda-using-java-and-failure-flags
+Resilience Testing Approach & Maturity,Gremlin - Fault Injection on Serverless (Python),https://www.gremlin.com/community/tutorials/how-to-run-a-chaos-engineering-experiment-on-aws-lambda-using-python-and-failure-flags
+Resilience Testing Approach & Maturity,Gremlin - Reliability Tracking,https://www.gremlin.com/community/tutorials/how-to-use-the-reliability-tracker
+Resilience Testing Approach & Maturity,Gremlin - Comparing Chaos Engineering Tools,https://www.gremlin.com/community/tutorials/chaos-engineering-tools-comparison
+Resilience Testing Approach & Maturity,Gremlin - CI/CD Integration with Jenkins,https://www.gremlin.com/community/tutorials/how-to-set-up-chaos-engineering-in-your-continuous-delivery-pipeline-with-gremlin-and-jenkins
+Resilience Testing Approach & Maturity,Chaos Engineering Primer,https://www.infoq.com/articles/chaos-engineering/
+Resilience Testing Approach & Maturity,Harness CE - Faults Landscape,https://www.harness.io/blog/harness-chaos-engineering-landscape
+Resilience Testing Approach & Maturity,Harness CE - CI/CD Integration with Jenkins,https://www.harness.io/blog/chaos-engineering-with-jenkins
+Resilience Testing Approach & Maturity,Harness CE - Continuous Resilience,https://www.harness.io/blog/continuous-resilience
+Resilience Testing Approach & Maturity,Harness CE - Disaster Recovery 101,https://www.harness.io/blog/what-is-disaster-recovery
+Resilience Testing Approach & Maturity,Harness CE - Disaster Recovery 101,https://www.harness.io/blog/chaos-engineering-strengthens-disaster-recovery-plan
+Resilience Testing Approach & Maturity,Harness CE - Chaos Engineering Primer,https://www.harness.io/blog/chaos-engineering
+Resilience Testing Approach & Maturity,Harness CE - Comparing Chaos Engineering Tools,https://www.harness.io/blog/chaos-engineering-tools
+Resilience Testing Approach & Maturity,Automated Performance & Resilience Tests,https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/continuous-performance-optimize
+Resilience Testing Approach & Maturity,Test Environment Parity,https://learn.microsoft.com/en-us/azure/well-architected/reliability/testing-strategy
+Monitoring Maturity,Observability Primer,https://opentelemetry.io/docs/concepts/observability-primer/
+Monitoring Maturity,Observability - Context Driven Tracing,https://opentelemetry.io/docs/concepts/context-propagation/
+Monitoring Maturity,Observability - Traces,https://opentelemetry.io/docs/concepts/signals/traces/
+Monitoring Maturity,Observability - Log Correlation,https://opentelemetry.io/docs/concepts/signals/logs/
+Monitoring Maturity,Observability - Service Level Correlation (Traceability),https://opentelemetry.io/docs/concepts/signals/baggage/
+Monitoring Maturity,Observability - Metrics,https://opentelemetry.io/docs/concepts/signals/metrics/
+Monitoring Maturity,Observability - Dashboards (Dashboard of Dashboards),https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/observability
+Monitoring Maturity,Alerts & Monitoring,https://docs.newrelic.com/docs/new-relic-solutions/observability-maturity/uptime-performance-reliability/alert-quality-management-guide/
+Monitoring Maturity,Threshold Setting,https://docs.newrelic.com/docs/alerts-applied-intelligence/new-relic-alerts/advanced-alerts/advanced-techniques/set-thresholds-alert-condition/
+Monitoring Maturity,Long Running Services - Monitoring,https://learn.microsoft.com/en-us/azure/well-architected/reliability/background-jobs
+Monitoring Maturity,Service Level Management,https://docs.newrelic.com/docs/new-relic-solutions/observability-maturity/uptime-performance-reliability/optimize-slm-guide/
+Monitoring Maturity,Reliability Engineering Diagnostics,https://docs.newrelic.com/docs/new-relic-solutions/observability-maturity/uptime-performance-reliability/diagnostics-beginner-guide/
+Monitoring Maturity,Observability as Code,https://docs.newrelic.com/docs/new-relic-solutions/observability-maturity/operational-efficiency/observability-as-code-guide/
