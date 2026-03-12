@@ -511,113 +511,6 @@
       background: #b83030;
     }
 
-    /* ── Tools Grid ────────────────────────────────────── */
-    .tools-section {
-      margin-bottom: 80px;
-    }
-
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 16px;
-    }
-
-    .tool-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: var(--radius-md);
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      transition: background var(--transition), border-color var(--transition), transform var(--transition);
-    }
-
-    .tool-item:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-    }
-
-    .tool-icon {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-primary);
-    }
-
-    .tool-icon svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .tool-name {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-align: center;
-      transition: color var(--transition);
-    }
-
-    .tool-item:hover .tool-name {
-      color: var(--text-primary);
-    }
-
-    /* ── Repo info section ─────────────────────────────── */
-    .repo-info {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      margin-bottom: 80px;
-      transition: background var(--transition), border-color var(--transition);
-    }
-
-    .repo-info h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .repo-detail-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    .repo-detail {
-      padding: 16px;
-      background: var(--detail-bg);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--detail-border);
-      transition: background var(--transition), border-color var(--transition);
-    }
-
-    .repo-detail-label {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      transition: color var(--transition);
-    }
-
-    .repo-detail-value {
-      font-size: 0.92rem;
-      font-weight: 500;
-      color: var(--text-primary);
-      transition: color var(--transition);
-    }
-
     /* ── Footer ───────────────────────────────────────── */
     footer {
       text-align: center;
@@ -652,10 +545,6 @@
         padding: 24px;
       }
 
-      .repo-detail-grid {
-        grid-template-columns: 1fr;
-      }
-
       .theme-toggle-wrap {
         top: 16px;
         right: 16px;
@@ -684,8 +573,8 @@
     <!-- Hero -->
     <header>
       <div class="badge">● Deployment Hub</div>
-      <h1><span class="gradient-text">AI Apps Playground</span><br>Built using AI-Assisted IDEs</h1>
-      <p class="hero-sub">A collection of interactive tools built by Reuben Rajan George</p>
+      <h1><span class="gradient-text">AI App Playground</span><br>Built using AI Assisted IDEs</h1>
+      <p class="hero-sub">A collection of utilities and tools, built by Reuben+AI, published for public use</p>
     </header>
 
     <!-- Apps -->
@@ -715,111 +604,6 @@
           </div>
         </div>
       </a>
-    </div>
-
-    <!-- Repo info -->
-    <div class="section-heading">Repository Details</div>
-    <div class="repo-info">
-      <h2>📦 About This Repository</h2>
-      <div class="repo-detail-grid">
-        <div class="repo-detail">
-          <div class="repo-detail-label">Platform</div>
-          <div class="repo-detail-value">Netlify</div>
-        </div>
-        <div class="repo-detail">
-          <div class="repo-detail-label">Stack</div>
-          <div class="repo-detail-value">HTML · CSS · JS</div>
-        </div>
-        <div class="repo-detail">
-          <div class="repo-detail-label">Dependencies</div>
-          <div class="repo-detail-value">None (+ Google Fonts)</div>
-        </div>
-        <div class="repo-detail">
-          <div class="repo-detail-label">Build Tools</div>
-          <div class="repo-detail-value">Zero — static files only</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tools -->
-    <div class="section-heading">Built With</div>
-    <div class="tools-section">
-      <div class="tools-grid">
-        <div class="tool-item" title="Claude">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="#D97757"/>
-            </svg>
-          </div>
-          <div class="tool-name">Claude</div>
-        </div>
-        <div class="tool-item" title="Anti-gravity">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="antigrav" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
-              <circle cx="12" cy="12" r="10" stroke="url(#antigrav)" stroke-width="2.5"></circle>
-              <path d="M12 2v20M2 12h20M8 8l8 8M16 8l-8 8" stroke="url(#antigrav)" stroke-width="2.5" stroke-linecap="round"></path>
-            </svg>
-          </div>
-          <div class="tool-name">Anti-gravity</div>
-        </div>
-        <div class="tool-item" title="GitHub Copilot">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="#a371f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
-              <path d="m10 13 3.54-3.54a5 5 0 0 1 7.07 0 5 5 0 0 1 0 7.07l-1.29 1.29" stroke="#a371f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-          </div>
-          <div class="tool-name">GitHub Copilot</div>
-        </div>
-        <div class="tool-item" title="Netlify">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 19L11.4 15V2L5 15.5V19Z" fill="#20C6B6"/>
-              <path d="M11.4 2V15L17.8 19V15.5L11.4 2Z" fill="#00C7B7"/>
-              <path d="M5 19L11.4 23L17.8 19H5Z" fill="#00A89A"/>
-            </svg>
-          </div>
-          <div class="tool-name">Netlify</div>
-        </div>
-        <div class="tool-item" title="Cloudflare">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.5 19h-8.5v-0.01A6.99 6.99 0 0 1 9.9 5.3a6.83 6.83 0 0 1 5.39 2.58A4.5 4.5 0 0 1 22 14.5a4.5 4.5 0 0 1-4.5 4.5Z" fill="#F38020"/>
-            </svg>
-          </div>
-          <div class="tool-name">Cloudflare</div>
-        </div>
-        <div class="tool-item" title="HTML5">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="m3 2 1.5 16.5L12 22l7.5-3.5L21 2H3Z" fill="#E34F26"/>
-              <path d="M12 4.2V19.7L18.4 16.8L19.5 4.2H12Z" fill="#EF652A"/>
-              <path d="M12 9.5H7.7L7.5 7.2H12V9.5ZM12 14V16.3L8.4 15.2L8.2 12.8H12V14ZM16.3 9.5H12V7.2H16.5L16.3 9.5ZM16 12.8L15.6 15.2L12 16.3V14L14.1 13.4L14.3 10.5H12V8.2H16.6L16 12.8Z" fill="#FFFFFF"/>
-            </svg>
-          </div>
-          <div class="tool-name">HTML</div>
-        </div>
-        <div class="tool-item" title="CSS3">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="m3 2 1.5 16.5L12 22l7.5-3.5L21 2H3Z" fill="#1572B6"/>
-              <path d="M12 4.2V19.7L18.4 16.8L19.5 4.2H12Z" fill="#33A9DC"/>
-              <path d="M12 9.5H7.7L7.5 7.2H12V9.5ZM12 14V16.3L8.4 15.2L8.2 12.8H12V14ZM16.3 9.5H12V7.2H16.5L16.3 9.5ZM16 12.8L15.6 15.2L12 16.3V14L14.1 13.4L14.3 10.5H12V8.2H16.6L16 12.8Z" fill="#FFFFFF"/>
-            </svg>
-          </div>
-          <div class="tool-name">CSS</div>
-        </div>
-        <div class="tool-item" title="JavaScript">
-          <div class="tool-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 3H21V21H3V3Z" fill="#F7DF1E"/>
-              <path d="M11.3 17.4c0 1.5-1.1 2.5-2.8 2.5-1.5 0-2.5-.7-3.1-1.7l1.7-1.1c.4.5.9.9 1.4.9.7 0 1.1-.3 1.1-.9v-5.4h1.9v5.7h-.2Zm7.8-1.5c.3.5.9 1 1.6 1 .7 0 1.1-.3 1.1-.8 0-.5-.5-.7-1.4-1-1.5-.5-2.2-1.2-2.2-2.5 0-1.4 1.1-2.4 2.8-2.4 1.2 0 2.1.5 2.7 1.4l-1.6 1c-.3-.4-.7-.7-1.1-.7-.6 0-.9.3-.9.7 0 .5.5.7 1.4 1 1.4.5 2.2 1.3 2.2 2.6 0 1.5-1.2 2.5-2.9 2.5-1.5 0-2.5-.6-3.1-1.7l1.6-1.1Z" fill="#000000"/>
-            </svg>
-          </div>
-          <div class="tool-name">JS</div>
-        </div>
-      </div>
     </div>
 
     <footer>
