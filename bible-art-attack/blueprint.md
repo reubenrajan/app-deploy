@@ -4,9 +4,7 @@ Build a polished interactive web game called:
 🔥 Bible Art Attack!! 🎨
 
 The game is used in church/youth events where contestants generate AI images of Bible events in random art styles.
-
 The application should be modern, playful, and visually engaging. Implement as a single page web application with inline css and js.
-
 The design should feel like a fun game show.
 
 ------------------------------------------------
