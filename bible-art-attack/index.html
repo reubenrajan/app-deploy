@@ -15,8 +15,6 @@
             --pink: #ec4899;
             --dark: #0f0a1e;
             --card-bg: rgba(255, 255, 255, 0.07);
-            --glow-gold: 0 0 30px rgba(245, 158, 11, 0.8);
-            --glow-pink: 0 0 30px rgba(236, 72, 153, 0.7);
         }
 
         * {
@@ -37,7 +35,6 @@
                 radial-gradient(ellipse at 60% 10%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
         }
 
-        /* Stars */
         .stars {
             position: fixed;
             inset: 0;
@@ -65,7 +62,6 @@
             }
         }
 
-        /* Screen management */
         .screen {
             display: none;
             position: relative;
@@ -117,7 +113,6 @@
             line-height: 1.5;
         }
 
-        /* Collage */
         .collage-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -134,7 +129,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: default;
         }
 
         .collage-card:hover {
@@ -178,7 +172,6 @@
             font-weight: 600;
         }
 
-        /* Start Button */
         .start-btn {
             font-family: 'Boogaloo', cursive;
             font-size: clamp(1.5rem, 3vw, 2.2rem);
@@ -218,7 +211,7 @@
             z-index: 1;
         }
 
-        /* ===== GAME SCREEN ===== */
+        /* ===== GAME ===== */
         #game {
             padding: 20px;
             max-width: 1000px;
@@ -239,7 +232,6 @@
             background-clip: text;
         }
 
-        /* Step bar */
         .step-bar {
             display: flex;
             justify-content: center;
@@ -274,7 +266,6 @@
             color: white;
         }
 
-        /* Spinner sections */
         .spinner-section {
             display: flex;
             flex-direction: column;
@@ -290,7 +281,6 @@
             text-align: center;
         }
 
-        /* Wheel */
         .wheel-wrap {
             position: relative;
             width: clamp(280px, 50vw, 420px);
@@ -305,16 +295,17 @@
             display: block;
         }
 
+        /* Arrow tip points downward toward the wheel's top edge */
         .wheel-arrow {
             position: absolute;
-            top: -22px;
+            top: -28px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
             border-left: 16px solid transparent;
             border-right: 16px solid transparent;
-            border-top: 34px solid var(--gold);
+            border-top: 36px solid var(--gold);
             filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.9));
             z-index: 10;
         }
@@ -337,7 +328,6 @@
             z-index: 10;
         }
 
-        /* Result display */
         .result-display {
             background: var(--card-bg);
             border: 2px solid rgba(255, 255, 255, 0.12);
@@ -410,7 +400,6 @@
             font-style: italic;
         }
 
-        /* Buttons */
         .btn {
             font-family: 'Boogaloo', cursive;
             font-size: clamp(1.1rem, 2.5vw, 1.5rem);
@@ -451,7 +440,7 @@
             box-shadow: 0 0 35px rgba(16, 185, 129, 0.8);
         }
 
-        .btn-reset {
+        .btn-ghost {
             background: rgba(255, 255, 255, 0.08);
             color: rgba(255, 255, 255, 0.6);
             border: 2px solid rgba(255, 255, 255, 0.15);
@@ -459,13 +448,31 @@
             padding: 10px 24px;
         }
 
-        .btn-reset:hover {
+        .btn-ghost:hover {
             background: rgba(255, 255, 255, 0.15);
             color: white;
             border-color: rgba(255, 255, 255, 0.3);
         }
 
-        /* Prompt box */
+        .btn-purple {
+            background: linear-gradient(135deg, var(--purple), var(--indigo));
+            color: white;
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+            font-size: 1rem;
+            padding: 10px 26px;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            font-family: 'Boogaloo', cursive;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .btn-purple:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(124, 58, 237, 0.8);
+        }
+
         .prompt-box {
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(79, 70, 229, 0.2));
             border: 2px solid rgba(245, 158, 11, 0.4);
@@ -501,7 +508,6 @@
             color: #f9a8d4;
         }
 
-        /* Styles remaining */
         .styles-box {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -554,7 +560,6 @@
             text-decoration: line-through;
         }
 
-        /* Controls */
         .controls {
             display: flex;
             gap: 16px;
@@ -564,7 +569,254 @@
             padding: 18px 0 36px;
         }
 
-        /* Confetti */
+        /* ===== HISTORY ===== */
+        .history-section {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .history-title {
+            font-family: 'Boogaloo', cursive;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--gold), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .history-empty {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-style: italic;
+            padding: 20px;
+            font-size: 0.95rem;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 16px;
+            padding: 14px 18px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-num {
+            font-family: 'Boogaloo', cursive;
+            font-size: 1.4rem;
+            color: var(--gold);
+            min-width: 28px;
+            text-align: center;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-theme {
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .history-style {
+            font-size: 0.8rem;
+            color: #a78bfa;
+            margin-top: 2px;
+        }
+
+        .history-badge {
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #34d399;
+            font-weight: 800;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        /* ===== UPLOAD MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9990;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #1a1035;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 28px;
+            padding: 36px;
+            max-width: 560px;
+            width: 100%;
+            box-shadow: 0 0 80px rgba(124, 58, 237, 0.4);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-family: 'Boogaloo', cursive;
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--gold), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .modal-sub {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .upload-section {
+            margin-bottom: 28px;
+        }
+
+        .upload-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone {
+            border: 2px dashed rgba(124, 58, 237, 0.5);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(124, 58, 237, 0.07);
+            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag {
+            border-color: var(--gold);
+            background: rgba(245, 158, 11, 0.08);
+            color: white;
+        }
+
+        .drop-zone input[type=file] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .drop-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .textarea-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.2s;
+        }
+
+        .textarea-input:focus {
+            outline: none;
+            border-color: var(--purple);
+        }
+
+        .textarea-input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .preview-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+
+        .preview-tag {
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .preview-tag.style-tag {
+            background: rgba(236, 72, 153, 0.15);
+            border-color: rgba(236, 72, 153, 0.35);
+            color: #f9a8d4;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== CONFETTI ===== */
         .confetti-wrap {
             position: fixed;
             inset: 0;
@@ -591,7 +843,7 @@
             }
         }
 
-        /* Celebration */
+        /* ===== CELEBRATION ===== */
         .celeb {
             display: none;
             position: fixed;
@@ -636,6 +888,30 @@
             line-height: 1.5;
         }
 
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border-radius: 50px;
+            padding: 12px 28px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            z-index: 99999;
+            opacity: 0;
+            transition: all 0.4s ease;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
         @media (max-width: 600px) {
             .collage-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -658,12 +934,63 @@
 
     <div class="stars" id="stars"></div>
     <div class="confetti-wrap" id="confetti"></div>
+    <div class="toast" id="toast"></div>
 
     <!-- Celebration overlay -->
     <div class="celeb" id="celeb">
         <div class="celeb-title">🎉 ALL DONE! 🎉</div>
-        <div class="celeb-sub">You've completed all 7 art styles!<br>What an epic Bible Art Attack!!</div>
+        <div class="celeb-sub" id="celebSub">You've completed all the art styles!<br>What an epic Bible Art Attack!!
+        </div>
         <button class="btn btn-spin" onclick="resetAll()" style="margin-top:10px;">🔄 Play Again!</button>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal">
+            <div class="modal-title">➕ Add Themes & Styles</div>
+            <div class="modal-sub">
+                Upload a <code style="color:var(--gold)">.txt</code> or <code style="color:var(--gold)">.json</code>
+                file, or type items below.<br>
+                One item per line — format: <code style="color:var(--gold)">🌟 The Prodigal Son</code>
+            </div>
+
+            <div class="upload-section">
+                <span class="upload-label">📖 Add Bible Themes</span>
+                <div class="drop-zone" id="themeDrop">
+                    <span class="drop-icon">📂</span>
+                    Drop a file here or click to browse<br>
+                    <small style="color:rgba(255,255,255,0.3)">.txt or .json accepted</small>
+                    <input type="file" accept=".txt,.json" id="themeFile" onchange="handleFile('theme', this)">
+                </div>
+                <div style="margin:10px 0;text-align:center;color:rgba(255,255,255,0.3);font-size:0.8rem;">— or type
+                    below —</div>
+                <textarea class="textarea-input" id="themeText"
+                    placeholder="🌟 The Prodigal Son&#10;🙏 Sermon on the Mount&#10;⚓ Paul's Shipwreck"
+                    oninput="previewItems('theme')"></textarea>
+                <div class="preview-tags" id="themePreview"></div>
+            </div>
+
+            <div class="upload-section">
+                <span class="upload-label">🎨 Add Art Styles</span>
+                <div class="drop-zone" id="styleDrop">
+                    <span class="drop-icon">📂</span>
+                    Drop a file here or click to browse<br>
+                    <small style="color:rgba(255,255,255,0.3)">.txt or .json accepted</small>
+                    <input type="file" accept=".txt,.json" id="styleFile" onchange="handleFile('style', this)">
+                </div>
+                <div style="margin:10px 0;text-align:center;color:rgba(255,255,255,0.3);font-size:0.8rem;">— or type
+                    below —</div>
+                <textarea class="textarea-input" id="styleText"
+                    placeholder="🖼️ Oil painting style&#10;🌈 Watercolor illustration&#10;✏️ Pencil sketch"
+                    oninput="previewItems('style')"></textarea>
+                <div class="preview-tags" id="stylePreview"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeUpload()">Cancel</button>
+                <button class="btn-purple" onclick="applyUploads()">✅ Add Items</button>
+            </div>
+        </div>
     </div>
 
     <!-- ===== LANDING ===== -->
@@ -737,41 +1064,41 @@
         <div class="controls">
             <button class="btn btn-complete" id="completeBtn" onclick="markDone()" disabled>✅ Mark Style
                 Completed</button>
-            <button class="btn btn-reset" onclick="resetAll()">🔄 Reset Game</button>
+            <button class="btn-purple" onclick="openUpload()">➕ Add Themes/Styles</button>
+            <button class="btn btn-ghost" onclick="resetAll()">🔄 Reset Game</button>
+        </div>
+
+        <!-- History -->
+        <div class="history-section">
+            <div class="history-header">
+                <div class="history-title">📋 Session History</div>
+                <button class="btn btn-ghost" style="font-size:0.8rem;padding:6px 16px;"
+                    onclick="clearHistory()">Clear</button>
+            </div>
+            <div id="historyList">
+                <div class="history-empty">No combinations yet — start spinning!</div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ── DATA ────────────────────────────────────────────────────────────
-        const THEMES = [
-            { n: "Creation of the World", i: "🌍" },
-            { n: "The Fall of Man", i: "🍎" },
-            { n: "Noah and the Ark", i: "🌈" },
-            { n: "Tower of Babel", i: "🗼" },
-            { n: "Abraham & Isaac", i: "⛰️" },
-            { n: "Jacob Wrestling the Angel", i: "👼" },
-            { n: "Joseph's Coat of Many Colors", i: "🧥" },
-            { n: "Burning Bush", i: "🔥" },
-            { n: "Red Sea Crossing", i: "🌊" },
-            { n: "Ten Commandments", i: "📜" },
-            { n: "Walls of Jericho", i: "🏛️" },
-            { n: "Gideon and the 300", i: "⚔️" },
-            { n: "Samson at the Temple", i: "💪" },
-            { n: "David and Goliath", i: "🪨" },
-            { n: "Elijah on Mount Carmel", i: "⚡" },
-            { n: "Daniel in the Lions' Den", i: "🦁" },
-            { n: "Jonah and the Great Fish", i: "🐋" },
-            { n: "Birth of Jesus", i: "⭐" },
-            { n: "Jesus Calms the Storm", i: "⛵" },
-            { n: "Feeding the 5,000", i: "🐟" },
-            { n: "Transfiguration", i: "✨" },
-            { n: "Last Supper", i: "🍞" },
-            { n: "Crucifixion", i: "✝️" },
-            { n: "Resurrection", i: "🌅" },
-            { n: "Pentecost", i: "🕊️" },
+        // ── DATA ─────────────────────────────────────────────────────────────
+        let THEMES = [
+            { n: "Creation of the World", i: "🌍" }, { n: "The Fall of Man", i: "🍎" },
+            { n: "Noah and the Ark", i: "🌈" }, { n: "Tower of Babel", i: "🗼" },
+            { n: "Abraham & Isaac", i: "⛰️" }, { n: "Jacob Wrestling the Angel", i: "👼" },
+            { n: "Joseph's Coat of Many Colors", i: "🧥" }, { n: "Burning Bush", i: "🔥" },
+            { n: "Red Sea Crossing", i: "🌊" }, { n: "Ten Commandments", i: "📜" },
+            { n: "Walls of Jericho", i: "🏛️" }, { n: "Gideon and the 300", i: "⚔️" },
+            { n: "Samson at the Temple", i: "💪" }, { n: "David and Goliath", i: "🪨" },
+            { n: "Elijah on Mount Carmel", i: "⚡" }, { n: "Daniel in the Lions' Den", i: "🦁" },
+            { n: "Jonah and the Great Fish", i: "🐋" }, { n: "Birth of Jesus", i: "⭐" },
+            { n: "Jesus Calms the Storm", i: "⛵" }, { n: "Feeding the 5,000", i: "🐟" },
+            { n: "Transfiguration", i: "✨" }, { n: "Last Supper", i: "🍞" },
+            { n: "Crucifixion", i: "✝️" }, { n: "Resurrection", i: "🌅" }, { n: "Pentecost", i: "🕊️" },
         ];
 
-        const ALL_STYLES = [
+        let ALL_STYLES = [
             { n: "Hyper-realistic photography", i: "📷" },
             { n: "IMAX epic scene", i: "🎬" },
             { n: "Pixar-style 3D animation", i: "🎠" },
@@ -791,14 +1118,15 @@
             { t: "Creation", s: "Minecraft Style", i: "🌍", g: "linear-gradient(135deg,#064e3b,#059669,#6ee7b7)" },
         ];
 
-        // ── STATE ────────────────────────────────────────────────────────────
+        // ── STATE ─────────────────────────────────────────────────────────────
         let available = [...ALL_STYLES];
         let selTheme = null, selStyle = null;
         let tAngle = 0, sAngle = 0;
         let spinning = false;
+        let history = [];
 
-        // ── STARS ────────────────────────────────────────────────────────────
-        (function buildStars() {
+        // ── STARS ─────────────────────────────────────────────────────────────
+        (function () {
             const c = document.getElementById('stars');
             for (let i = 0; i < 80; i++) {
                 const el = document.createElement('div');
@@ -809,26 +1137,18 @@
             }
         })();
 
-        // ── COLLAGE ──────────────────────────────────────────────────────────
-        (function buildCollage() {
+        // ── COLLAGE ───────────────────────────────────────────────────────────
+        (function () {
             const grid = document.getElementById('collage');
             COLLAGE.forEach(c => {
-                grid.innerHTML += `
-      <div class="collage-card">
-        <div class="card-art" style="background:${c.g}"><span>${c.i}</span></div>
-        <div class="card-label">
-          <div class="card-theme">${c.t}</div>
-          <div class="card-style">${c.s}</div>
-        </div>
-      </div>`;
+                grid.innerHTML += `<div class="collage-card"><div class="card-art" style="background:${c.g}"><span>${c.i}</span></div><div class="card-label"><div class="card-theme">${c.t}</div><div class="card-style">${c.s}</div></div></div>`;
             });
         })();
 
-        // ── WHEEL DRAWING ────────────────────────────────────────────────────
+        // ── WHEEL DRAWING ─────────────────────────────────────────────────────
         const COLORS = [
             ['#7c3aed', '#4c1d95'], ['#4f46e5', '#312e81'], ['#db2777', '#831843'],
-            ['#d97706', '#78350f'], ['#059669', '#064e3b'], ['#dc2626', '#7f1d1d'],
-            ['#9333ea', '#581c87'],
+            ['#d97706', '#78350f'], ['#059669', '#064e3b'], ['#dc2626', '#7f1d1d'], ['#9333ea', '#581c87'],
         ];
 
         function drawWheel(id, items, angle) {
@@ -838,23 +1158,17 @@
             const W = canvas.width, cx = W / 2, cy = W / 2, R = cx - 10;
             const arc = 2 * Math.PI / items.length;
             ctx.clearRect(0, 0, W, W);
-
-            // Outer ring
             ctx.beginPath(); ctx.arc(cx, cy, R + 8, 0, 2 * Math.PI);
             ctx.strokeStyle = 'rgba(245,158,11,0.7)'; ctx.lineWidth = 5; ctx.stroke();
-
             for (let i = 0; i < items.length; i++) {
                 const a0 = angle + i * arc, a1 = a0 + arc;
                 const [c1, c2] = COLORS[i % COLORS.length];
                 const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
                 g.addColorStop(0, c1); g.addColorStop(1, c2);
-
                 ctx.beginPath(); ctx.moveTo(cx, cy);
                 ctx.arc(cx, cy, R, a0, a1); ctx.closePath();
                 ctx.fillStyle = g; ctx.fill();
                 ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 2; ctx.stroke();
-
-                // Text
                 ctx.save();
                 ctx.translate(cx, cy); ctx.rotate(a0 + arc / 2);
                 const label = items[i].i + ' ' + items[i].n;
@@ -869,99 +1183,105 @@
                 ctx.fillText(txt, R - 14, 5);
                 ctx.restore();
             }
-
-            // Center
             ctx.beginPath(); ctx.arc(cx, cy, 30, 0, 2 * Math.PI);
             ctx.fillStyle = '#0f0a1e'; ctx.fill();
             ctx.strokeStyle = 'rgba(245,158,11,0.7)'; ctx.lineWidth = 3; ctx.stroke();
         }
 
-        // ── SPIN ANIMATION ───────────────────────────────────────────────────
+        // ── SPIN ANIMATION ────────────────────────────────────────────────────
+        // The pointer arrow tip sits at the TOP of the wheel = canvas angle -π/2.
+        // Segment i spans angles [baseAngle + i*arc, baseAngle + (i+1)*arc].
+        // We want the midpoint of the winning segment to land at -π/2.
+        //   finalAngle + winnerIdx*arc + arc/2 = -π/2  (mod 2π)
+        //   => finalAngle = -π/2 - (winnerIdx + 0.5)*arc
+        // Then we subtract enough full rotations so the wheel spins dramatically.
+
         function spinWheel(id, items, startAngle, onDone) {
-            const totalSpins = (5 + Math.random() * 5) * 2 * Math.PI;
-            const extra = Math.random() * 2 * Math.PI;
-            const target = startAngle - totalSpins - extra;
-            const dur = 3000;
+            const count = items.length;
+            const arc = 2 * Math.PI / count;
+            const winnerIdx = Math.floor(Math.random() * count);
+
+            // Target resting angle so pointer (at -π/2) aligns with winner's midpoint
+            const pointerAngle = -Math.PI / 2;
+            let dest = pointerAngle - (winnerIdx + 0.5) * arc;
+
+            // Normalise dest into one "canonical" revolution, then subtract enough
+            // full rotations to ensure we always spin clockwise from startAngle.
+            // In canvas, clockwise = decreasing angle when we rotate the wheel content.
+            // We want dest < startAngle - minSpins*2π
+            const minSpins = 5 + Math.floor(Math.random() * 5);
+            // Bring dest into [startAngle - 2π, startAngle) then subtract minSpins revolutions
+            dest = dest - Math.ceil((dest - startAngle) / (2 * Math.PI)) * 2 * Math.PI;
+            dest -= minSpins * 2 * Math.PI;
+
+            const dur = 3500;
             const t0 = performance.now();
-
             function ease(t) { return 1 - Math.pow(1 - t, 4); }
-
             function frame(now) {
                 const p = Math.min((now - t0) / dur, 1);
-                const cur = startAngle + (target - startAngle) * ease(p);
+                const cur = startAngle + (dest - startAngle) * ease(p);
                 drawWheel(id, items, cur);
                 if (p < 1) { requestAnimationFrame(frame); }
-                else { drawWheel(id, items, target); onDone(target); }
+                else { drawWheel(id, items, dest); onDone(dest, winnerIdx); }
             }
             requestAnimationFrame(frame);
-            return target;
         }
 
-        function getIdx(count, angle) {
-            const arc = 2 * Math.PI / count;
-            const norm = ((-angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-            return Math.floor(norm / arc) % count;
-        }
-
-        // ── SPIN THEME ───────────────────────────────────────────────────────
+        // ── SPIN THEME ────────────────────────────────────────────────────────
         function doSpinTheme() {
             if (spinning) return;
             spinning = true;
             document.getElementById('themeSpinBtn').disabled = true;
-
-            spinWheel('themeWheel', THEMES, tAngle, (finalAngle) => {
+            spinWheel('themeWheel', THEMES, tAngle, (finalAngle, idx) => {
                 tAngle = finalAngle;
-                const idx = getIdx(THEMES.length, finalAngle);
                 selTheme = THEMES[idx];
                 spinning = false;
-
                 const el = document.getElementById('themeResult');
                 el.innerHTML = `<div class="result-icon">📖 THEME SELECTED</div><div class="result-text">${selTheme.i} ${selTheme.n}</div>`;
                 el.classList.add('glow-gold');
-
                 setTimeout(() => {
                     document.getElementById('themeSection').style.display = 'none';
                     document.getElementById('styleSection').style.display = 'flex';
                     pill('s1', 'done'); pill('s2', 'active');
+                    // Always reset style angle for a clean spin each round
+                    sAngle = 0;
                     drawWheel('styleWheel', available, sAngle);
+                    document.getElementById('styleSpinBtn').disabled = false;
                 }, 1300);
             });
         }
 
-        // ── SPIN STYLE ───────────────────────────────────────────────────────
+        // ── SPIN STYLE ────────────────────────────────────────────────────────
         function doSpinStyle() {
             if (spinning || !available.length) return;
             spinning = true;
             document.getElementById('styleSpinBtn').disabled = true;
-
-            spinWheel('styleWheel', available, sAngle, (finalAngle) => {
+            spinWheel('styleWheel', available, sAngle, (finalAngle, idx) => {
                 sAngle = finalAngle;
-                const idx = getIdx(available.length, finalAngle);
                 selStyle = available[idx];
                 spinning = false;
-
                 const el = document.getElementById('styleResult');
                 el.innerHTML = `<div class="result-icon">🎨 STYLE SELECTED</div><div class="result-text">${selStyle.i} ${selStyle.n}</div>`;
                 el.classList.add('glow-pink');
-
-                // Show prompt
                 document.getElementById('promptWrap').style.display = 'block';
                 document.getElementById('promptText').innerHTML =
                     `<span class="t">${selTheme.i} ${selTheme.n}</span><br>— in <span class="s">${selStyle.i} ${selStyle.n}</span>`;
-
                 document.getElementById('completeBtn').disabled = false;
                 pill('s2', 'done'); pill('s3', 'active');
             });
         }
 
-        // ── MARK DONE ────────────────────────────────────────────────────────
+        // ── MARK DONE ─────────────────────────────────────────────────────────
         function markDone() {
             if (!selStyle) return;
+            history.push({ theme: selTheme, style: selStyle });
+            renderHistory();
             available = available.filter(s => s.n !== selStyle.n);
             updateStyles();
-
             if (available.length === 0) {
                 confetti();
+                document.getElementById('celebSub').innerHTML =
+                    `You've completed all ${ALL_STYLES.length} art styles!<br>What an epic Bible Art Attack!!`;
                 setTimeout(() => document.getElementById('celeb').classList.add('show'), 700);
                 return;
             }
@@ -970,20 +1290,19 @@
 
         function nextRound() {
             selTheme = null; selStyle = null;
-
             document.getElementById('promptWrap').style.display = 'none';
             document.getElementById('styleResult').innerHTML = '<div class="result-pending">Spin the wheel to reveal your style!</div>';
             document.getElementById('styleResult').className = 'result-display';
             document.getElementById('themeResult').innerHTML = '<div class="result-pending">Spin the wheel to reveal your theme!</div>';
             document.getElementById('themeResult').className = 'result-display';
-
             pill('s1', 'active'); pill('s2', ''); pill('s3', '');
-
             document.getElementById('completeBtn').disabled = true;
             document.getElementById('themeSpinBtn').disabled = false;
-
+            document.getElementById('styleSpinBtn').disabled = false;
             document.getElementById('themeSection').style.display = 'flex';
             document.getElementById('styleSection').style.display = 'none';
+            // Reset angles each round so wheels always start fresh
+            tAngle = 0; sAngle = 0;
             drawWheel('themeWheel', THEMES, tAngle);
         }
 
@@ -997,34 +1316,134 @@
             });
         }
 
-        // ── SCREEN HELPERS ───────────────────────────────────────────────────
+        // ── HISTORY ───────────────────────────────────────────────────────────
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            if (!history.length) {
+                list.innerHTML = '<div class="history-empty">No combinations yet — start spinning!</div>';
+                return;
+            }
+            list.innerHTML = '<div class="history-list">' +
+                history.map((h, i) => `
+      <div class="history-item">
+        <div class="history-num">${i + 1}</div>
+        <div class="history-info">
+          <div class="history-theme">${h.theme.i} ${h.theme.n}</div>
+          <div class="history-style">${h.style.i} ${h.style.n}</div>
+        </div>
+        <div class="history-badge">✅ DONE</div>
+      </div>`).join('') +
+                '</div>';
+        }
+
+        function clearHistory() {
+            history = [];
+            renderHistory();
+        }
+
+        // ── UPLOAD MODAL ──────────────────────────────────────────────────────
+        function openUpload() {
+            document.getElementById('themeText').value = '';
+            document.getElementById('styleText').value = '';
+            document.getElementById('themePreview').innerHTML = '';
+            document.getElementById('stylePreview').innerHTML = '';
+            document.getElementById('uploadModal').classList.add('show');
+        }
+        function closeUpload() {
+            document.getElementById('uploadModal').classList.remove('show');
+        }
+
+        function handleFile(type, input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                let text = e.target.result;
+                try {
+                    const parsed = JSON.parse(text);
+                    if (Array.isArray(parsed)) {
+                        text = parsed.map(p => typeof p === 'string' ? p : (p.i || '❓') + ' ' + (p.n || p.name || '')).join('\n');
+                    }
+                } catch (e2) { }
+                document.getElementById(type + 'Text').value = text;
+                previewItems(type);
+            };
+            reader.readAsText(file);
+        }
+
+        function parseLines(raw) {
+            return raw.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+                const m = l.match(/^(\p{Emoji_Presentation}|\p{Extended_Pictographic})\s+(.*)/u);
+                if (m) return { i: m[1], n: m[2].trim() };
+                return { i: '❓', n: l };
+            });
+        }
+
+        function previewItems(type) {
+            const raw = document.getElementById(type + 'Text').value;
+            const items = parseLines(raw);
+            const cls = type === 'style' ? 'preview-tag style-tag' : 'preview-tag';
+            document.getElementById(type + 'Preview').innerHTML =
+                items.map(it => `<div class="${cls}">${it.i} ${it.n}</div>`).join('');
+        }
+
+        function applyUploads() {
+            const newThemes = parseLines(document.getElementById('themeText').value);
+            const newStyles = parseLines(document.getElementById('styleText').value);
+            let added = 0;
+            newThemes.forEach(t => {
+                if (t.n && !THEMES.find(x => x.n === t.n)) { THEMES.push(t); added++; }
+            });
+            newStyles.forEach(s => {
+                if (s.n && !ALL_STYLES.find(x => x.n === s.n)) {
+                    ALL_STYLES.push(s); available.push(s); added++;
+                }
+            });
+            closeUpload();
+            updateStyles();
+            drawWheel('themeWheel', THEMES, tAngle);
+            if (document.getElementById('styleSection').style.display !== 'none') {
+                drawWheel('styleWheel', available, sAngle);
+            }
+            showToast(`✅ Added ${added} new item${added !== 1 ? 's' : ''}!`);
+        }
+
+        // ── TOAST ─────────────────────────────────────────────────────────────
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        // ── SCREEN HELPERS ────────────────────────────────────────────────────
         function pill(id, cls) {
-            const el = document.getElementById(id);
-            el.className = 'step-pill' + (cls ? ' ' + cls : '');
+            document.getElementById(id).className = 'step-pill' + (cls ? ' ' + cls : '');
         }
 
         function startGame() {
             document.getElementById('landing').classList.remove('active');
             document.getElementById('game').classList.add('active');
+            tAngle = 0; sAngle = 0;
             drawWheel('themeWheel', THEMES, tAngle);
             updateStyles();
+            renderHistory();
         }
 
         function resetAll() {
             available = [...ALL_STYLES];
             selTheme = null; selStyle = null;
             tAngle = 0; sAngle = 0; spinning = false;
-
+            history = [];
             document.getElementById('celeb').classList.remove('show');
             document.getElementById('confetti').innerHTML = '';
             document.getElementById('game').classList.remove('active');
             document.getElementById('landing').classList.add('active');
-
             nextRound();
             updateStyles();
+            renderHistory();
         }
 
-        // ── CONFETTI ─────────────────────────────────────────────────────────
+        // ── CONFETTI ──────────────────────────────────────────────────────────
         function confetti() {
             const wrap = document.getElementById('confetti');
             wrap.innerHTML = '';
@@ -1033,15 +1452,21 @@
                 const el = document.createElement('div');
                 el.className = 'cp';
                 const c = cols[Math.floor(Math.random() * cols.length)];
-                const sz = Math.random() * 10 + 6;
-                const del = Math.random() * 2;
-                const dur = Math.random() * 2 + 2.5;
+                const sz = Math.random() * 10 + 6, del = Math.random() * 2, dur = Math.random() * 2 + 2.5;
                 const shape = Math.random() > 0.5 ? '50%' : '3px';
                 el.style.cssText = `left:${Math.random() * 100}%;width:${sz}px;height:${sz}px;background:${c};border-radius:${shape};animation-duration:${dur}s;animation-delay:${del}s`;
                 wrap.appendChild(el);
             }
             setTimeout(() => { wrap.innerHTML = ''; }, 7000);
         }
+
+        // Drag-over for drop zones
+        ['themeDrop', 'styleDrop'].forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag'); });
+            el.addEventListener('dragleave', () => el.classList.remove('drag'));
+            el.addEventListener('drop', e => { e.preventDefault(); el.classList.remove('drag'); });
+        });
     </script>
 </body>
 
