@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Performance Testing × AI Agents — Skills & Tools Reference 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── LIGHT THEME ── */
+[data-theme="light"] {
+  --bg: #f5f0e8;
+  --paper: #faf7f2;
+  --paper2: #f3ede3;
+  --ink: #1a1410;
+  --ink-muted: #7a6e62;
+  --ink-light: #b5aca0;
+  --rule: #ddd6cc;
+  --rule-strong: #b8ae9f;
+  --A: #1a3a4f;
+  --A-mid: #2c6e8a;
+  --A-bg: #eef5f9;
+  --A-bg2: #d6eaf4;
+  --A-rule: #9ac5dc;
+  --A-tag: rgba(26,58,79,0.1);
+  --B: #3d2009;
+  --B-mid: #a0522d;
+  --B-bg: #faf2ec;
+  --B-bg2: #f0d9c8;
+  --B-rule: #d4a080;
+  --B-tag: rgba(61,32,9,0.1);
+  --shared: #1f4a2a;
+  --shared-mid: #2e7d46;
+  --shared-bg: #eef7f1;
+  --shared-bg2: #cce8d4;
+  --critical: #c0392b;
+  --advanced: #7d3c98;
+  --emerging: #d35400;
+  --strategic: #1a5276;
+  --hover-overlay: rgba(0,0,0,0.018);
+  --hover-table: rgba(0,0,0,0.012);
+  --noise-opacity: 0.35;
+}
+
+/* ── DARK THEME ── */
+[data-theme="dark"] {
+  --bg: #13110e;
+  --paper: #1c1916;
+  --paper2: #252118;
+  --ink: #e8e2d6;
+  --ink-muted: #a09080;
+  --ink-light: #6a5e52;
+  --rule: #302a24;
+  --rule-strong: #453d34;
+  --A: #6ab8d8;
+  --A-mid: #6ab8d8;
+  --A-bg: #0a1e2a;
+  --A-bg2: #0f2a38;
+  --A-rule: #1a4a60;
+  --A-tag: rgba(106,184,216,0.1);
+  --B: #d4906a;
+  --B-mid: #d4906a;
+  --B-bg: #1e1008;
+  --B-bg2: #281808;
+  --B-rule: #583020;
+  --B-tag: rgba(212,144,106,0.1);
+  --shared: #78c890;
+  --shared-mid: #78c890;
+  --shared-bg: #0a1a0e;
+  --shared-bg2: #102014;
+  --critical: #e06060;
+  --advanced: #c080e0;
+  --emerging: #e09040;
+  --strategic: #60a0d0;
+  --hover-overlay: rgba(255,255,255,0.03);
+  --hover-table: rgba(255,255,255,0.02);
+  --noise-opacity: 0.15;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inconsolata', monospace;
+  min-height: 100vh;
+  transition: background 0.2s, color 0.2s;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+  opacity: var(--noise-opacity);
+}
+
+.page { max-width: 1380px; margin: 0 auto; padding: 48px 32px 120px; }
+
+/* ── DARK MODE TOGGLE ── */
+.theme-toggle {
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  display: flex; align-items: center; gap: 7px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.theme-toggle:hover { background: var(--paper); color: var(--ink); border-color: var(--rule-strong); }
+.theme-toggle-icon { font-size: 14px; line-height: 1; }
+
+/* ── MASTHEAD ── */
+.masthead { border-top: 4px solid var(--ink); padding: 20px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.masthead-eyebrow { font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 4px; }
+.masthead-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(24px, 3.8vw, 52px); font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+.masthead-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.masthead-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.masthead-edition { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); }
+.masthead-byline { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); }
+.rule-heavy { height: 2px; background: var(--ink); margin: 14px 0 0; }
+.rule-light  { height: 1px; background: var(--rule); margin: 6px 0 32px; }
+
+/* ── CONCEPT BLOCKS ── */
+.concept-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 3px; }
+.concept-box { padding: 26px 30px; border-top: 5px solid; }
+.concept-box.A { background: var(--A-bg); border-color: var(--A); }
+.concept-box.B { background: var(--B-bg); border-color: var(--B); }
+.concept-discipline { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
+.A .concept-discipline { color: var(--A-mid); }
+.B .concept-discipline { color: var(--B-mid); }
+.concept-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 10px; }
+.concept-def { font-size: 12px; line-height: 1.8; color: var(--ink-muted); }
+.concept-def strong { color: var(--ink); font-weight: 600; }
+.concept-role { display: inline-block; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border: 1px solid; font-weight: 600; }
+.A .concept-role { color: var(--A); border-color: var(--A-rule); background: var(--A-bg2); }
+.B .concept-role { color: var(--B); border-color: var(--B-rule); background: var(--B-bg2); }
+
+/* ── NAV TABS ── */
+.tab-nav { display: flex; gap: 2px; margin-top: 28px; margin-bottom: 3px; flex-wrap: wrap; }
+.tab-btn { font-family: 'Bricolage Grotesque', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 20px; background: var(--paper2); border: none; cursor: pointer; color: var(--ink-muted); transition: all 0.13s; border-bottom: 3px solid transparent; }
+.tab-btn:hover { background: var(--paper); color: var(--ink); }
+.tab-btn.active-A      { background: var(--A-bg); color: var(--A); border-bottom-color: var(--A-mid); }
+.tab-btn.active-B      { background: var(--B-bg); color: var(--B); border-bottom-color: var(--B-mid); }
+.tab-btn.active-shared { background: var(--shared-bg); color: var(--shared); border-bottom-color: var(--shared); }
+.tab-btn.active-compare{ background: var(--paper); color: var(--ink); border-bottom-color: var(--ink); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── PAIRED SKILLS LAYOUT ── */
+.skill-group { margin-bottom: 3px; }
+.group-header { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 2px; }
+.group-hdr-cell { padding: 10px 22px; display: flex; align-items: center; gap: 8px; font-size: 8.5px; letter-spacing: 0.22em; text-transform: uppercase; font-family: 'Inconsolata', monospace; font-weight: 600; }
+.group-hdr-cell.A { background: var(--A); color: rgba(255,255,255,0.8); }
+.group-hdr-cell.B { background: var(--B); color: rgba(255,255,255,0.8); }
+.group-hdr-cell::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.2); }
+.skill-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 2px; }
+.skill-cell { background: var(--paper); display: grid; grid-template-columns: 28px 1fr; gap: 0 12px; padding: 13px 22px; align-items: start; cursor: default; transition: background 0.1s; border-bottom: 1px solid var(--rule); }
+.skill-cell:hover { background: var(--hover-overlay); }
+.skill-cell.cell-A { border-left: 2px solid var(--A-rule); }
+.skill-cell.cell-B { border-left: 2px solid var(--B-rule); }
+.skills-col-headers { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 3px; }
+.col-hdr { padding: 14px 24px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.col-hdr.A { background: var(--A); color: #fff; }
+.col-hdr.B { background: var(--B); color: #fff; }
+.col-hdr-num { font-size: 26px; font-weight: 800; opacity: 0.3; }
+
+/* ── SKILL CONTENT ── */
+.skill-num { font-size: 9px; color: var(--ink-light); padding-top: 3px; text-align: right; font-family: 'Inconsolata', monospace; }
+.skill-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 3px; letter-spacing: -0.01em; }
+.skill-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.62; margin-bottom: 6px; }
+.prof-wrap { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.prof-dots { display: flex; gap: 2px; }
+.pdot { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); }
+.pdot.fill-A { background: var(--A-mid); }
+.pdot.fill-B { background: var(--B-mid); }
+.prof-label { font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 1px; border: 1px solid var(--rule); background: rgba(128,128,128,0.05); color: var(--ink-muted); }
+.tag.critical  { background: rgba(192,57,43,0.08); color: var(--critical); border-color: rgba(192,57,43,0.3); }
+.tag.advanced  { background: rgba(125,60,152,0.08); color: var(--advanced); border-color: rgba(125,60,152,0.3); }
+.tag.emerging  { background: rgba(211,84,0,0.08);  color: var(--emerging); border-color: rgba(211,84,0,0.3); }
+.tag.strategic { background: rgba(26,82,118,0.08); color: var(--strategic); border-color: rgba(26,82,118,0.3); }
+.tag.A { background: var(--A-tag); color: var(--A-mid); border-color: var(--A-rule); }
+.tag.B { background: var(--B-tag); color: var(--B-mid); border-color: var(--B-rule); }
+.tool-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.tool-chip { font-size: 9px; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 2px; font-family: 'Inconsolata', monospace; display: flex; align-items: center; gap: 4px; }
+.tool-chip.oss  { background: rgba(46,125,70,0.1);  color: var(--shared-mid); border: 1px solid rgba(46,125,70,0.35); }
+.tool-chip.com  { background: rgba(61,32,9,0.08);   color: var(--B-mid);     border: 1px solid rgba(61,32,9,0.25); }
+.tool-chip.both { background: rgba(26,58,79,0.08);  color: var(--A-mid);     border: 1px solid rgba(26,58,79,0.25); }
+.tool-chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.tool-chip.oss  .tool-chip-dot { background: var(--shared-mid); }
+.tool-chip.com  .tool-chip-dot { background: var(--B-mid); }
+.tool-chip.both .tool-chip-dot { background: var(--A-mid); }
+
+/* ── SHARED SECTION ── */
+.shared-hdr { background: var(--shared); color: #fff; padding: 14px 24px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; margin-bottom: 3px; }
+.shared-hdr-sym { font-size: 22px; font-weight: 800; opacity: 0.4; }
+.shared-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 3px; background: var(--rule); }
+.shared-item { background: var(--shared-bg); padding: 16px 20px; transition: background 0.12s; cursor: default; }
+.shared-item:hover { background: var(--shared-bg2); }
+.shared-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.shared-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.6; margin-bottom: 7px; }
+.shared-tools { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ── TOOLS PANEL ── */
+.tools-legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 12px 20px; background: var(--paper2); border-bottom: 1px solid var(--rule); margin-bottom: 3px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--ink-muted); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+.tools-discipline-hdr { font-family: 'Bricolage Grotesque', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; padding: 12px 20px 8px; color: var(--ink-muted); border-bottom: 1px solid var(--rule); margin-bottom: 3px; }
+.tools-discipline-hdr.A { color: var(--A-mid); border-bottom-color: var(--A-rule); }
+.tools-discipline-hdr.B { color: var(--B-mid); border-bottom-color: var(--B-rule); }
+.tools-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 3px; }
+.tools-col { background: var(--paper); padding: 0 0 20px; }
+.tool-category { font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); padding: 14px 20px 8px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px; }
+.tool-category::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.tool-card { padding: 12px 20px; border-bottom: 1px solid var(--rule); transition: background 0.1s; cursor: default; }
+.tool-card:last-child { border-bottom: none; }
+.tool-card:hover { background: var(--hover-overlay); }
+.tool-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.tool-card-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+.tool-badges { display: flex; gap: 4px; flex-shrink: 0; }
+.tbadge { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border: 1px solid; font-weight: 600; border-radius: 1px; }
+.tbadge.oss  { background: rgba(46,125,70,0.1);  color: var(--shared-mid); border-color: rgba(46,125,70,0.45); }
+.tbadge.com  { background: rgba(160,82,45,0.1);  color: var(--B-mid);     border-color: var(--B-rule); }
+.tbadge.both { background: rgba(44,110,138,0.1); color: var(--A-mid);     border-color: var(--A-rule); }
+.tool-card-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.6; }
+.tool-skill-link { font-size: 9.5px; color: var(--ink-light); margin-top: 4px; font-style: italic; }
+
+/* ── COMPARE TABLE ── */
+.compare-wrap { background: var(--paper); }
+.compare-caption { font-family: 'Bricolage Grotesque', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); padding: 16px 20px 12px; border-bottom: 2px solid var(--ink); }
+table.compare { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.compare th { padding: 10px 16px; text-align: left; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); background: var(--paper2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-family: 'Inconsolata', monospace; }
+table.compare th.A-th { color: var(--A-mid); }
+table.compare th.B-th { color: var(--B-mid); }
+table.compare td { padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.6; color: var(--ink-muted); }
+table.compare tr:hover td { background: var(--hover-table); }
+table.compare td.dim-cell { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 12px; color: var(--ink); white-space: nowrap; }
+table.compare td.A-cell { color: var(--A-mid); }
+table.compare td.B-cell { color: var(--B-mid); }
+
+/* ── VERDICT ── */
+.verdict { margin-top: 3px; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.verdict-box { padding: 20px 24px; }
+.verdict-box.A { background: var(--A-bg); border-top: 3px solid var(--A-mid); }
+.verdict-box.B { background: var(--B-bg); border-top: 3px solid var(--B-mid); }
+.verdict-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+.verdict-box.A .verdict-label { color: var(--A-mid); }
+.verdict-box.B .verdict-label { color: var(--B-mid); }
+.verdict-text { font-size: 11.5px; color: var(--ink-muted); line-height: 1.7; }
+.verdict-text strong { color: var(--ink); font-weight: 600; }
+
+.footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-text { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); }
+
+@media(max-width: 900px) {
+  .concept-row, .skills-col-headers, .group-header, .skill-pair, .tools-cols, .verdict { grid-template-columns: 1fr; }
+  .masthead { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .masthead-right { align-items: flex-start; text-align: left; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div>
+      <div class="masthead-eyebrow">Engineering Skills Reference · AI × Performance</div>
+      <div class="masthead-title">Performance Testing × AI Agents</div>
+    </div>
+    <div class="masthead-right">
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+        <span class="theme-toggle-icon">🌙</span> Dark mode
+      </button>
+      <div class="masthead-meta">
+        <div class="masthead-edition">Skills & Tools Breakdown · 2025–2026</div>
+        <div class="masthead-byline">18 AgPT skills · 18 ADPT skills · 35+ tools mapped</div>
+      </div>
+    </div>
+  </div>
+  <div class="rule-heavy"></div>
+  <div class="rule-light"></div>
+
+  <div class="concept-row">
+    <div class="concept-box A">
+      <div class="concept-discipline">Discipline A — AgPT</div>
+      <div class="concept-name">Agentic Performance Testing</div>
+      <div class="concept-def">
+        Testing <strong>the performance of AI agents themselves</strong> — measuring how fast, how reliably, and how cost-effectively autonomous agents complete multi-step tasks. The <em>agent is the system under test</em>. You validate latency across reasoning chains, tool-call overhead, token throughput, memory retrieval speed, and end-to-end task completion time.
+      </div>
+      <div class="concept-role">AI is the subject under scrutiny</div>
+    </div>
+    <div class="concept-box B">
+      <div class="concept-discipline">Discipline B — ADPT</div>
+      <div class="concept-name">Agent-Driven Performance Testing</div>
+      <div class="concept-def">
+        Using <strong>AI agents as the testing instrument</strong> — deploying autonomous agents to <em>generate</em>, <em>execute</em>, and <em>analyze</em> performance tests against traditional software systems. The agent is the tester. It writes load scripts, spawns virtual users, interprets results, and self-heals test scenarios based on observed system behaviour.
+      </div>
+      <div class="concept-role">AI is the tool accelerating tests</div>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active-A"      onclick="switchTab('skills',  this,'active-A')">Skills Comparison</button>
+    <button class="tab-btn"               onclick="switchTab('tools',   this,'active-B')">Tools by Discipline</button>
+    <button class="tab-btn"               onclick="switchTab('shared',  this,'active-shared')">Shared Foundation</button>
+    <button class="tab-btn"               onclick="switchTab('compare', this,'active-compare')">At a Glance</button>
+  </div>
+
+  <!-- ════════ SKILLS TAB ════════ -->
+  <div class="tab-panel active" id="panel-skills">
+
+    <div class="skills-col-headers">
+      <div class="col-hdr A"><span class="col-hdr-num">A</span> Agentic Performance Testing Skills</div>
+      <div class="col-hdr B"><span class="col-hdr-num">B</span> Agent-Driven Performance Testing Skills</div>
+    </div>
+
+    <!-- ── GROUP 1 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Foundation · LLM & Agent Internals</div>
+        <div class="group-hdr-cell B">Foundation · Classic Performance Testing</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">01</span><div>
+          <div class="skill-name">LLM Inference Metrics Literacy</div>
+          <div class="skill-desc">TTFT (time-to-first-token), TPOT (time-per-output-token), ITL (inter-token latency), and E2E latency. Understanding how these differ fundamentally from HTTP response time and why they require different SLO definitions.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag">foundational</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>OpenLLMetry</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Helicone</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">01</span><div>
+          <div class="skill-name">Performance Testing Fundamentals</div>
+          <div class="skill-desc">Deep understanding of load, stress, soak, spike, and volume testing types. The agent needs to understand what test type to generate for a given scenario — this domain knowledge cannot be delegated.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag">foundational</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">02</span><div>
+          <div class="skill-name">Token Budget Analysis</div>
+          <div class="skill-desc">Profiling input/output token counts per agent step. Modelling cost-per-task, identifying prompt bloat that degrades throughput, and designing token-efficient agent architectures without sacrificing quality.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag A">cost engineering</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>tiktoken</span><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span><span class="tool-chip both"><span class="tool-chip-dot"></span>OpenMeter</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">02</span><div>
+          <div class="skill-name">Load Testing Tool Mastery</div>
+          <div class="skill-desc">k6, Gatling, Locust, JMeter internals — scripting APIs, executor types, virtual user models. You must understand these well enough to review and govern agent-generated scripts for correctness.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>k6</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Gatling</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Locust</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>JMeter</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">03</span><div>
+          <div class="skill-name">Reasoning Chain Profiling</div>
+          <div class="skill-desc">Measuring time spent in each reasoning step (plan → tool select → execute → reflect). Identifying which chain nodes are bottlenecks — distinguishing slow LLM inference from slow tool I/O.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span><span class="tag A">tracing</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>LangSmith</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Arize Phoenix</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">03</span><div>
+          <div class="skill-name">Virtual User & Think Time Modelling</div>
+          <div class="skill-desc">Modelling realistic user behaviour — pacing, think time, session flows — so agents can generate statistically representative load profiles. Understanding how think time distribution affects server saturation curves.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">test design</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">04</span><div>
+          <div class="skill-name">Tool-Call Overhead Measurement</div>
+          <div class="skill-desc">Benchmarking latency introduced by each tool invocation (API calls, DB lookups, code execution). Distinguishing LLM inference time from tool I/O time to correctly attribute bottlenecks.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag A">instrumentation</span><span class="tag">analysis</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>OTel GenAI</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">04</span><div>
+          <div class="skill-name">Protocol-Level Knowledge (HTTP/gRPC/WS)</div>
+          <div class="skill-desc">Agents must understand HTTP/2 pipelining, WebSocket connection behaviour, and gRPC streaming to generate correct load scripts for each protocol. Correlation and session management across protocol types.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">infrastructure</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">05</span><div>
+          <div class="skill-name">Memory & RAG Retrieval Benchmarking</div>
+          <div class="skill-desc">Measuring vector store query latency, embedding generation time, and context window fill rate under concurrent load. Identifying retrieval-induced latency that degrades agent response time.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span><span class="pdot"></span></div><span class="prof-label">Emerging</span></div>
+          <div class="skill-tags"><span class="tag">infrastructure</span><span class="tag emerging">emerging</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>RAGAS</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">05</span><div>
+          <div class="skill-name">Results Interpretation & Statistical Analysis</div>
+          <div class="skill-desc">P50/P90/P99 percentile analysis, throughput vs latency trade-offs, Apdex scoring, error budget burn rate. The agent must interpret results correctly to take follow-up actions without human review of every run.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Prometheus</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Grafana</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 2 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Instrumentation & Observability</div>
+        <div class="group-hdr-cell B">Agent Engineering for Test Generation</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">06</span><div>
+          <div class="skill-name">OTel Instrumentation for Agent Frameworks</div>
+          <div class="skill-desc">Adding OTel spans to LangChain, LlamaIndex, CrewAI, and custom agents using OpenLLMetry or emerging GenAI semantic conventions. Ensuring every agent step emits a traceable span.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>OpenLLMetry</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>OTel SDK</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">06</span><div>
+          <div class="skill-name">LLM-Powered Script Generation</div>
+          <div class="skill-desc">Prompting LLMs to produce valid k6/Locust/Gatling scripts from OpenAPI specs, HAR files, or natural language descriptions. Includes prompt engineering, output validation, and iterative refinement loops.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Claude / GPT-4o API</span><span class="tool-chip com"><span class="tool-chip-dot"></span>GitHub Copilot</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">07</span><div>
+          <div class="skill-name">Distributed Trace Correlation (Multi-Agent)</div>
+          <div class="skill-desc">Stitching traces across multi-agent workflows — correlating sub-agent spans back to parent task IDs across orchestrator boundaries and async tool invocations.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>LangSmith</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog APM</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Dynatrace</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">07</span><div>
+          <div class="skill-name">API Spec → Load Script Transformation</div>
+          <div class="skill-desc">Agents that consume OpenAPI/Swagger specs and auto-generate parametrised load test scenarios covering happy paths, edge cases, and error flows. Schema-aware test data injection from spec examples.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag B">key skill</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangChain tools</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Locust</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">08</span><div>
+          <div class="skill-name">LLM Observability Platform Operations</div>
+          <div class="skill-desc">Operating LangSmith, Langfuse, Helicone, or Arize Phoenix in production. Building latency and cost dashboards per agent/workflow. Setting alert thresholds on token spend and quality degradation.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">tooling</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>LangSmith</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Helicone</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Arize</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">08</span><div>
+          <div class="skill-name">HAR File Analysis & Replay Agents</div>
+          <div class="skill-desc">Agents that parse browser HAR capture files, extract user flows, deduplicate requests, and generate correlation-aware load scripts — converting recorded sessions into production-representative test scenarios.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">automation</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 3 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Load & Concurrency Testing</div>
+        <div class="group-hdr-cell B">Autonomous Test Execution</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">09</span><div>
+          <div class="skill-name">Concurrent Agent Session Simulation</div>
+          <div class="skill-desc">Running N parallel agent instances against shared infrastructure. Understanding how shared LLM rate limits, memory stores, and vector DBs degrade under concurrency — not just infrastructure saturation.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>asyncio harnesses</span><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>promptfoo</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">09</span><div>
+          <div class="skill-name">Test Data Generation Agents</div>
+          <div class="skill-desc">Using LLMs to generate realistic, diverse test payloads — user profiles, transaction data, search queries — that avoid bias in load distribution. Structured output enforcement via JSON Schema or Pydantic.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag">test design</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangChain</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>AutoGen</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">10</span><div>
+          <div class="skill-name">Rate Limit & Throttling Behaviour Testing</div>
+          <div class="skill-desc">Validating agent retry logic under LLM API rate limits. Testing exponential backoff strategies and queue-based buffering under spike loads. Simulating provider outages and partial degradation.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">resilience</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">10</span><div>
+          <div class="skill-name">Agentic Tool-Use for Test Orchestration</div>
+          <div class="skill-desc">Agents with tools to start/stop load tests, query Prometheus/Grafana mid-test, and adjust VU ramp rates based on observed system response — closing the loop between execution and telemetry.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangGraph</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>CrewAI</span><span class="tool-chip both"><span class="tool-chip-dot"></span>k6</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">11</span><div>
+          <div class="skill-name">Synthetic Workload Design for Agents</div>
+          <div class="skill-desc">Creating realistic task datasets that mirror production distributions using golden-set prompts and task complexity tiers (simple / compound / adversarial). Statistical non-determinism is a first-class concern.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag">test design</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>DeepEval</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">11</span><div>
+          <div class="skill-name">Adaptive Load Shaping</div>
+          <div class="skill-desc">Agents that dynamically adjust load ramp profiles in response to real-time metrics — backing off when error rates spike, increasing when headroom exists. Requires tight observability-execution integration.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Prometheus API</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangChain</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 4 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">SLO, Benchmarking & Evals</div>
+        <div class="group-hdr-cell B">Intelligent Analysis & Reporting</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">12</span><div>
+          <div class="skill-name">Agent SLO Definition</div>
+          <div class="skill-desc">Setting latency, quality, cost, and completion-rate SLOs for agent workflows. Writing SLIs that go beyond HTTP status codes — task success rate, instruction-following score, and cost-per-completion.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag strategic">strategic</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">12</span><div>
+          <div class="skill-name">Failure Detection & Self-Healing Tests</div>
+          <div class="skill-desc">Agents that detect script failures mid-run (auth expiry, changed response schemas), auto-fix the script, and resume without human intervention. Requires robust state management and rollback capability.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">13</span><div>
+          <div class="skill-name">Benchmark Harness Engineering</div>
+          <div class="skill-desc">Building evaluation pipelines (AgentBench, custom async harnesses) that run consistent scenarios across model versions. Detecting performance AND quality regressions in CI with statistical confidence.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">automation</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>promptfoo</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>DeepEval</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">13</span><div>
+          <div class="skill-name">Automated Root Cause Hypothesis Generation</div>
+          <div class="skill-desc">Agents that correlate load test results with APM traces, infrastructure metrics, and DB query plans to generate ranked root cause hypotheses — augmenting rather than replacing engineer judgment.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag B">key skill</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Dynatrace Davis</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog Watchdog</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness AIDA</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">14</span><div>
+          <div class="skill-name">Cross-Model Performance Comparison</div>
+          <div class="skill-desc">Running identical agent tasks across GPT-4o, Claude Sonnet, Gemini Flash, etc. Building apples-to-apples cost/latency/quality trade-off matrices that inform model selection decisions.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">analysis</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>promptfoo</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">14</span><div>
+          <div class="skill-name">Performance Regression Narrative Generation</div>
+          <div class="skill-desc">LLM-generated plain-language summaries comparing current vs baseline runs. Identifying which changes (code deploy, config, data volume) caused regressions and surfacing this directly to PR reviewers.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">reporting</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Claude / GPT API</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Grafana</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">15</span><div>
+          <div class="skill-name">Eval Framework Design (LLM-as-Judge)</div>
+          <div class="skill-desc">Defining task completion rate, factual accuracy under load, instruction-following degradation. Evals are the SLIs for agentic systems — statistical significance across probabilistic runs is essential.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>RAGAS</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>DeepEval</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">15</span><div>
+          <div class="skill-name">Bottleneck Localisation via Agent Reasoning</div>
+          <div class="skill-desc">Agents that chain together: slow endpoint → slow DB query → missing index → recommended fix. Reasoning across multiple observability data sources to close the loop from symptom to remediation.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 5 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Optimisation & Architecture</div>
+        <div class="group-hdr-cell B">Platform & Governance</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">16</span><div>
+          <div class="skill-name">Prompt Caching & Batching Strategy</div>
+          <div class="skill-desc">Leveraging semantic caching (GPTCache, Redis), prompt prefix caching, and request batching to reduce LLM call frequency and latency. Measuring cache hit rates under realistic load distributions.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">optimisation</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>GPTCache</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">16</span><div>
+          <div class="skill-name">Agent Safety in Test Environments</div>
+          <div class="skill-desc">Constraining agents so they only target designated test environments. Guardrails preventing accidental production load injection. Environment detection, scope boundaries, and blast radius containment.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">17</span><div>
+          <div class="skill-name">Agent Architecture Performance Patterns</div>
+          <div class="skill-desc">Knowing when to use parallel vs sequential tool calls, streaming vs buffered output, and async agent execution to minimise wall-clock time. Understanding MCP server performance implications.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag">architecture</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">17</span><div>
+          <div class="skill-name">CI/CD Integration of Agent Test Pipelines</div>
+          <div class="skill-desc">Embedding agent-driven perf tests in CI. Agents generate, run, analyse, and gate deployments — raising PRs with findings when thresholds breach. GitHub Actions, GitLab CI, Harness integration.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag">automation</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>GitHub Actions</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">18</span><div>
+          <div class="skill-name">FinOps for Agent Fleets</div>
+          <div class="skill-desc">Token spend attribution per agent, per workflow, per business unit. Building cost anomaly detection and per-task budget gates. Cost is a first-class SLO in agentic systems — not an afterthought.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag strategic">strategic</span><span class="tag A">cost engineering</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>OpenMeter</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Helicone</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">18</span><div>
+          <div class="skill-name">Human-in-the-Loop Validation Design</div>
+          <div class="skill-desc">Knowing when to surface agent-generated scripts and analysis to engineers for approval vs when to allow fully autonomous execution. Trust calibration, approval workflows, and override mechanisms.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag strategic">strategic</span></div>
+        </div></div>
+      </div>
+    </div>
+
+  </div><!-- end skills panel -->
+
+  <!-- ════════ TOOLS TAB ════════ -->
+  <div class="tab-panel" id="panel-tools">
+    <div class="tools-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--shared-mid)"></span><span class="tbadge oss">OSS</span> Open-source / free</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--B-mid)"></span><span class="tbadge com">COM</span> Commercial / SaaS</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--A-mid)"></span><span class="tbadge both">BOTH</span> OSS core + paid tier</div>
+    </div>
+
+    <div class="tools-discipline-hdr A">Discipline A — Agentic Performance Testing (AgPT) Tools</div>
+    <div class="tools-cols">
+      <div class="tools-col">
+        <div class="tool-category">LLM Observability & Tracing</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">LangSmith</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">LangChain's observability platform — full trace-level visibility into agent steps, tool calls, token usage, and latency per node. The primary debugging surface when an agent degrades under load.</div><div class="tool-skill-link">→ Skills 03, 07, 08, 12</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Langfuse</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Open-source LLM engineering platform — tracing, evals, and prompt management. Self-hostable. Strong AgPT fit for teams requiring full data ownership over agent traces and cost attribution.</div><div class="tool-skill-link">→ Skills 01, 06, 07, 08</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Arize AI / Arize Phoenix</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">ML observability with strong LLM monitoring — embedding drift, hallucination scoring, and output quality degradation over time. Detecting quality SLO breaches under sustained load.</div><div class="tool-skill-link">→ Skills 03, 08, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Helicone</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Proxy-based LLM observability — zero-code instrumentation of any OpenAI-compatible API. Tracks cost, latency, token usage, and error rates per model and prompt template. Lightweight starting point.</div><div class="tool-skill-link">→ Skills 01, 08, 18</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">OpenLLMetry</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">OpenTelemetry-based SDK for instrumenting LLM calls. Emits standard OTel spans enriched with token counts, model name, and finish reason. Vendor-neutral AgPT instrumentation foundation.</div><div class="tool-skill-link">→ Skills 01, 06, 07</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Datadog LLM Observability</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Datadog's dedicated LLM product — traces, evaluations, and cost monitoring in one platform. Strong for organisations already on Datadog who want to unify infrastructure and AI monitoring.</div><div class="tool-skill-link">→ Skills 07, 08, 18</div></div>
+      </div>
+      <div class="tools-col">
+        <div class="tool-category">Eval Frameworks</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Braintrust</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Eval platform with dataset management, LLM-as-judge scoring, and CI integration. Run eval suites on each model/prompt change to gate deployment on quality SLOs alongside latency SLOs.</div><div class="tool-skill-link">→ Skills 05, 12, 13, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">DeepEval</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Open-source LLM eval framework with pytest integration. Covers hallucination, toxicity, task completion, and custom metrics. Ideal for embedding AgPT quality gates directly in CI pipelines.</div><div class="tool-skill-link">→ Skills 11, 13, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">RAGAS</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">RAG-specific evaluation framework. Measures faithfulness, answer relevancy, context precision/recall. Quantifying retrieval-augmented agent output quality degradation under high concurrency.</div><div class="tool-skill-link">→ Skills 05, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">promptfoo</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">LLM testing CLI — runs prompt variants across models and datasets, scores outputs, detects regressions. High-throughput batch evaluation of agent prompts to find performance vs quality trade-offs.</div><div class="tool-skill-link">→ Skills 09, 13, 14</div></div>
+        <div class="tool-category">Load, Concurrency & Token Economics</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">LiteLLM</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Unified LLM proxy with rate limit management, retry logic, and cost tracking across 100+ models. Stress-test agent behaviour under different provider constraints and simulate rate limit scenarios.</div><div class="tool-skill-link">→ Skills 02, 09, 10, 14, 16</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">tiktoken</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">OpenAI tokeniser library. Used in AgPT harnesses to measure token counts, compute cost estimates, and detect prompt bloat patterns that emerge under multi-turn load.</div><div class="tool-skill-link">→ Skills 02, 18</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">OpenMeter</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Usage-based metering for APIs including LLM providers. Aggregate token consumption across concurrent agent sessions to model cost SLOs and identify expensive agent execution paths.</div><div class="tool-skill-link">→ Skills 02, 18</div></div>
+      </div>
+    </div>
+
+    <div class="tools-discipline-hdr B" style="margin-top:3px">Discipline B — Agent-Driven Performance Testing (ADPT) Tools</div>
+    <div class="tools-cols">
+      <div class="tools-col">
+        <div class="tool-category">Load Generation & Test Execution</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">k6</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">JavaScript-based load testing with Grafana Cloud for distributed execution and AI-assisted analysis. Agents generate k6 scripts from OpenAPI specs, parametrise with synthetic data, and run via CLI or cloud.</div><div class="tool-skill-link">→ Skills 02, 06, 10, 17</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Locust</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">Python-native load tool — well-suited to LLM co-generation since Python is the dominant AI/ML scripting language. Agents extend Locust tasks with dynamic behaviour trees and custom wait logic.</div><div class="tool-skill-link">→ Skills 02, 06, 09, 10</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Gatling</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Scala/Java DSL with Gatling Enterprise for distributed cloud execution. Strong for high-volume HTTP/gRPC scenarios. Agents produce Gatling simulations from traffic recordings and API specs.</div><div class="tool-skill-link">→ Skills 02, 04, 06</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Apache JMeter</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">Mature, widely adopted enterprise standard. Agents convert HAR files or Postman collections into JMeter test plans. Lower baseline for agentic augmentation but ubiquitous in large organisations.</div><div class="tool-skill-link">→ Skills 02, 08</div></div>
+        <div class="tool-category">Agent Orchestration (as the test driver)</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">LangChain / LangGraph</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Frameworks for building test agents — orchestrating script generation, execution, and result interpretation as a stateful agentic workflow. LangGraph adds control flow for adaptive load shaping loops.</div><div class="tool-skill-link">→ Skills 06, 09, 10, 11, 12</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">AutoGen (Microsoft)</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">Multi-agent conversation framework. A "test planner" agent coordinates with a "script writer" agent and "result analyser" — each specialised, all operating in a single orchestrated test pipeline.</div><div class="tool-skill-link">→ Skills 09, 13, 14</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">CrewAI</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Role-based multi-agent framework. Intuitive for modelling test team personas as agents — QE analyst, script engineer, performance coach — each contributing to automated test creation workflows.</div><div class="tool-skill-link">→ Skills 09, 10, 13</div></div>
+      </div>
+      <div class="tools-col">
+        <div class="tool-category">AI-Assisted Script & Analysis</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Claude / GPT-4o API</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Direct LLM API calls to generate test scripts from specs, interpret results, narrate anomalies in natural language, and suggest remediation steps. Core to bespoke ADPT agent pipelines.</div><div class="tool-skill-link">→ Skills 06, 07, 13, 14, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">GitHub Copilot</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">IDE-level assistance for writing k6/Locust/JMeter scripts. Competent at boilerplate test code — an ADPT baseline productivity accelerant for engineers reviewing agent-generated output.</div><div class="tool-skill-link">→ Skill 06</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Harness (AIDA)</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">AI-augmented CI/CD — integrates load test triggers, SLO gating, and AI-driven failure root cause analysis directly in the deployment pipeline. Strong ADPT enterprise integration story.</div><div class="tool-skill-link">→ Skills 13, 17</div></div>
+        <div class="tool-category">Observability (supporting ADPT)</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Grafana + Prometheus</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">Core metrics stack. AI agents query Prometheus APIs during test runs to detect threshold breaches and auto-generate pass/fail assessments with trend commentary — closing the observability loop.</div><div class="tool-skill-link">→ Skills 05, 10, 11, 13</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Datadog APM</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Full-stack APM with Watchdog AI for anomaly detection. ADPT integration: test agents correlate load test windows with Datadog traces to attribute latency to specific service calls automatically.</div><div class="tool-skill-link">→ Skills 05, 13, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Dynatrace (Davis AI)</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Davis AI engine auto-detects anomalies during load runs with strong automated root cause analysis. Reduces post-test analysis burden — the Davis engine complements ADPT agent-generated hypotheses.</div><div class="tool-skill-link">→ Skills 05, 13, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">PagerDuty</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Alert routing and incident management triggered by SLO breaches detected during agent-driven test runs. Integrates with both ADPT pipelines and AgPT quality gate failures.</div><div class="tool-skill-link">→ Skills 12, 17</div></div>
+      </div>
+    </div>
+  </div><!-- end tools panel -->
+
+  <!-- ════════ SHARED PANEL ════════ -->
+  <div class="tab-panel" id="panel-shared">
+    <div class="shared-hdr"><span class="shared-hdr-sym">∩</span> Shared Foundation Skills — Required for Both Disciplines</div>
+    <div class="shared-grid">
+      <div class="shared-item"><div class="shared-name">Python / JavaScript Scripting</div><div class="shared-desc">Writing instrumentation code, test harnesses, and agent tool implementations. Async patterns (asyncio, Promises) are essential for both. Python dominates AgPT; JS/Python split in ADPT.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>asyncio</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>pytest</span></div></div>
+      <div class="shared-item"><div class="shared-name">OpenTelemetry Fundamentals</div><div class="shared-desc">Traces, spans, metrics, and logs as the lingua franca of modern observability — used to instrument agent steps (AgPT) and correlate test results with system behaviour (ADPT).</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>OTel SDK</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>OpenLLMetry</span></div></div>
+      <div class="shared-item"><div class="shared-name">Prometheus + Grafana</div><div class="shared-desc">The default metrics stack. Both disciplines require building dashboards and writing PromQL queries to interpret system behaviour under load — whether that system is a microservice or an agent.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Prometheus</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Grafana</span></div></div>
+      <div class="shared-item"><div class="shared-name">SLO / SLI / Error Budget Design</div><div class="shared-desc">Defining what "good performance" means. Error budgets frame when performance work takes priority. AgPT adds quality-dimension SLOs on top of classical latency and availability SLIs.</div><div class="shared-tools"><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog SLOs</span></div></div>
+      <div class="shared-item"><div class="shared-name">Docker / Kubernetes Basics</div><div class="shared-desc">Running agents and load generators in containers. Understanding resource limits that affect both LLM inference pods and load injection infrastructure. Pod scheduling, resource requests, and HPA behaviour.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Docker</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Kubernetes</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span></div></div>
+      <div class="shared-item"><div class="shared-name">LLM API Fluency</div><div class="shared-desc">Working knowledge of Anthropic, OpenAI, and Google APIs — request structure, streaming, function/tool calling, context limits, and error handling. The baseline for any AI-adjacent engineering practice.</div><div class="shared-tools"><span class="tool-chip com"><span class="tool-chip-dot"></span>Anthropic API</span><span class="tool-chip com"><span class="tool-chip-dot"></span>OpenAI API</span><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span></div></div>
+      <div class="shared-item"><div class="shared-name">Statistical Reasoning</div><div class="shared-desc">Percentile analysis, confidence intervals, sample size for meaningful benchmarks, distinguishing noise from real regressions. AgPT demands extra rigour — probabilistic systems require multiple runs and variance analysis.</div></div>
+      <div class="shared-item"><div class="shared-name">CI/CD Pipeline Fluency</div><div class="shared-desc">GitHub Actions, GitLab CI, or Harness. Integrating performance gates and automated test runs into deployment pipelines — a prerequisite for making either discipline shift-left effectively.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>GitHub Actions</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness</span></div></div>
+      <div class="shared-item"><div class="shared-name">Structured Output & JSON Schema</div><div class="shared-desc">Enforcing typed, predictable outputs from LLMs via JSON Schema, Pydantic, or Zod — essential for agents that programmatically drive test tools (ADPT) and for deterministic eval scoring (AgPT).</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Pydantic</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Zod</span></div></div>
+      <div class="shared-item"><div class="shared-name">Agent Architecture Literacy</div><div class="shared-desc">Understanding ReAct, plan-and-execute, and multi-agent orchestration patterns. In ADPT you configure and govern test agents; in AgPT you instrument and stress-test these very same patterns.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangChain</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>AutoGen</span><span class="tool-chip both"><span class="tool-chip-dot"></span>CrewAI</span></div></div>
+      <div class="shared-item"><div class="shared-name">DORA Metrics Familiarity</div><div class="shared-desc">Deployment frequency, lead time, MTTR, and change failure rate as the business framing for both disciplines. Performance work and agent reliability both ultimately serve the DORA improvement mandate.</div></div>
+      <div class="shared-item"><div class="shared-name">Prompt Engineering Fundamentals</div><div class="shared-desc">In ADPT: writing prompts that generate good scripts and narrate results. In AgPT: constructing adversarial and boundary-pushing prompts that expose reliability weaknesses. Different intent, same craft.</div><div class="shared-tools"><span class="tool-chip com"><span class="tool-chip-dot"></span>Claude API</span><span class="tool-chip com"><span class="tool-chip-dot"></span>OpenAI API</span></div></div>
+    </div>
+  </div><!-- end shared panel -->
+
+  <!-- ════════ COMPARE TAB ════════ -->
+  <div class="tab-panel" id="panel-compare">
+    <div class="compare-wrap">
+      <div class="compare-caption">Key Differences at a Glance</div>
+      <table class="compare">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th class="A-th">Agentic Performance Testing (AgPT)</th>
+            <th class="B-th">Agent-Driven Performance Testing (ADPT)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="dim-cell">What is being tested</td><td class="A-cell">The AI agent / workflow itself — agent is the system under test</td><td class="B-cell">A software system (API, DB, microservice) — agent is the tester</td></tr>
+          <tr><td class="dim-cell">Role of AI in the work</td><td class="A-cell">AI is the subject under scrutiny — measured, profiled, benchmarked</td><td class="B-cell">AI is the executor and co-pilot — generates, runs, and interprets tests</td></tr>
+          <tr><td class="dim-cell">Primary metric vocabulary</td><td class="A-cell">TTFT, TPOT, tokens/request, cost/completion, task success rate, eval score</td><td class="B-cell">TPS, VU count, p95/p99 latency, error rate, script coverage</td></tr>
+          <tr><td class="dim-cell">Key failure modes</td><td class="A-cell">Hallucination under load, loop divergence, context truncation, rate limit cascades</td><td class="B-cell">Timeout storms, connection pool exhaustion, DB lock contention, bad scripts in prod</td></tr>
+          <tr><td class="dim-cell">Core toolchain</td><td class="A-cell">LangSmith, Langfuse, Arize, DeepEval, RAGAS, promptfoo, LiteLLM</td><td class="B-cell">k6, Gatling, Locust + LangChain/AutoGen for orchestration + LLM APIs</td></tr>
+          <tr><td class="dim-cell">Determinism of results</td><td class="A-cell">Probabilistic — variance across identical runs is expected; statistics are mandatory</td><td class="B-cell">Largely deterministic — scripts are stable; variance is system noise, not tool noise</td></tr>
+          <tr><td class="dim-cell">Hardest skill to acquire</td><td class="A-cell">Reasoning chain profiling + cross-model benchmarking + eval design under non-determinism</td><td class="B-cell">Adaptive load shaping + safe autonomous execution + trust calibration</td></tr>
+          <tr><td class="dim-cell">Risk if done poorly</td><td class="A-cell">Invisible cost overruns, unpredictable agent latency, quality regressions reaching users</td><td class="B-cell">Agents generating misleading scripts or — worst case — injecting load into production</td></tr>
+          <tr><td class="dim-cell">Career adjacency</td><td class="A-cell">SRE, ML engineering, AI product reliability</td><td class="B-cell">SDET, QE automation, AI-augmented DevOps</td></tr>
+          <tr><td class="dim-cell">Practice maturity</td><td class="A-cell">Emerging specialist discipline — no established playbook, high demand, low supply</td><td class="B-cell">Evolution of an existing role — natural progression for performance engineers upskilling into AI</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict">
+      <div class="verdict-box A">
+        <div class="verdict-label">When to prioritise AgPT skills</div>
+        <div class="verdict-text">Your organisation is <strong>shipping AI-powered products</strong> — agents, copilots, or RAG workflows — where performance, reliability, and cost are customer-facing concerns. You need to define SLOs for AI behaviour, not just infrastructure uptime. The people who can do this are <strong>rare and valuable</strong>; the toolchain is still forming and the practitioner who can also build it will have outsized influence.</div>
+      </div>
+      <div class="verdict-box B">
+        <div class="verdict-label">When to prioritise ADPT skills</div>
+        <div class="verdict-text">Your organisation wants to <strong>dramatically accelerate how performance tests are created and maintained</strong> — reducing the manual scripting burden, expanding coverage without growing headcount, and getting intelligent analysis without waiting for an expert to read charts. This is the <strong>lower barrier path</strong>: existing performance engineers can adopt ADPT incrementally without rebuilding their entire practice.</div>
+      </div>
+    </div>
+  </div><!-- end compare panel -->
+
+  <div class="footer">
+    <span class="footer-text">Performance Testing × AI Agents — Skills & Tools Reference 2025–2026</span>
+    <span class="footer-text">18 AgPT skills · 18 ADPT skills · 12 shared foundations · 35+ tools</span>
+  </div>
+
+</div><!-- end page -->
+<script>
+function switchTab(id, el, cls) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-A','active-B','active-shared','active-compare'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add(cls);
+}
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('themeBtn');
+  btn.innerHTML = isDark ? '<span class="theme-toggle-icon">🌙</span> Dark mode' : '<span class="theme-toggle-icon">☀️</span> Light mode';
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.innerHTML = '<span class="theme-toggle-icon">☀️</span> Light mode';
+    });
+  }
+})();
+</script>
+</body>
+</html>

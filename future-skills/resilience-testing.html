@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resilience & Chaos Testing × AI Agents — Skills & Tools Reference 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── LIGHT THEME ── */
+[data-theme="light"] {
+  --bg: #f0ede6;
+  --paper: #f8f5ee;
+  --paper2: #ede8de;
+  --ink: #141210;
+  --ink-muted: #6e6358;
+  --ink-light: #aea398;
+  --rule: #d8d0c4;
+  --rule-strong: #b0a898;
+  --A: #1b3a35;
+  --A-mid: #2d7d6a;
+  --A-bg: #ecf5f3;
+  --A-bg2: #cde8e1;
+  --A-rule: #8ecfc3;
+  --A-tag: rgba(27,58,53,0.1);
+  --B: #3a1a1a;
+  --B-mid: #9b3636;
+  --B-bg: #faf0f0;
+  --B-bg2: #f2d0d0;
+  --B-rule: #d49090;
+  --B-tag: rgba(58,26,26,0.1);
+  --shared: #2a2a4a;
+  --shared-mid: #4a4a8a;
+  --shared-bg: #f0f0f8;
+  --shared-bg2: #d0d0ec;
+  --critical: #b83232;
+  --advanced: #6a3294;
+  --emerging: #c86000;
+  --strategic: #1a4a6a;
+  --hover-overlay: rgba(0,0,0,0.018);
+  --hover-table: rgba(0,0,0,0.012);
+  --noise-opacity: 0.35;
+  --toggle-icon: "☀";
+}
+
+/* ── DARK THEME ── */
+[data-theme="dark"] {
+  --bg: #13110e;
+  --paper: #1c1916;
+  --paper2: #252118;
+  --ink: #e8e2d6;
+  --ink-muted: #a09080;
+  --ink-light: #6a5e52;
+  --rule: #302a24;
+  --rule-strong: #453d34;
+  --A: #5ecfb8;
+  --A-mid: #5ecfb8;
+  --A-bg: #0d2420;
+  --A-bg2: #122e28;
+  --A-rule: #1d5a4e;
+  --A-tag: rgba(94,207,184,0.1);
+  --B: #e08080;
+  --B-mid: #e08080;
+  --B-bg: #200e0e;
+  --B-bg2: #2c1212;
+  --B-rule: #5a2020;
+  --B-tag: rgba(224,128,128,0.1);
+  --shared: #9898d8;
+  --shared-mid: #9898d8;
+  --shared-bg: #0e0e1e;
+  --shared-bg2: #181828;
+  --critical: #e06060;
+  --advanced: #b87ad8;
+  --emerging: #e09040;
+  --strategic: #6090c8;
+  --hover-overlay: rgba(255,255,255,0.03);
+  --hover-table: rgba(255,255,255,0.02);
+  --noise-opacity: 0.15;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inconsolata', monospace;
+  min-height: 100vh;
+  transition: background 0.2s, color 0.2s;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+  opacity: var(--noise-opacity);
+}
+
+.page { max-width: 1380px; margin: 0 auto; padding: 48px 32px 120px; }
+
+/* ── DARK MODE TOGGLE ── */
+.theme-toggle {
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  display: flex; align-items: center; gap: 7px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.theme-toggle:hover { background: var(--paper); color: var(--ink); border-color: var(--rule-strong); }
+.theme-toggle-icon { font-size: 14px; line-height: 1; }
+
+/* ── MASTHEAD ── */
+.masthead { border-top: 4px solid var(--ink); padding: 20px 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.masthead-left {}
+.masthead-eyebrow { font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 4px; }
+.masthead-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(22px, 3.6vw, 50px); font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+.masthead-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.masthead-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.masthead-edition { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); }
+.masthead-byline { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); }
+.rule-heavy { height: 2px; background: var(--ink); margin: 14px 0 0; }
+.rule-light  { height: 1px; background: var(--rule); margin: 6px 0 32px; }
+
+/* ── CONCEPT BLOCKS ── */
+.concept-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 3px; }
+.concept-box { padding: 26px 30px; border-top: 5px solid; }
+.concept-box.A { background: var(--A-bg); border-color: var(--A); }
+.concept-box.B { background: var(--B-bg); border-color: var(--B); }
+.concept-discipline { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
+.A .concept-discipline { color: var(--A-mid); }
+.B .concept-discipline { color: var(--B-mid); }
+.concept-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -0.022em; margin-bottom: 10px; }
+.concept-def { font-size: 12px; line-height: 1.82; color: var(--ink-muted); }
+.concept-def strong { color: var(--ink); font-weight: 600; }
+.concept-role { display: inline-block; margin-top: 13px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border: 1px solid; font-weight: 600; }
+.A .concept-role { color: var(--A); border-color: var(--A-rule); background: var(--A-bg2); }
+.B .concept-role { color: var(--B); border-color: var(--B-rule); background: var(--B-bg2); }
+
+/* ── NAV TABS ── */
+.tab-nav { display: flex; gap: 2px; margin-top: 28px; margin-bottom: 3px; flex-wrap: wrap; }
+.tab-btn { font-family: 'Bricolage Grotesque', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 20px; background: var(--paper2); border: none; cursor: pointer; color: var(--ink-muted); transition: all 0.13s; border-bottom: 3px solid transparent; }
+.tab-btn:hover { background: var(--paper); color: var(--ink); }
+.tab-btn.active-A      { background: var(--A-bg); color: var(--A); border-bottom-color: var(--A-mid); }
+.tab-btn.active-B      { background: var(--B-bg); color: var(--B); border-bottom-color: var(--B-mid); }
+.tab-btn.active-shared { background: var(--shared-bg); color: var(--shared); border-bottom-color: var(--shared); }
+.tab-btn.active-compare{ background: var(--paper); color: var(--ink); border-bottom-color: var(--ink); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── PAIRED SKILLS LAYOUT ── */
+/* Section group: full-width header, then paired rows */
+.skill-group { margin-bottom: 3px; }
+
+.group-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 2px;
+}
+.group-hdr-cell {
+  padding: 10px 22px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 8.5px; letter-spacing: 0.22em; text-transform: uppercase; color: white;
+  font-family: 'Inconsolata', monospace; font-weight: 600;
+}
+.group-hdr-cell.A { background: var(--A); color: rgba(255,255,255,0.8); }
+.group-hdr-cell.B { background: var(--B); color: rgba(255,255,255,0.8); }
+.group-hdr-cell::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.2); }
+
+.skill-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 2px;
+}
+
+.skill-cell {
+  background: var(--paper);
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 0 12px;
+  padding: 13px 22px;
+  align-items: start;
+  cursor: default;
+  transition: background 0.1s;
+  border-bottom: 1px solid var(--rule);
+}
+.skill-cell:hover { background: var(--hover-overlay); }
+.skill-cell.cell-A { border-left: 2px solid var(--A-rule); }
+.skill-cell.cell-B { border-left: 2px solid var(--B-rule); }
+
+.skill-num { font-size: 9px; color: var(--ink-light); padding-top: 3px; text-align: right; font-family: 'Inconsolata', monospace; }
+.skill-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 3px; letter-spacing: -0.01em; }
+.skill-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.62; margin-bottom: 6px; }
+.prof-wrap { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.prof-dots { display: flex; gap: 2px; }
+.pdot { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); }
+.pdot.fill-A { background: var(--A-mid); }
+.pdot.fill-B { background: var(--B-mid); }
+.prof-label { font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 1px; border: 1px solid var(--rule); background: rgba(128,128,128,0.05); color: var(--ink-muted); }
+.tag.critical  { background: rgba(184,50,50,0.08);  color: var(--critical); border-color: rgba(184,50,50,0.35); }
+.tag.advanced  { background: rgba(106,50,148,0.08); color: var(--advanced); border-color: rgba(106,50,148,0.35); }
+.tag.emerging  { background: rgba(200,96,0,0.08);   color: var(--emerging); border-color: rgba(200,96,0,0.35); }
+.tag.strategic { background: rgba(26,74,106,0.08);  color: var(--strategic); border-color: rgba(26,74,106,0.35); }
+.tag.A { background: var(--A-tag); color: var(--A-mid); border-color: var(--A-rule); }
+.tag.B { background: var(--B-tag); color: var(--B-mid); border-color: var(--B-rule); }
+.tool-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.tool-chip { font-size: 9px; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 2px; font-family: 'Inconsolata', monospace; display: flex; align-items: center; gap: 4px; }
+.tool-chip.oss  { background: rgba(45,125,106,0.1); color: var(--A-mid); border: 1px solid rgba(45,125,106,0.35); }
+.tool-chip.com  { background: rgba(155,54,54,0.08); color: var(--B-mid); border: 1px solid rgba(155,54,54,0.3); }
+.tool-chip.both { background: rgba(74,74,138,0.1);  color: var(--shared-mid); border: 1px solid rgba(74,74,138,0.35); }
+.tool-chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.tool-chip.oss  .tool-chip-dot { background: var(--A-mid); }
+.tool-chip.com  .tool-chip-dot { background: var(--B-mid); }
+.tool-chip.both .tool-chip-dot { background: var(--shared-mid); }
+
+/* Column headers above paired skills */
+.skills-col-headers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+.col-hdr { padding: 14px 24px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.col-hdr.A { background: var(--A); color: #fff; }
+.col-hdr.B { background: var(--B); color: #fff; }
+.col-hdr-num { font-size: 26px; font-weight: 800; opacity: 0.3; }
+
+/* ── SHARED SECTION ── */
+.shared-hdr { background: var(--shared); color: #fff; padding: 14px 24px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; margin-bottom: 3px; }
+.shared-hdr-sym { font-size: 22px; font-weight: 800; opacity: 0.4; }
+.shared-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 3px; background: var(--rule); }
+.shared-item { background: var(--shared-bg); padding: 16px 20px; transition: background 0.12s; cursor: default; }
+.shared-item:hover { background: var(--shared-bg2); }
+.shared-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.shared-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.6; margin-bottom: 7px; }
+.shared-tools { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ── TOOLS PANEL ── */
+.tools-legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 12px 20px; background: var(--paper2); border-bottom: 1px solid var(--rule); margin-bottom: 3px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--ink-muted); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+.tools-discipline-hdr { font-family: 'Bricolage Grotesque', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; padding: 12px 20px 8px; color: var(--ink-muted); border-bottom: 1px solid var(--rule); margin-bottom: 3px; }
+.tools-discipline-hdr.A { color: var(--A-mid); border-bottom-color: var(--A-rule); }
+.tools-discipline-hdr.B { color: var(--B-mid); border-bottom-color: var(--B-rule); }
+.tools-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 3px; }
+.tools-col { background: var(--paper); padding: 0 0 20px; }
+.tool-category { font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); padding: 14px 20px 8px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px; }
+.tool-category::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.tool-card { padding: 12px 20px; border-bottom: 1px solid var(--rule); transition: background 0.1s; cursor: default; }
+.tool-card:last-child { border-bottom: none; }
+.tool-card:hover { background: var(--hover-overlay); }
+.tool-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.tool-card-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+.tool-badges { display: flex; gap: 4px; flex-shrink: 0; }
+.tbadge { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border: 1px solid; font-weight: 600; border-radius: 1px; }
+.tbadge.oss  { background: rgba(45,125,106,0.1); color: var(--A-mid);    border-color: rgba(45,125,106,0.45); }
+.tbadge.com  { background: rgba(155,54,54,0.1);  color: var(--B-mid);   border-color: var(--B-rule); }
+.tbadge.both { background: rgba(74,74,138,0.1);  color: var(--shared-mid); border-color: rgba(74,74,138,0.4); }
+.tool-card-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.6; }
+.tool-skill-link { font-size: 9.5px; color: var(--ink-light); margin-top: 4px; font-style: italic; }
+
+/* ── COMPARE TABLE ── */
+.compare-wrap { background: var(--paper); }
+.compare-caption { font-family: 'Bricolage Grotesque', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); padding: 16px 20px 12px; border-bottom: 2px solid var(--ink); }
+table.compare { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.compare th { padding: 10px 16px; text-align: left; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); background: var(--paper2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-family: 'Inconsolata', monospace; }
+table.compare th.A-th { color: var(--A-mid); }
+table.compare th.B-th { color: var(--B-mid); }
+table.compare td { padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.6; color: var(--ink-muted); }
+table.compare tr:hover td { background: var(--hover-table); }
+table.compare td.dim-cell { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 12px; color: var(--ink); white-space: nowrap; }
+table.compare td.A-cell { color: var(--A-mid); }
+table.compare td.B-cell { color: var(--B-mid); }
+
+/* ── VERDICT ── */
+.verdict { margin-top: 3px; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.verdict-box { padding: 20px 24px; }
+.verdict-box.A { background: var(--A-bg); border-top: 3px solid var(--A-mid); }
+.verdict-box.B { background: var(--B-bg); border-top: 3px solid var(--B-mid); }
+.verdict-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+.verdict-box.A .verdict-label { color: var(--A-mid); }
+.verdict-box.B .verdict-label { color: var(--B-mid); }
+.verdict-text { font-size: 11.5px; color: var(--ink-muted); line-height: 1.7; }
+.verdict-text strong { color: var(--ink); font-weight: 600; }
+
+.footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-text { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); }
+
+@media(max-width: 900px) {
+  .concept-row, .skills-col-headers, .group-header, .skill-pair, .tools-cols, .verdict { grid-template-columns: 1fr; }
+  .masthead { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .masthead-right { align-items: flex-start; text-align: left; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="masthead-left">
+      <div class="masthead-eyebrow">Engineering Skills Reference · Resilience & Chaos × AI</div>
+      <div class="masthead-title">Resilience Testing × AI Agents</div>
+    </div>
+    <div class="masthead-right">
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+        <span class="theme-toggle-icon">🌙</span> Dark mode
+      </button>
+      <div class="masthead-meta">
+        <div class="masthead-edition">Skills & Tools Breakdown · 2025–2026</div>
+        <div class="masthead-byline">18 AgRT skills · 18 ABCE skills · 40+ tools mapped</div>
+      </div>
+    </div>
+  </div>
+  <div class="rule-heavy"></div>
+  <div class="rule-light"></div>
+
+  <div class="concept-row">
+    <div class="concept-box A">
+      <div class="concept-discipline">Discipline A — AgRT</div>
+      <div class="concept-name">Agentic Resilience Testing</div>
+      <div class="concept-def">
+        Testing <strong>the resilience of AI agents themselves</strong> — validating how autonomous agents behave when their tools fail, context degrades, memory becomes corrupted, or reasoning chains collapse. The <em>agent is the system under stress</em>. You probe cognitive degradation, loop divergence, tool-outage recovery, adversarial prompt injection, multi-agent cascade failure, and graceful fallback behaviour across the full agent lifecycle.
+      </div>
+      <div class="concept-role">AI is the resilience subject</div>
+    </div>
+    <div class="concept-box B">
+      <div class="concept-discipline">Discipline B — ABCE</div>
+      <div class="concept-name">Agent-Based Chaos Engineering</div>
+      <div class="concept-def">
+        Using <strong>AI agents as autonomous chaos operators</strong> — deploying agents to <em>design</em>, <em>execute</em>, and <em>analyse</em> chaos experiments against traditional infrastructure and services. The agent is the chaos practitioner. It generates hypotheses, selects failure modes, injects faults, observes system response, and produces post-experiment findings — dramatically accelerating and scaling traditional chaos practice.
+      </div>
+      <div class="concept-role">AI is the chaos instrument</div>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active-A"      onclick="switchTab('skills',  this,'active-A')">Skills Comparison</button>
+    <button class="tab-btn"               onclick="switchTab('tools',   this,'active-B')">Tools by Discipline</button>
+    <button class="tab-btn"               onclick="switchTab('shared',  this,'active-shared')">Shared Foundation</button>
+    <button class="tab-btn"               onclick="switchTab('compare', this,'active-compare')">At a Glance</button>
+  </div>
+
+  <!-- ════════ SKILLS TAB ════════ -->
+  <div class="tab-panel active" id="panel-skills">
+
+    <div class="skills-col-headers">
+      <div class="col-hdr A"><span class="col-hdr-num">A</span> Agentic Resilience Testing Skills</div>
+      <div class="col-hdr B"><span class="col-hdr-num">B</span> Agent-Based Chaos Engineering Skills</div>
+    </div>
+
+    <!-- ── GROUP 1 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Foundation · AI Failure Taxonomy</div>
+        <div class="group-hdr-cell B">Foundation · Chaos Engineering Principles</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">01</span><div>
+          <div class="skill-name">Cognitive Degradation Recognition</div>
+          <div class="skill-desc">Understanding the 6-stage AI agent failure progression: latency anomaly → context saturation → behavioural drift → memory entrenchment → functional override → systemic collapse. Mapping this taxonomy to observable signals is the prerequisite for all AgRT work.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag">foundational</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>OpenLLMetry</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">01</span><div>
+          <div class="skill-name">Chaos Engineering Principles & Methodology</div>
+          <div class="skill-desc">Deep fluency in steady-state hypothesis formation, blast-radius control, progressive experiment scaling, and distinguishing chaos from random destruction. Agents must embody this discipline — poorly configured agents injecting chaos without hypotheses are more dangerous than no agent at all.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag">foundational</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">02</span><div>
+          <div class="skill-name">Agent Architecture Failure Mode Analysis</div>
+          <div class="skill-desc">Applying FMEA to agentic architectures: identifying how planner, tool router, memory store, context window, and MCP interface can fail and how failures propagate across agent boundaries. The foundation for designing targeted resilience experiments.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag A">FMEA</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">02</span><div>
+          <div class="skill-name">Chaos Experiment Design & Hypothesis Formulation</div>
+          <div class="skill-desc">Structuring well-formed chaos hypotheses: "If we induce X failure in Y, the system will maintain SLO Z." Teaching agents to generate hypotheses from architecture docs, runbooks, and incident post-mortems — moving from random injection to targeted, learning-driven experiments.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>Gremlin</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Chaos Toolkit</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">03</span><div>
+          <div class="skill-name">Steady-State Definition for Agents</div>
+          <div class="skill-desc">Defining what "normal" looks like for an agent: baseline task completion rate, p95 reasoning latency, hallucination frequency, tool error rate, and cost-per-session. Without this baseline, resilience experiments have no measurable outcome — you cannot observe deviation from a state you haven't defined.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>DeepEval</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">03</span><div>
+          <div class="skill-name">Steady-State Definition & Resilience Scoring</div>
+          <div class="skill-desc">Establishing measurable baselines for classical system health: uptime, latency percentiles, error rates, throughput. Understanding LitmusChaos resilience scores so agents can autonomously determine experiment success or failure without human review of every run.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Prometheus</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">04</span><div>
+          <div class="skill-name">Non-Determinism Handling in Resilience Tests</div>
+          <div class="skill-desc">Unlike classical systems where a failure either occurs or doesn't, agent failures are probabilistic. Building statistically valid resilience tests requires multi-run sampling, variance analysis, and confidence intervals — not binary pass/fail assertions applied to a single run.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>promptfoo</span><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">04</span><div>
+          <div class="skill-name">Blast Radius Control & Safety Governance</div>
+          <div class="skill-desc">The most critical ABCE skill — configuring agents to limit experiment scope precisely. Includes namespace-scoped RBAC, stop conditions that auto-abort on alarm, environment detection to prevent production injection, and approval workflow integration with Slack or Jira.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag strategic">strategic</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Steadybit</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 2 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Fault Injection for AI Agents</div>
+        <div class="group-hdr-cell B">Fault Injection Domains</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">05</span><div>
+          <div class="skill-name">Adversarial Prompt Injection Testing</div>
+          <div class="skill-desc">Designing adversarial inputs that probe jailbreaks, prompt leakage, goal hijacking, sycophancy under pressure, and instruction-hierarchy violations. Testing that guardrails hold under sustained adversarial sequences, not just isolated attacks — red-teaming the agent's reasoning boundaries.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag A">red-teaming</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Garak</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>promptfoo</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">05</span><div>
+          <div class="skill-name">Infrastructure Fault Injection (Pod, Node, VM)</div>
+          <div class="skill-desc">Deploying agents to execute Kubernetes pod kills, node reboots, and VM terminations at the right time and scope. Understanding pod deletion, node CPU hog, disk fill, and container kill scenarios — configuring agents to select experiments appropriate to the target's resilience maturity.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Chaos Mesh</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">06</span><div>
+          <div class="skill-name">Tool Outage & Degradation Simulation</div>
+          <div class="skill-desc">Simulating tool failures the agent depends on: injecting timeouts, rate limit responses, malformed return payloads, and complete tool unavailability. Validating that agents gracefully degrade, retry correctly, fall back to alternatives, and don't hallucinate tool responses when real calls fail.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>WireMock</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Toxiproxy</span><span class="tool-chip both"><span class="tool-chip-dot"></span>LiteLLM</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">06</span><div>
+          <div class="skill-name">Network Fault Engineering (Latency, Loss, Partition)</div>
+          <div class="skill-desc">Configuring agents to inject network latency, packet loss, bandwidth throttling, and connection resets between services. Understanding TCP proxy-based injection vs. kernel-level simulation and which approach correctly tests a given service's retry logic, circuit breakers, and timeout configurations.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Toxiproxy</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Chaos Mesh</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">07</span><div>
+          <div class="skill-name">Context Window Boundary & Truncation Testing</div>
+          <div class="skill-desc">Deliberately pushing agent context windows to their limits — injecting long conversation histories, large retrieved documents, and tool response payloads that approach or exceed context capacity. Validating that truncation strategies preserve critical task state and don't silently corrupt reasoning.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span><span class="tag A">context</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>tiktoken</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">07</span><div>
+          <div class="skill-name">Cloud-Native & Multi-Cloud Fault Injection</div>
+          <div class="skill-desc">Agents using AWS FIS to inject EC2 stop, EBS loss, AZ outage, and Lambda throttle conditions; Azure Chaos Studio for managed-service disruption; multi-cloud experiments for validating cross-region failover. Configuring agents to operate within cloud-provider IAM guardrails.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>AWS FIS</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Azure Chaos Studio</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">08</span><div>
+          <div class="skill-name">Memory Corruption & Poisoning Tests</div>
+          <div class="skill-desc">Injecting hallucinated or adversarially-crafted data into agent long-term memory stores and validating whether it propagates into future decisions. Testing retrieval under corrupted vector store conditions, stale embeddings, and semantic drift from repeated write cycles.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Garak</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Arize Phoenix</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">08</span><div>
+          <div class="skill-name">Dependency & Third-Party API Fault Simulation</div>
+          <div class="skill-desc">Configuring agents to simulate downstream dependency failures using WireMock — payment gateways returning 503, auth providers timing out, database replica lag. Validating circuit breakers, fallback logic, and UX degradation without touching real external systems.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>WireMock</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Toxiproxy</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 3 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Loop & Multi-Agent Resilience</div>
+        <div class="group-hdr-cell B">Agent Orchestration for Chaos</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">09</span><div>
+          <div class="skill-name">Loop Divergence & Infinite Reasoning Detection</div>
+          <div class="skill-desc">Identifying conditions that trigger planner starvation — agents entering endless reasoning loops, repeating the same tool calls, or oscillating between contradictory plans. Building loop detection probes and circuit-breaker-style termination conditions into agent harnesses.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>LangSmith</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">09</span><div>
+          <div class="skill-name">LLM-Generated Chaos Experiment Design</div>
+          <div class="skill-desc">Prompting agents to consume architecture diagrams, runbooks, and past incident data to automatically generate novel chaos hypotheses. Moving beyond the fixed experiment library — agents surface non-obvious failure modes that human teams miss because they haven't experienced them yet.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag B">key skill</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Claude / GPT API</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangChain</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Chaos Toolkit</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">10</span><div>
+          <div class="skill-name">Multi-Agent Cascade Failure Testing</div>
+          <div class="skill-desc">Simulating failures in orchestrator-subagent pipelines — killing a subagent mid-task, introducing latency in inter-agent communication, injecting malformed outputs from one agent into another's context. Validating the orchestrator degrades gracefully rather than cascading the failure upstream.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span><span class="tag A">multi-agent</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangGraph</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">10</span><div>
+          <div class="skill-name">Autonomous GameDay Orchestration</div>
+          <div class="skill-desc">Agents that plan and coordinate full GameDay sessions: scheduling experiments, sequencing fault injections, monitoring system state between rounds, adjusting the experiment plan based on live observations, and producing post-GameDay reports without requiring a dedicated practitioner to drive the session.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span><span class="tag B">GameDay</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin GameDay</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangGraph</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">11</span><div>
+          <div class="skill-name">Durable Execution & State Recovery Validation</div>
+          <div class="skill-desc">Testing that long-running agentic workflows survive mid-execution failures — process crashes, network partitions, container restarts — and resume from checkpointed state without re-executing completed steps or losing task context. Critical for production-grade agentic systems.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Restate</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Temporal</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">11</span><div>
+          <div class="skill-name">Adaptive Chaos Based on Live Telemetry</div>
+          <div class="skill-desc">Agents that monitor Prometheus/Grafana metrics in real time during experiments and adapt their fault injection strategy accordingly — backing off when error rates approach SLO burn limits, escalating when headroom exists, selecting complementary fault types based on untested paths.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Prometheus API</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LangChain</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Steadybit</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 4 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Observability & Detection</div>
+        <div class="group-hdr-cell B">Observability & Resilience Verification</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">12</span><div>
+          <div class="skill-name">Agent Health Probe Design</div>
+          <div class="skill-desc">Building lightweight, continuous probes that detect early symptoms of cognitive degradation: latency anomalies, starvation monitors for memory stalls, token pressure guards against overflow, behavioural drift indicators in reasoning quality. Health probes are the runtime resilience overlay for production agents.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>Helicone</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog LLM Obs</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">12</span><div>
+          <div class="skill-name">Post-Experiment Narrative & RCA Generation</div>
+          <div class="skill-desc">Agents that automatically produce post-chaos experiment reports: what failed, why, which SLOs were impacted, which resilience patterns held or broke, and what remediation is recommended. LLM-generated RCA tied to experiment telemetry — replacing the manual hour of post-GameDay documentation.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag B">key skill</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Claude / GPT API</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness AIDA</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Dynatrace Davis</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">13</span><div>
+          <div class="skill-name">Hallucination Rate Under Stress Measurement</div>
+          <div class="skill-desc">Quantifying how hallucination rates change as agents operate under degraded conditions: high concurrency, context pressure, tool failure, adversarial inputs, or extended multi-turn sessions. Establishing hallucination SLOs and detecting regression when these worsen under stress.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>RAGAS</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>DeepEval</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Arize Phoenix</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">13</span><div>
+          <div class="skill-name">SLO Correlation During Fault Injection</div>
+          <div class="skill-desc">Tracking error budget burn rate, latency percentile shifts, and availability SLIs in real time during chaos experiments. Agents must understand when a fault has crossed an SLO boundary — this separates a well-governed chaos programme from one that accidentally breaks SLA commitments.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Prometheus</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Grafana</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">14</span><div>
+          <div class="skill-name">Trace-Level Failure Classification</div>
+          <div class="skill-desc">Systematically tagging the root cause of every agent failure in trace data: tool_api_timeout, hallucination_factual, planning_loop, misinterpreted_goal, context_truncation, policy_violation. This taxonomy enables automated RCA and helps teams prioritise resilience improvements by frequency and severity.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip both"><span class="tool-chip-dot"></span>LangSmith</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Langfuse</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">14</span><div>
+          <div class="skill-name">Distributed Trace Analysis Under Fault Conditions</div>
+          <div class="skill-desc">Using distributed tracing to observe how failures propagate through microservice topologies during experiments. Agents identify which service spans degraded, which circuit breakers activated, and which latency increases reached user-facing endpoints — attributing chaos impact with service-call-level precision.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Jaeger</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Dynatrace</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog APM</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ── GROUP 5 ── -->
+    <div class="skill-group">
+      <div class="group-header">
+        <div class="group-hdr-cell A">Governance, Guardrails & Production Safety</div>
+        <div class="group-hdr-cell B">Platform & Programme Scaling</div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">15</span><div>
+          <div class="skill-name">Guardrail Verification Under Adversarial Load</div>
+          <div class="skill-desc">Testing that safety guardrails, policy checks, and compliance boundaries hold under adversarial input sequences, high concurrency, and prompt injection attacks at scale. Verifying that guardrails don't degrade under throughput pressure or get bypassed through chained multi-turn manipulation.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag strategic">strategic</span><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Garak</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Guardrails AI</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">15</span><div>
+          <div class="skill-name">Resilience Pattern Validation</div>
+          <div class="skill-desc">Testing that circuit breakers, bulkheads, retry with exponential backoff, timeout cascades, and health check endpoints behave as designed under fault injection. Agents identify silent failures where a pattern is present in code but doesn't activate correctly in production.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Steadybit</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">16</span><div>
+          <div class="skill-name">Kill Switch & Emergency Stop Design</div>
+          <div class="skill-desc">Designing and testing kill switches, circuit breakers, and human-override mechanisms that halt agent execution when anomalous behaviour is detected. Testing that stop mechanisms fire reliably — and that the agent does not resist or route around them.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag critical">critical</span><span class="tag strategic">strategic</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">16</span><div>
+          <div class="skill-name">Chaos CI/CD Pipeline Integration</div>
+          <div class="skill-desc">Embedding agent-driven chaos experiments as post-deployment quality gates in CI/CD pipelines. Agents trigger experiments after canary deploy, observe results, and block or approve production promotion based on SLO compliance. Chaos becomes a gated quality check, not a quarterly GameDay.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag strategic">strategic</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>GitHub Actions</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness CE</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">17</span><div>
+          <div class="skill-name">MCP Gateway Resilience Testing</div>
+          <div class="skill-desc">Testing the resilience of Model Context Protocol gateways governing agent-to-tool and agent-to-agent communication. Validating that policy enforcement, authentication, and rate limiting hold under failure conditions — the MCP gateway is the USB-C port for AI and its failure is catastrophic.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span><span class="tag A">MCP</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Toxiproxy</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>WireMock</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">17</span><div>
+          <div class="skill-name">Chaos Experiment Coverage Mapping</div>
+          <div class="skill-desc">Using agents to audit which services, failure modes, and dependency paths have been tested — and which remain unexplored. Generating chaos coverage maps analogous to code coverage reports: identifying blind spots and prioritising experiments that address highest-risk untested paths.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span><span class="tag strategic">strategic</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>Steadybit</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span></div>
+        </div></div>
+      </div>
+
+      <div class="skill-pair">
+        <div class="skill-cell cell-A"><span class="skill-num">18</span><div>
+          <div class="skill-name">Continuous AgRT in CI/CD</div>
+          <div class="skill-desc">Embedding agentic resilience tests as mandatory CI gates: adversarial prompt suites, tool failure scenarios, and hallucination-under-stress benchmarks run against every prompt change, model version bump, or agent architecture update before deployment.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span><span class="pdot fill-A"></span></div><span class="prof-label">Core</span></div>
+          <div class="skill-tags"><span class="tag strategic">strategic</span></div>
+          <div class="tool-row"><span class="tool-chip oss"><span class="tool-chip-dot"></span>GitHub Actions</span><span class="tool-chip both"><span class="tool-chip-dot"></span>Braintrust</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness</span></div>
+        </div></div>
+        <div class="skill-cell cell-B"><span class="skill-num">18</span><div>
+          <div class="skill-name">Incident-Driven Chaos Feedback Loop</div>
+          <div class="skill-desc">Agents that consume incident post-mortems and automatically generate corresponding chaos experiments that would have detected the failure before it reached production. Every production incident produces a new chaos scenario added to the continuous resilience testing programme.</div>
+          <div class="prof-wrap"><div class="prof-dots"><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot fill-B"></span><span class="pdot"></span></div><span class="prof-label">Advanced</span></div>
+          <div class="skill-tags"><span class="tag advanced">advanced</span><span class="tag strategic">strategic</span></div>
+          <div class="tool-row"><span class="tool-chip com"><span class="tool-chip-dot"></span>PagerDuty</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness AIDA</span></div>
+        </div></div>
+      </div>
+    </div>
+
+  </div><!-- end skills panel -->
+
+  <!-- ════════ TOOLS TAB ════════ -->
+  <div class="tab-panel" id="panel-tools">
+    <div class="tools-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--A-mid)"></span><span class="tbadge oss">OSS</span> Open-source / free</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--B-mid)"></span><span class="tbadge com">COM</span> Commercial / SaaS</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--shared-mid)"></span><span class="tbadge both">BOTH</span> OSS core + paid tier</div>
+    </div>
+
+    <div class="tools-discipline-hdr A">Discipline A — Agentic Resilience Testing (AgRT) Tools</div>
+    <div class="tools-cols">
+      <div class="tools-col">
+        <div class="tool-category">AI Fault Injection & Red-Teaming</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Garak</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">LLM vulnerability scanner by NVIDIA — probes for prompt injection, jailbreaks, information leakage, hallucination, toxicity, and sycophancy. The go-to open-source red-teaming tool for AgRT. Runs batteries of adversarial tests against any LLM API endpoint.</div><div class="tool-skill-link">→ Skills 05, 08, 15</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Guardrails AI</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">Open-source framework for defining, validating, and enforcing guardrail policies on LLM outputs. In AgRT: used to test that guardrails intercept adversarial outputs under load and don't produce false negatives under adversarial bypasses.</div><div class="tool-skill-link">→ Skills 15, 16</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">promptfoo</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">LLM testing CLI with red-team mode — runs adversarial prompt variants across models, scores safety and quality metrics, detects regressions. Stress-tests guardrails and measures hallucination rates across hundreds of adversarial scenarios in CI.</div><div class="tool-skill-link">→ Skills 04, 05, 13, 18</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">WireMock</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">API mocking and service virtualisation. In AgRT: simulates tool endpoint failures (timeouts, malformed responses, 429s, 503s) without requiring real downstream services to degrade. Essential for deterministic tool-failure injection.</div><div class="tool-skill-link">→ Skills 06, 08, 17</div></div>
+        <div class="tool-category">Agent Observability for Resilience</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">LangSmith</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Full trace-level visibility into agent reasoning steps, tool calls, and decision points. Primary surface for detecting loop divergence, plan starvation, and reasoning chain anomalies during resilience experiments. Trace replay enables deterministic re-execution of failure scenarios.</div><div class="tool-skill-link">→ Skills 09, 10, 14</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Langfuse</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Self-hostable LLM observability with tracing, evals, and prompt management. Provides step-level trace data needed to classify failure modes and detect context truncation, memory entrenchment, and behavioural drift patterns across multi-session experiments.</div><div class="tool-skill-link">→ Skills 01, 07, 09, 14</div></div>
+      </div>
+      <div class="tools-col">
+        <div class="tool-category">Agent Observability (continued)</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Arize Phoenix</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">LLM and agent observability with hallucination detection and embedding drift monitoring. Detects quality regressions and behavioural drift over time — critical for identifying memory poisoning effects and measuring hallucination rate changes under stress conditions.</div><div class="tool-skill-link">→ Skills 08, 12, 13</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Datadog LLM Observability</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Unified platform combining infrastructure monitoring with LLM-specific traces, evaluations, and cost tracking. Provides a single pane for correlating infrastructure failures with agent cognitive degradation events during resilience experiments.</div><div class="tool-skill-link">→ Skills 12, 13, 16</div></div>
+        <div class="tool-category">Eval Frameworks for Resilience</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">DeepEval</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Open-source LLM eval framework with pytest integration. Measures hallucination, policy violation, and task completion degradation under adversarial conditions. Integrates with CI to gate deploys on resilience eval scores, not just latency SLOs.</div><div class="tool-skill-link">→ Skills 03, 13, 15, 18</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">RAGAS</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">RAG-specific evaluation — faithfulness, answer relevancy, context precision/recall. In AgRT: quantifies how retrieval quality degrades when vector stores are corrupted, under memory poisoning, or when context windows are stressed near capacity limits.</div><div class="tool-skill-link">→ Skills 08, 13</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Restate</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Durable execution engine that persists intermediate step results so agents can resume from checkpointed state after crashes. Used both to build resilient agents AND to inject mid-execution failures for state recovery validation testing.</div><div class="tool-skill-link">→ Skill 11</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Toxiproxy</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">TCP proxy for simulating network conditions between agent processes and dependencies — latency, bandwidth throttling, connection resets. Intercepts traffic between agent and MCP server to validate tool timeout handling and retry logic.</div><div class="tool-skill-link">→ Skills 06, 07, 17</div></div>
+      </div>
+    </div>
+
+    <div class="tools-discipline-hdr B" style="margin-top:3px">Discipline B — Agent-Based Chaos Engineering (ABCE) Tools</div>
+    <div class="tools-cols">
+      <div class="tools-col">
+        <div class="tool-category">Core Chaos Platforms</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">LitmusChaos</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">CNCF-backed Kubernetes-native chaos platform with rich ChaosHub experiment library. ABCE agents trigger Litmus experiments via CRDs or REST API, monitor resilience scores, and incorporate results into adaptive chaos sequences. The most natural OSS chaos tool for agent integration.</div><div class="tool-skill-link">→ Skills 03, 05, 06, 15, 16</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Chaos Mesh</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">CNCF incubating project with comprehensive Kubernetes fault injection: pod failures, network chaos, IO stress, time skew, kernel-level faults, and a Workflow CRD for sequencing experiments. ABCE agents interact with Chaos Mesh's API to orchestrate multi-step sequences adaptively.</div><div class="tool-skill-link">→ Skills 05, 06, 11, 16</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Chaos Toolkit</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">Python-based declarative chaos experimentation framework with drivers for AWS, Kubernetes, Istio, Toxiproxy. ABCE agents generate Chaos Toolkit JSON experiment definitions from natural language hypotheses and execute programmatically — the most LLM-friendly chaos experiment format.</div><div class="tool-skill-link">→ Skills 02, 09, 11</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Gremlin</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Commercial chaos platform with multi-cloud support, GameDay feature, and enterprise governance. Agents use Gremlin's API to trigger targeted attacks with built-in blast-radius controls, automatic stop conditions, and Slack/Jira approval workflows — safest platform for autonomous chaos execution at scale.</div><div class="tool-skill-link">→ Skills 04, 05, 06, 10, 17</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Steadybit</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Modern chaos platform with auto-discovery, resilience policies, drag-and-drop editor, and native safety guardrails. Agents query Steadybit's Reliability Hub for experiment templates aligned to the system topology, then execute with policy compliance checked automatically before each run.</div><div class="tool-skill-link">→ Skills 04, 11, 15, 17</div></div>
+      </div>
+      <div class="tools-col">
+        <div class="tool-category">Cloud-Native & Network Tools</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">AWS Fault Injection Service (FIS)</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">AWS-native chaos service with deep integration with EC2, EKS, RDS, Lambda, and Route53. ABCE agents call FIS API to inject AZ outages, EC2 instance stop, Lambda throttle, and RDS failover — all with IAM-scoped blast radius and CloudWatch integration for stop conditions.</div><div class="tool-skill-link">→ Skills 07, 13, 16</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Toxiproxy</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">TCP proxy for network fault simulation. ABCE agents configure Toxiproxy's REST API to inject precise network conditions between specific service pairs without touching Kubernetes networking — surgical and reversible network fault injection.</div><div class="tool-skill-link">→ Skills 06, 08, 11</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">WireMock</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">API mocking and service virtualisation. ABCE agents configure WireMock scenarios to simulate third-party dependency failures — payment gateway 503s, auth provider latency, database replica timeouts — without degrading live external services.</div><div class="tool-skill-link">→ Skills 08, 15</div></div>
+        <div class="tool-category">Orchestration & Observability</div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">LangChain / LangGraph</span><div class="tool-badges"><span class="tbadge both">BOTH</span></div></div><div class="tool-card-desc">Frameworks for building chaos orchestration agents — stateful multi-step workflows that plan experiments, invoke chaos tools, monitor Prometheus metrics, and adapt strategy in real time. LangGraph's cyclic state machine model maps naturally to observe-hypothesise-inject-measure loops.</div><div class="tool-skill-link">→ Skills 09, 10, 11, 12</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Prometheus + Grafana</span><div class="tool-badges"><span class="tbadge oss">OSS</span></div></div><div class="tool-card-desc">Core telemetry backbone for ABCE. Agents query the Prometheus API during experiments to monitor SLO compliance, trigger stop conditions, and determine whether faults produced measurable impact. Grafana annotations mark experiment windows for post-hoc analysis.</div><div class="tool-skill-link">→ Skills 03, 11, 13, 16</div></div>
+        <div class="tool-card"><div class="tool-card-top"><span class="tool-card-name">Harness Chaos Engineering</span><div class="tool-badges"><span class="tbadge com">COM</span></div></div><div class="tool-card-desc">Enterprise chaos platform built on LitmusChaos with AIDA AI-powered RCA, pipeline integration, and centralised governance. ABCE teams orchestrate experiments across multiple teams, with AIDA generating post-experiment findings and connecting chaos results to deployment decisions.</div><div class="tool-skill-link">→ Skills 04, 12, 16, 18</div></div>
+      </div>
+    </div>
+  </div><!-- end tools panel -->
+
+  <!-- ════════ SHARED PANEL ════════ -->
+  <div class="tab-panel" id="panel-shared">
+    <div class="shared-hdr"><span class="shared-hdr-sym">∩</span> Shared Foundation Skills — Required for Both Disciplines</div>
+    <div class="shared-grid">
+      <div class="shared-item"><div class="shared-name">Chaos Engineering Principles</div><div class="shared-desc">In AgRT you apply steady-state hypothesis formation to AI cognitive failure modes; in ABCE you operationalise it through agents executing classical infrastructure chaos. Same intellectual framework, different target systems.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Chaos Toolkit</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span></div></div>
+      <div class="shared-item"><div class="shared-name">Observability & Telemetry (OTel)</div><div class="shared-desc">OTel traces, Prometheus metrics, and structured logs are the measurement instruments for both disciplines. AgRT adds LLM-specific semantic conventions; ABCE uses classical infrastructure metrics. Neither can function without robust observability.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>OTel SDK</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Prometheus</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>Grafana</span></div></div>
+      <div class="shared-item"><div class="shared-name">SLO / SLI / Error Budget Design</div><div class="shared-desc">SLOs define when an experiment has found a real problem. In ABCE they cover latency and availability; in AgRT they must be extended to hallucination rate and task completion quality — not just classical infrastructure dimensions.</div><div class="shared-tools"><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Datadog SLOs</span></div></div>
+      <div class="shared-item"><div class="shared-name">Kubernetes & Cloud-Native Fluency</div><div class="shared-desc">ABCE requires K8s for fault injection targets; AgRT requires K8s knowledge to inject infrastructure failures into the agent's supporting compute. Pod scheduling, resource limits, and HPA behaviour are directly relevant to both failure modes.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Kubernetes</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>LitmusChaos</span></div></div>
+      <div class="shared-item"><div class="shared-name">FMEA & Failure Mode Analysis</div><div class="shared-desc">ABCE applies FMEA to service topology; AgRT applies it to agent architecture components. The skill transfers directly; the vocabulary shifts from microservices and databases to planners, tool routers, and context windows.</div></div>
+      <div class="shared-item"><div class="shared-name">Python Scripting & API Automation</div><div class="shared-desc">Chaos Toolkit, LitmusChaos, and LangChain are all Python-first. Both disciplines require engineers who can wire together tool APIs, process telemetry programmatically, and build repeatable test automation without relying on GUI-only workflows.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>Python asyncio</span><span class="tool-chip oss"><span class="tool-chip-dot"></span>pytest</span></div></div>
+      <div class="shared-item"><div class="shared-name">LLM API & Agent Architecture Literacy</div><div class="shared-desc">Both disciplines require working knowledge of LLM APIs, tool use, and agent orchestration — either to understand what you're testing (AgRT) or to build the testing agent itself (ABCE). Understanding ReAct loops and context management is non-negotiable for either path.</div><div class="shared-tools"><span class="tool-chip both"><span class="tool-chip-dot"></span>LangChain</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Claude API</span></div></div>
+      <div class="shared-item"><div class="shared-name">Blast Radius & Safety Discipline</div><div class="shared-desc">In ABCE this is infrastructure scope limiting; in AgRT it means confining adversarial tests to sandboxed environments. Both disciplines are dangerous without it — autonomous agents injecting unconstrained chaos or adversarial prompts without guardrails is the nightmare scenario.</div><div class="shared-tools"><span class="tool-chip com"><span class="tool-chip-dot"></span>Steadybit</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Gremlin</span></div></div>
+      <div class="shared-item"><div class="shared-name">Distributed Systems Resilience Patterns</div><div class="shared-desc">Circuit breakers, bulkheads, retries, timeouts, and saga patterns — the vocabulary of resilient design. ABCE tests whether these patterns work; AgRT borrows and adapts them for agentic contexts (e.g., cognitive circuit breakers that halt a looping agent).</div></div>
+      <div class="shared-item"><div class="shared-name">CI/CD Pipeline Integration</div><div class="shared-desc">Both disciplines require their experiments to run automatically on deployment events, not just quarterly GameDays. GitHub Actions, Harness, and GitLab CI integrate both chaos and resilience gates. The shift-left imperative applies equally to both.</div><div class="shared-tools"><span class="tool-chip oss"><span class="tool-chip-dot"></span>GitHub Actions</span><span class="tool-chip com"><span class="tool-chip-dot"></span>Harness</span></div></div>
+      <div class="shared-item"><div class="shared-name">Incident & Post-Mortem Analysis</div><div class="shared-desc">ABCE converts post-mortems into new chaos experiments; AgRT converts agent failure incidents into new adversarial test scenarios. The feedback loop from production incidents to proactive testing is central to both practices.</div><div class="shared-tools"><span class="tool-chip com"><span class="tool-chip-dot"></span>PagerDuty</span></div></div>
+      <div class="shared-item"><div class="shared-name">Statistical & Hypothesis-Driven Thinking</div><div class="shared-desc">Both disciplines require rigorous experimental thinking: clear hypotheses, measurable outcomes, controlled variables. AgRT demands extra rigour due to non-determinism; ABCE requires rigour to distinguish meaningful resilience findings from noise introduced by the experiment itself.</div></div>
+    </div>
+  </div><!-- end shared panel -->
+
+  <!-- ════════ COMPARE TAB ════════ -->
+  <div class="tab-panel" id="panel-compare">
+    <div class="compare-wrap">
+      <div class="compare-caption">Key Differences at a Glance</div>
+      <table class="compare">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th class="A-th">Agentic Resilience Testing (AgRT)</th>
+            <th class="B-th">Agent-Based Chaos Engineering (ABCE)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="dim-cell">What is being tested</td><td class="A-cell">The AI agent — its cognitive resilience, fault recovery, and safety under adversarial conditions</td><td class="B-cell">Classical infrastructure and services — AI agents are the chaos experiment operators</td></tr>
+          <tr><td class="dim-cell">Role of AI</td><td class="A-cell">AI is the subject under stress — measured for degradation, loop divergence, and guardrail bypass</td><td class="B-cell">AI is the chaos operator — generates hypotheses, injects faults, produces findings autonomously</td></tr>
+          <tr><td class="dim-cell">Primary failure vocabulary</td><td class="A-cell">Cognitive degradation, loop divergence, memory poisoning, context truncation, guardrail bypass</td><td class="B-cell">Pod kill, node failure, network partition, latency injection, CPU/memory hog, AZ failure</td></tr>
+          <tr><td class="dim-cell">Core experiment type</td><td class="A-cell">Adversarial prompt sequences, tool outage injection, context stress tests, multi-agent cascade simulations</td><td class="B-cell">Infrastructure fault injection, GameDay orchestration, hypothesis generation from architecture docs</td></tr>
+          <tr><td class="dim-cell">Core toolchain</td><td class="A-cell">Garak, promptfoo, WireMock, LangSmith, Langfuse, DeepEval, Restate, Toxiproxy</td><td class="B-cell">LitmusChaos, Chaos Mesh, Gremlin, Steadybit, AWS FIS, Chaos Toolkit, LangChain, Prometheus</td></tr>
+          <tr><td class="dim-cell">Determinism</td><td class="A-cell">Probabilistic — agent responses to identical fault injection vary; statistics are mandatory</td><td class="B-cell">Largely deterministic — pod is either killed or it isn't; system response may vary but the fault is binary</td></tr>
+          <tr><td class="dim-cell">Hardest skill</td><td class="A-cell">Cognitive degradation taxonomy + adversarial prompt design + probabilistic resilience measurement</td><td class="B-cell">Safe autonomous blast-radius control + incident-to-hypothesis feedback loop + adaptive live-telemetry chaos</td></tr>
+          <tr><td class="dim-cell">Risk if done poorly</td><td class="A-cell">Invisible agent failures in production; agents bypassing safety constraints; no early warning of cognitive collapse</td><td class="B-cell">Autonomous chaos agents injecting faults into production without safeguards; runaway feedback loop escalating experiment scope</td></tr>
+          <tr><td class="dim-cell">Governance relevance</td><td class="A-cell">NIST AI RMF, ISO/IEC 42001, AI safety frameworks — adversarial stress is a compliance dimension</td><td class="B-cell">DORA, DR validation requirements, regulated-industry uptime SLAs — chaos is accepted resilience evidence in audits</td></tr>
+          <tr><td class="dim-cell">Practice maturity</td><td class="A-cell">Emerging — no established playbook; CSA CDR Framework, NIST AI RMF are early scaffolding</td><td class="B-cell">Evolving — classical chaos is mature; the AI-agent orchestration layer is new and rapidly developing</td></tr>
+          <tr><td class="dim-cell">Career adjacency</td><td class="A-cell">AI safety engineer, LLM reliability engineer, red-team researcher</td><td class="B-cell">SRE, platform engineer, chaos practitioner upskilling into AI-augmented practice</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict">
+      <div class="verdict-box A">
+        <div class="verdict-label">When to prioritise AgRT skills</div>
+        <div class="verdict-text">Your organisation is <strong>shipping AI agents into production</strong> where failure has real consequences — customer-facing products, internal automation with write access, or AI systems in regulated environments. You need to know agents won't hallucinate under stress, loop indefinitely, or bypass safety constraints. The practitioners who can design and run these experiments are <strong>exceptionally rare</strong> — the discipline is forming now and the frameworks are still being written.</div>
+      </div>
+      <div class="verdict-box B">
+        <div class="verdict-label">When to prioritise ABCE skills</div>
+        <div class="verdict-text">Your organisation has <strong>a mature or growing resilience practice</strong> and wants to dramatically scale its chaos engineering capability — running more experiments, covering more failure modes, and producing better post-experiment analysis without growing SRE headcount. ABCE is the <strong>more accessible entry point</strong>: existing chaos engineers can adopt agent tooling incrementally, the infrastructure failure vocabulary is well understood, and the tools already have the APIs agents need.</div>
+      </div>
+    </div>
+  </div><!-- end compare panel -->
+
+  <div class="footer">
+    <span class="footer-text">Resilience & Chaos Testing × AI Agents — Skills & Tools Reference 2025–2026</span>
+    <span class="footer-text">18 AgRT skills · 18 ABCE skills · 12 shared foundations · 40+ tools</span>
+  </div>
+
+</div><!-- end page -->
+<script>
+function switchTab(id, el, cls) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-A','active-B','active-shared','active-compare'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add(cls);
+}
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('themeBtn');
+  btn.innerHTML = isDark ? '<span class="theme-toggle-icon">🌙</span> Dark mode' : '<span class="theme-toggle-icon">☀️</span> Light mode';
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.innerHTML = '<span class="theme-toggle-icon">☀️</span> Light mode';
+    });
+  }
+})();
+</script>
+</body>
+</html>
