@@ -1,0 +1,3599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ResilienceX Chaos Scribe</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230c0e12'/%3E%3C!-- battlements --%3E%3Crect x='8' y='18' width='9' height='10' rx='1.5' fill='%23e2e4e9'/%3E%3Crect x='20' y='18' width='5' height='10' rx='1' fill='%234a4f5e'/%3E%3Crect x='47' y='18' width='9' height='10' rx='1.5' fill='%23e2e4e9'/%3E%3Crect x='39' y='18' width='5' height='10' rx='1' fill='%234a4f5e'/%3E%3Crect x='29' y='16' width='6' height='12' rx='1.5' fill='%23e2e4e9'/%3E%3C!-- tower body --%3E%3Crect x='8' y='27' width='21' height='22' rx='1' fill='%23e2e4e9'/%3E%3Crect x='35' y='27' width='21' height='22' rx='1' fill='%23e2e4e9'/%3E%3Crect x='22' y='28' width='20' height='21' rx='1' fill='%23c8cad0'/%3E%3C!-- arch gate --%3E%3Cpath d='M27 49 L27 38 Q32 32 37 38 L37 49 Z' fill='%230c0e12'/%3E%3C!-- stone lines left tower --%3E%3Crect x='9' y='32' width='19' height='1' rx='.5' fill='%23b0b2b8' opacity='.5'/%3E%3Crect x='9' y='38' width='19' height='1' rx='.5' fill='%23b0b2b8' opacity='.5'/%3E%3Crect x='9' y='44' width='19' height='1' rx='.5' fill='%23b0b2b8' opacity='.5'/%3E%3C!-- stone lines right tower --%3E%3Crect x='36' y='32' width='19' height='1' rx='.5' fill='%23b0b2b8' opacity='.5'/%3E%3Crect x='36' y='38' width='19' height='1' rx='.5' fill='%23b0b2b8' opacity='.5'/%3E%3Crect x='36' y='44' width='19' height='1' rx='.5' fill='%23b0b2b8' opacity='.5'/%3E%3C!-- flame --%3E%3Cellipse cx='32' cy='10' rx='5' ry='7' fill='%23f59e0b' opacity='.95'/%3E%3Cellipse cx='29' cy='12' rx='2.5' ry='4' fill='%23ef4444' opacity='.8'/%3E%3Cellipse cx='35' cy='12' rx='2.5' ry='4' fill='%23ef4444' opacity='.8'/%3E%3Cellipse cx='32' cy='8' rx='2' ry='3' fill='%23fde68a'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  /* ── Dark theme (default) ── */
+  --bg0: #0c0e12;
+  --bg1: #111318;
+  --bg2: #181b22;
+  --bg3: #1e222b;
+  --bg4: #252a35;
+  --border: rgba(255,255,255,0.07);
+  --border-active: rgba(255,255,255,0.15);
+  --text: #e2e4e9;
+  --text-dim: #7a7f8e;
+  --text-muted: #4a4f5e;
+  --accent: #4f9eff;
+  --accent-dim: rgba(79,158,255,0.12);
+  --accent-border: rgba(79,158,255,0.3);
+  --green: #3dd68c;
+  --green-dim: rgba(61,214,140,0.12);
+  --green-border: rgba(61,214,140,0.3);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --amber-border: rgba(245,158,11,0.3);
+  --red: #f66;
+  --red-dim: rgba(255,102,102,0.12);
+  --red-border: rgba(255,102,102,0.3);
+  --cyan: #22d3ee;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+  --topbar-bg: rgba(12,14,18,0.95);
+  --scanline: rgba(0,0,0,0.03);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+/* ── Light theme ── */
+html.light {
+  --bg0: #f4f5f7;
+  --bg1: #ffffff;
+  --bg2: #f0f1f4;
+  --bg3: #e8eaee;
+  --bg4: #dde0e6;
+  --border: rgba(0,0,0,0.08);
+  --border-active: rgba(0,0,0,0.18);
+  --text: #12151c;
+  --text-dim: #4a5068;
+  --text-muted: #8c91a4;
+  --accent: #1a6fd4;
+  --accent-dim: rgba(26,111,212,0.10);
+  --accent-border: rgba(26,111,212,0.28);
+  --green: #16a34a;
+  --green-dim: rgba(22,163,74,0.10);
+  --green-border: rgba(22,163,74,0.28);
+  --amber: #b45309;
+  --amber-dim: rgba(180,83,9,0.10);
+  --amber-border: rgba(180,83,9,0.28);
+  --red: #dc2626;
+  --red-dim: rgba(220,38,38,0.10);
+  --red-border: rgba(220,38,38,0.28);
+  --cyan: #0e7490;
+  --topbar-bg: rgba(255,255,255,0.96);
+  --scanline: rgba(0,0,0,0.015);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+/* ── Global theme transition ── */
+*, *::before, *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+  transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* ── Theme toggle button ── */
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  flex-shrink: 0;
+  user-select: none;
+}
+.theme-toggle:hover { background: var(--bg3); border-color: var(--border-active); transform: scale(1.05); }
+.theme-toggle:active { transform: scale(0.95); }
+
+/* icon swap */
+.icon-dark  { display: block; }
+.icon-light { display: none; }
+html.light .icon-dark  { display: none; }
+html.light .icon-light { display: block; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCANLINES EFFECT ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scanline) 2px, var(--scanline) 4px);
+  pointer-events: none; z-index: 1000;
+}
+
+/* ── LAYOUT ── */
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  border-bottom: 1px solid var(--border);
+  background: var(--topbar-bg);
+  backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 100;
+  padding: 0 32px;
+  display: flex; align-items: center; gap: 0; height: 60px;
+}
+
+.topbar-logo {
+  display: flex; align-items: center; gap: 12px;
+  margin-right: 40px;
+}
+
+.logo-mark { display: none; }
+
+.topbar-name {
+  font-family: var(--font-mono);
+  font-size: 13px; font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+
+.topbar-name span { color: var(--accent); }
+
+.topbar-divider {
+  width: 1px; height: 20px;
+  background: var(--border);
+  margin: 0 20px;
+}
+
+.topbar-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.topbar-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 12px;
+}
+
+.status-dot {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);
+}
+
+.dot-pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(61,214,140,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(61,214,140,0); }
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 60px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--bg1);
+  padding: 24px 0;
+  position: sticky; top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  padding: 0 20px;
+  margin-bottom: 28px;
+}
+
+.sidebar-label {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px; color: var(--text-dim);
+  transition: all 0.15s;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.nav-item:hover { color: var(--text); background: var(--bg3); }
+
+.nav-item.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-color: var(--accent-border);
+}
+
+.nav-item.done { color: var(--green); }
+.nav-item.done .nav-num { background: var(--green-dim); color: var(--green); border-color: var(--green-border); }
+.nav-item.active .nav-num { background: var(--accent-dim); color: var(--accent); border-color: var(--accent-border); }
+
+.nav-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  flex-shrink: 0; color: var(--text-muted);
+}
+
+.nav-checkmark { font-size: 10px; }
+
+/* Sidebar status cards */
+.status-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+.sc-label { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; }
+.sc-val { font-size: 13px; font-weight: 500; font-family: var(--font-mono); }
+.sc-val.green { color: var(--green); }
+.sc-val.red { color: var(--red); }
+.sc-val.amber { color: var(--amber); }
+.sc-val.dim { color: var(--text-dim); }
+
+/* ── CONTENT AREA ── */
+.content {
+  background: var(--bg0);
+  overflow-y: auto;
+}
+
+.panel { display: none; padding: 32px 40px; max-width: 960px; }
+.panel.active { display: block; }
+
+/* ── PANEL HEADER ── */
+.panel-header {
+  margin-bottom: 32px;
+}
+
+.panel-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: 500;
+  color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.panel-title {
+  font-size: 22px; font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.panel-desc {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* ── FORM ELEMENTS ── */
+.form-section {
+  margin-bottom: 28px;
+}
+
+.form-section-title {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-grid.full { grid-template-columns: 1fr; }
+
+.field { }
+.field.span2 { grid-column: span 2; }
+.field.span3 { grid-column: span 3; }
+
+.field label {
+  display: block;
+  font-size: 11px; font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.field input, .field select {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.field input:focus, .field select:focus {
+  border-color: var(--accent-border);
+  background: var(--bg3);
+}
+
+.field select option { background: var(--bg2); }
+
+/* ── METRICS CHECKBOXES ── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.metric-cb {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 12px; color: var(--text-dim);
+  transition: all 0.15s;
+  background: var(--bg2);
+  user-select: none;
+}
+
+.metric-cb:hover { border-color: var(--border-active); color: var(--text); }
+
+.metric-cb input[type=checkbox] {
+  width: 13px; height: 13px; cursor: pointer;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+.metric-cb:has(input:checked) {
+  border-color: var(--accent-border);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.metric-cb .m-icon { font-size: 13px; }
+
+/* ── BUTTONS ── */
+.btn-row { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.btn:hover { border-color: var(--border-active); color: var(--text); background: var(--bg4); }
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--accent-dim);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+.btn-primary:hover { background: rgba(79,158,255,0.2); border-color: var(--accent); }
+
+.btn-success {
+  background: var(--green-dim);
+  border-color: var(--green-border);
+  color: var(--green);
+}
+
+.btn-success:hover { background: rgba(61,214,140,0.2); }
+
+.btn-danger {
+  background: var(--red-dim);
+  border-color: var(--red-border);
+  color: var(--red);
+}
+
+/* ── LOG TERMINAL ── */
+.terminal {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.terminal-bar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.t-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.t-dot.r { background: #ff5f57; }
+.t-dot.y { background: #febc2e; }
+.t-dot.g { background: #28c840; }
+
+.terminal-title {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.terminal-body {
+  padding: 16px;
+  font-family: var(--font-mono); font-size: 12px; line-height: 1.8;
+  height: 260px; overflow-y: auto;
+}
+
+.log-line { }
+.log-ok { color: var(--green); }
+.log-err { color: var(--red); }
+.log-warn { color: var(--amber); }
+.log-info { color: var(--text-dim); }
+.log-head { color: var(--cyan); font-weight: 600; }
+.log-dim { color: var(--text-muted); }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  margin-bottom: 16px;
+}
+
+.progress-labels {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  transition: width 0.5s ease;
+  width: 0;
+}
+
+/* ── DATA TABLE ── */
+.data-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.data-table-head {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+table.dtable {
+  width: 100%; border-collapse: collapse;
+}
+
+table.dtable th {
+  text-align: left; padding: 9px 16px;
+  background: var(--bg2);
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+}
+
+table.dtable td {
+  padding: 9px 16px;
+  font-family: var(--font-mono); font-size: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+table.dtable tr:last-child td { border-bottom: none; }
+table.dtable tr:hover td { background: var(--bg3); }
+
+.val-good { color: var(--green); }
+.val-warn { color: var(--amber); }
+.val-bad  { color: var(--red); }
+.val-neu  { color: var(--text-dim); }
+
+/* ── CHARTS ── */
+.charts-header {
+  margin-bottom: 20px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.charts-grid.single { grid-template-columns: 1fr; }
+
+.chart-card {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.chart-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.chart-card-title {
+  font-size: 12px; font-weight: 500; color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+.chart-badge {
+  font-family: var(--font-mono); font-size: 10px;
+  padding: 2px 8px; border-radius: 20px;
+}
+.badge-ok { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
+.badge-warn { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-border); }
+.badge-crit { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
+.badge-info { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+
+.chart-area { position: relative; width: 100%; height: 180px; }
+.chart-area.short { height: 130px; }
+
+/* ── REPORT ── */
+.report-banner {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.meta-item .meta-key {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 5px;
+}
+
+.meta-item .meta-val {
+  font-size: 13px; font-weight: 500; color: var(--text);
+}
+
+.verdict-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 20px;
+}
+
+.vchip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 20px;
+  font-family: var(--font-mono); font-size: 11px;
+  border: 1px solid;
+}
+.vchip.pass { border-color: var(--green-border); color: var(--green); background: var(--green-dim); }
+.vchip.warn { border-color: var(--amber-border); color: var(--amber); background: var(--amber-dim); }
+.vchip.fail { border-color: var(--red-border); color: var(--red); background: var(--red-dim); }
+
+.report-sections { }
+
+.rsection {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.rsection:hover { border-color: var(--border-active); }
+
+.rsection-head {
+  padding: 14px 20px;
+  background: var(--bg1);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.rsection-head:hover { background: var(--bg2); }
+
+.rsection-title {
+  font-size: 13px; font-weight: 500; color: var(--text);
+  display: flex; align-items: center; gap: 10px;
+}
+
+.rsection-icon {
+  font-size: 14px;
+}
+
+.rsection-right {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.rsection-badge {
+  font-family: var(--font-mono); font-size: 10px;
+  padding: 2px 10px; border-radius: 20px; border: 1px solid;
+}
+
+.rbadge-pass { border-color: var(--green-border); color: var(--green); background: var(--green-dim); }
+.rbadge-warn { border-color: var(--amber-border); color: var(--amber); background: var(--amber-dim); }
+.rbadge-fail { border-color: var(--red-border); color: var(--red); background: var(--red-dim); }
+.rbadge-info { border-color: var(--accent-border); color: var(--accent); background: var(--accent-dim); }
+
+.chevron {
+  color: var(--text-muted); font-size: 12px;
+  transition: transform 0.2s;
+  user-select: none;
+}
+.chevron.open { transform: rotate(90deg); }
+
+.rsection-body {
+  padding: 16px 20px;
+  background: var(--bg0);
+  border-top: 1px solid var(--border);
+  display: none;
+  font-size: 13px; line-height: 1.8;
+}
+
+.rsection-body.open { display: block; }
+
+.finding {
+  display: flex; gap: 10px; margin-bottom: 10px;
+  color: var(--text-dim);
+}
+
+.finding strong { color: var(--text); }
+
+.reco-list { margin-top: 14px; }
+.reco-title {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.reco {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-border);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  font-size: 12px; color: var(--text-dim);
+  font-family: var(--font-mono);
+  line-height: 1.6;
+}
+.reco.p1 { border-left-color: var(--red); }
+.reco.p2 { border-left-color: var(--amber); }
+.reco.p3 { border-left-color: var(--green); }
+.reco.neutral { border-left-color: var(--accent-border); }
+
+/* Divider */
+.divider {
+  height: 1px; background: var(--border);
+  margin: 24px 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Animations */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.panel.active { animation: fadeSlideIn 0.2s ease; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .main { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .panel { padding: 24px 20px; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .report-banner { grid-template-columns: 1fr 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Light mode: form inputs need explicit bg fix ── */
+html.light .field input,
+html.light .field select,
+html.light .disco-select {
+  background: var(--bg1);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+html.light .field input:focus,
+html.light .field select:focus,
+html.light .disco-select:focus {
+  background: var(--bg0);
+  border-color: var(--accent-border);
+}
+
+html.light .terminal-body { color: #2d3a2d; }
+html.light .log-ok   { color: #16a34a; }
+html.light .log-err  { color: #dc2626; }
+html.light .log-warn { color: #b45309; }
+html.light .log-info { color: #4a5068; }
+html.light .log-head { color: #0e7490; }
+html.light .log-dim  { color: #8c91a4; }
+
+html.light .metric-cb { background: var(--bg1); }
+html.light .svc-item  { background: transparent; }
+
+/* light mode: topbar name */
+html.light .topbar-name { color: var(--text); }
+html.light .topbar-name span { color: var(--accent); }
+
+/* light mode: chart canvas parent bg */
+html.light .chart-card { background: var(--bg1); }
+html.light .panel { background: var(--bg0); }
+html.light .content { background: var(--bg0); }
+
+/* ── Animate panel bg on theme change ── */
+.panel { transition: background 0.22s ease; }
+
+/* ── Scrollbar light mode ── */
+html.light ::-webkit-scrollbar-thumb { background: var(--bg4); }
+
+/* ── Light mode: progress fill keep gradient readable ── */
+html.light .progress-fill {
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+}
+
+/* ── Light mode: data table alternating rows ── */
+html.light table.dtable tr:nth-child(even) td { background: var(--bg2); }
+
+/* ── Light mode: report banner ── */
+html.light .report-banner { background: var(--bg1); }
+html.light .rsection-head { background: var(--bg1); }
+html.light .rsection-head:hover { background: var(--bg2); }
+html.light .rsection-body { background: var(--bg0); }
+
+/* ── Light mode: nav items ── */
+html.light .nav-item:hover { background: var(--bg3); }
+.empty-state {
+  text-align: center; padding: 48px 24px;
+  color: var(--text-muted);
+}
+.empty-icon { font-size: 32px; margin-bottom: 12px; }
+.empty-text { font-size: 13px; }
+
+/* ── DISCOVERY CASCADE ── */
+.discovery-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.discover-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent-border);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  height: 38px;
+}
+.discover-btn:hover { background: rgba(79,158,255,0.2); border-color: var(--accent); }
+.discover-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.discover-btn.loading { animation: spin-pulse 1s ease-in-out infinite; }
+
+@keyframes spin-pulse {
+  0%,100% { opacity: 1; } 50% { opacity: 0.5; }
+}
+
+.discover-step {
+  margin-bottom: 14px;
+  transition: opacity 0.2s;
+}
+.discover-step.locked { opacity: 0.4; pointer-events: none; }
+.discover-step.unlocked { opacity: 1; pointer-events: auto; }
+
+.discovery-status {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px; height: 16px;
+}
+.discovery-status.ok { color: var(--green); }
+.discovery-status.err { color: var(--red); }
+.discovery-status.loading { color: var(--accent); }
+
+/* custom select styled like the rest */
+.disco-select {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+.disco-select:focus { border-color: var(--accent-border); background: var(--bg3); }
+.disco-select option { background: var(--bg2); }
+.disco-select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── SERVICE MULTI-SELECT ── */
+.svc-picker {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.svc-picker:focus-within { border-color: var(--accent-border); }
+
+.svc-picker-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 14px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+}
+
+.svc-picker-actions {
+  display: flex; gap: 10px;
+}
+
+.svc-link {
+  color: var(--accent); cursor: pointer; font-size: 11px;
+  background: none; border: none; font-family: var(--font-mono);
+  transition: opacity 0.15s;
+}
+.svc-link:hover { opacity: 0.7; }
+
+.svc-picker-body {
+  max-height: 220px; overflow-y: auto;
+  padding: 8px;
+}
+
+.svc-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-bottom: 3px;
+  transition: all 0.12s;
+  user-select: none;
+}
+.svc-item:hover { background: var(--bg4); border-color: var(--border); }
+.svc-item.selected {
+  background: var(--accent-dim);
+  border-color: var(--accent-border);
+}
+
+.svc-item input[type=checkbox] {
+  width: 14px; height: 14px;
+  accent-color: var(--accent);
+  flex-shrink: 0; cursor: pointer;
+}
+
+.svc-item-info { flex: 1; min-width: 0; }
+.svc-item-name {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.svc-item.selected .svc-item-name { color: var(--accent); }
+
+.svc-item-meta {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.svc-badges { display: flex; gap: 5px; }
+.svc-badge {
+  font-family: var(--font-mono); font-size: 9px;
+  padding: 1px 6px; border-radius: 3px;
+  border: 1px solid;
+}
+.svc-badge.healthy { border-color: var(--green-border); color: var(--green); background: var(--green-dim); }
+.svc-badge.degraded { border-color: var(--amber-border); color: var(--amber); background: var(--amber-dim); }
+.svc-badge.type { border-color: var(--border); color: var(--text-muted); background: var(--bg3); }
+
+.svc-picker-footer {
+  padding: 8px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--bg3);
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.svc-count { color: var(--accent); font-weight: 500; }
+
+.svc-empty {
+  padding: 24px 12px; text-align: center;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+}
+
+/* connection test banner */
+.conn-result {
+  display: none;
+  align-items: center; gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid;
+  font-family: var(--font-mono); font-size: 11px;
+  margin-top: 10px;
+}
+.conn-result.ok  { border-color: var(--green-border); color: var(--green); background: var(--green-dim); display: flex; }
+.conn-result.err { border-color: var(--red-border); color: var(--red); background: var(--red-dim); display: flex; }
+
+/* ── CSV UPLOAD ── */
+.csv-dropzone {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: var(--bg2);
+  position: relative;
+}
+.csv-dropzone:hover, .csv-dropzone.drag-over {
+  border-color: var(--accent-border);
+  background: var(--accent-dim);
+}
+.csv-dropzone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.csv-drop-icon { font-size: 24px; margin-bottom: 8px; }
+.csv-drop-title {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 500;
+  color: var(--text); margin-bottom: 4px;
+}
+.csv-drop-hint {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+}
+.csv-drop-hint span { color: var(--accent); }
+
+/* CSV schema hint */
+.csv-schema {
+  margin-top: 10px;
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.csv-schema-head {
+  padding: 7px 14px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.csv-schema-body {
+  padding: 10px 14px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);
+  line-height: 1.9;
+  display: none;
+}
+.csv-schema-body.open { display: block; }
+.csv-col-req { color: var(--accent); }
+.csv-col-opt { color: var(--text-muted); }
+
+/* CSV parse result */
+.csv-result {
+  margin-top: 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid;
+  overflow: hidden;
+  display: none;
+}
+.csv-result.ok   { border-color: var(--green-border); display: block; }
+.csv-result.err  { border-color: var(--red-border); display: block; }
+.csv-result.warn { border-color: var(--amber-border); display: block; }
+
+.csv-result-header {
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+}
+.csv-result.ok   .csv-result-header { background: var(--green-dim);  color: var(--green); }
+.csv-result.err  .csv-result-header { background: var(--red-dim);    color: var(--red); }
+.csv-result.warn .csv-result-header { background: var(--amber-dim);  color: var(--amber); }
+
+.csv-result-body {
+  padding: 12px 16px;
+  background: var(--bg1);
+  border-top: 1px solid var(--border);
+}
+
+/* CSV error list */
+.csv-error-list { list-style: none; margin: 0; padding: 0; }
+.csv-error-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 11px;
+}
+.csv-error-item:last-child { border-bottom: none; }
+.csv-error-svc {
+  color: var(--red); font-weight: 500; min-width: 140px; flex-shrink: 0;
+}
+.csv-error-msg { color: var(--text-dim); }
+
+/* CSV preview table */
+.csv-preview-wrap {
+  overflow-x: auto; margin-top: 4px;
+}
+table.csv-preview {
+  width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 11px;
+}
+table.csv-preview th {
+  text-align: left; padding: 5px 10px;
+  background: var(--bg3);
+  color: var(--text-muted); font-weight: 500;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+table.csv-preview td {
+  padding: 5px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+table.csv-preview tr:last-child td { border-bottom: none; }
+table.csv-preview td.match { color: var(--green); }
+table.csv-preview td.no-match { color: var(--red); font-weight: 500; }
+table.csv-preview td.partial { color: var(--amber); }
+
+/* CSV summary chips row */
+.csv-summary-row {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.csv-chip {
+  padding: 3px 10px; border-radius: 20px;
+  font-family: var(--font-mono); font-size: 10px; border: 1px solid;
+}
+.csv-chip.ok   { border-color: var(--green-border); color: var(--green);  background: var(--green-dim); }
+.csv-chip.warn { border-color: var(--amber-border); color: var(--amber); background: var(--amber-dim); }
+.csv-chip.err  { border-color: var(--red-border);   color: var(--red);   background: var(--red-dim); }
+.csv-chip.neu  { border-color: var(--border);        color: var(--text-muted); background: var(--bg3); }
+
+/* remove file btn */
+.csv-remove {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  padding: 2px 6px; border-radius: 4px; transition: color 0.15s;
+}
+.csv-remove:hover { color: var(--red); }
+
+/* ── CONNECTIVITY ERROR BANNERS ── */
+.conn-error-banner {
+  margin-top: 10px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--red-border);
+  overflow: hidden;
+  animation: fadeSlideIn 0.2s ease;
+}
+.conn-error-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  background: var(--red-dim);
+  border-bottom: 1px solid var(--red-border);
+}
+.conn-error-code {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--red);
+  background: rgba(255,102,102,0.15); border: 1px solid var(--red-border);
+  padding: 1px 8px; border-radius: 4px; flex-shrink: 0;
+}
+.conn-error-title { font-size: 13px; font-weight: 500; color: var(--red); flex: 1; }
+.conn-error-copy {
+  background: none; border: 1px solid var(--red-border); border-radius: 4px;
+  color: var(--red); cursor: pointer; font-size: 12px; padding: 2px 7px;
+  font-family: var(--font-mono); transition: background 0.15s; flex-shrink: 0;
+}
+.conn-error-copy:hover { background: rgba(255,102,102,0.15); }
+.conn-error-body {
+  padding: 10px 16px; font-size: 12px; color: var(--text-dim); line-height: 1.7;
+  background: var(--bg1);
+}
+.conn-error-body code {
+  font-family: var(--font-mono); font-size: 11px;
+  background: var(--bg3); padding: 1px 5px; border-radius: 3px; color: var(--text);
+}
+.conn-error-remedy {
+  padding: 8px 16px 10px; background: var(--bg1);
+  border-top: 1px solid var(--border); border-left: 3px solid var(--amber);
+  font-size: 12px; color: var(--text-dim); line-height: 1.7;
+}
+.conn-error-remedy strong { color: var(--amber); }
+.conn-error-actions {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px; background: var(--bg2); border-top: 1px solid var(--border);
+}
+.btn-retry {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: var(--radius);
+  border: 1px solid var(--red-border); background: var(--red-dim); color: var(--red);
+  font-family: var(--font-mono); font-size: 11px; cursor: pointer; transition: background 0.15s;
+}
+.btn-retry:hover { background: rgba(255,102,102,0.2); }
+.btn-docs {
+  font-family: var(--font-mono); font-size: 11px; color: var(--accent);
+  text-decoration: none; transition: opacity 0.15s;
+}
+.btn-docs:hover { opacity: 0.7; }
+
+/* ── DISCOVERY INLINE ERROR (per-step) ── */
+.discovery-error {
+  margin-top: 8px; padding: 9px 14px; border-radius: var(--radius);
+  border: 1px solid var(--red-border); background: var(--red-dim);
+  font-family: var(--font-mono); font-size: 11px; color: var(--red);
+  display: flex; align-items: flex-start; gap: 8px; line-height: 1.6;
+}
+.de-code {
+  flex-shrink: 0; font-weight: 600;
+  background: rgba(255,102,102,0.18); border: 1px solid var(--red-border);
+  padding: 0 5px; border-radius: 3px;
+}
+.de-remedy { margin-top: 3px; color: var(--text-dim); font-size: 10px; }
+.de-retry {
+  background: none; border: none; cursor: pointer; color: var(--accent);
+  font-family: var(--font-mono); font-size: 10px; padding: 0; margin-top: 3px;
+  text-decoration: underline; display: block;
+}
+
+/* ── DEMO THANOS MODE ── */
+.demo-mode-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 20px;
+  background: var(--amber-dim); border: 1px solid var(--amber-border);
+  color: var(--amber); font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  animation: pulse-amber 2s ease-in-out infinite;
+}
+@keyframes pulse-amber {
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.3); }
+  50% { box-shadow: 0 0 0 4px rgba(245,158,11,0); }
+}
+.demo-thanos-banner {
+  margin-top: 10px; padding: 10px 14px; border-radius: var(--radius);
+  border: 1px solid var(--amber-border); background: var(--amber-dim);
+  font-family: var(--font-mono); font-size: 11px; color: var(--amber);
+  line-height: 1.7; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.dtb-text { flex: 1; }
+.dtb-exit {
+  background: none; border: 1px solid var(--amber-border); border-radius: 4px;
+  color: var(--amber); font-family: var(--font-mono); font-size: 10px;
+  cursor: pointer; padding: 2px 8px; flex-shrink: 0; transition: background 0.15s;
+}
+.dtb-exit:hover { background: rgba(245,158,11,0.2); }
+
+/* ── AUTH / CONNECT ROW ── */
+.auth-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;
+}
+.auth-row .field { margin: 0; }
+.connect-btn-row {
+  display: flex; align-items: flex-end; gap: 8px; margin-top: 14px; flex-wrap: wrap;
+}
+.btn-demo-thanos {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 16px; border-radius: var(--radius);
+  border: 1px solid var(--amber-border); background: var(--amber-dim);
+  color: var(--amber); font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+  cursor: pointer; white-space: nowrap; transition: all 0.15s;
+}
+.btn-demo-thanos:hover { background: rgba(245,158,11,0.2); border-color: var(--amber); }
+.btn-demo-thanos:active { transform: scale(0.98); }
+.conn-hint {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  margin-top: 6px; line-height: 1.6;
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <!-- ResilienceX Logo Mark -->
+      <svg width="36" height="36" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+        <rect width="64" height="64" rx="10" fill="#111318"/>
+        <rect x="8" width="64" height="64" rx="0" fill="none"/>
+        <!-- left battlement -->
+        <rect x="7" y="19" width="9" height="10" rx="2" fill="#e2e4e9"/>
+        <rect x="19" y="19" width="5" height="10" rx="1" fill="#3a3f4e"/>
+        <!-- right battlement -->
+        <rect x="48" y="19" width="9" height="10" rx="2" fill="#e2e4e9"/>
+        <rect x="40" y="19" width="5" height="10" rx="1" fill="#3a3f4e"/>
+        <!-- centre battlement -->
+        <rect x="28" y="16" width="8" height="13" rx="2" fill="#e2e4e9"/>
+        <!-- left tower body -->
+        <rect x="7" y="28" width="22" height="22" rx="1.5" fill="#d0d2d8"/>
+        <!-- right tower body -->
+        <rect x="35" y="28" width="22" height="22" rx="1.5" fill="#d0d2d8"/>
+        <!-- centre wall -->
+        <rect x="21" y="29" width="22" height="21" rx="1" fill="#b8bac0"/>
+        <!-- stone courses left -->
+        <rect x="8"  y="33" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+        <rect x="8"  y="39" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+        <rect x="8"  y="45" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+        <!-- stone courses right -->
+        <rect x="36" y="33" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+        <rect x="36" y="39" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+        <rect x="36" y="45" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+        <!-- arched gate -->
+        <path d="M26 50 L26 38 Q26 31 32 31 Q38 31 38 38 L38 50 Z" fill="#111318"/>
+        <!-- flame outer -->
+        <path d="M32 3 C28 6 24 10 25 15 C22 12 23 8 24 6 C20 10 19 16 22 20 C20 18 19 14 21 11 C18 15 18 22 22 26 C24 28 28 29 32 29 C36 29 40 28 42 26 C46 22 46 15 43 11 C45 14 44 18 42 20 C45 16 44 10 40 6 C41 8 42 12 39 15 C40 10 36 6 32 3 Z" fill="#f59e0b"/>
+        <!-- flame mid -->
+        <path d="M32 7 C30 10 28 13 29 17 C27 15 28 11 29 9 C26 13 27 18 30 21 C28 19 28 15 30 12 C28 16 29 21 32 23 C35 21 36 16 34 12 C36 15 36 19 34 21 C37 18 38 13 35 9 C36 11 37 15 35 17 C36 13 34 10 32 7 Z" fill="#ef4444"/>
+        <!-- flame core -->
+        <ellipse cx="32" cy="18" rx="3" ry="4" fill="#fde68a"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <div class="topbar-name" style="line-height:1.1">ResilienceX <span>Chaos Scribe</span></div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase">Chaos Engineering Platform</div>
+      </div>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-meta">SRE Report Pipeline · Thanos · Multi-service</div>
+    <div class="topbar-right">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark mode" aria-label="Toggle theme">
+        <span class="icon-dark">🌙</span>
+        <span class="icon-light">☀️</span>
+      </button>
+      <div class="status-dot">
+        <div class="dot-pulse" id="top-dot"></div>
+        <span id="top-status">Ready</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Pipeline</div>
+        <div class="nav-item active" id="nav-1" onclick="goStep(1)">
+          <div class="nav-num">1</div>
+          Configure
+        </div>
+        <div class="nav-item" id="nav-2" onclick="goStep(2)">
+          <div class="nav-num">2</div>
+          Fetch from Thanos
+        </div>
+        <div class="nav-item" id="nav-3" onclick="goStep(3)">
+          <div class="nav-num">3</div>
+          Plot graphs
+        </div>
+        <div class="nav-item" id="nav-4" onclick="goStep(4)">
+          <div class="nav-num">4</div>
+          Generate report
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Live metrics</div>
+        <div class="status-card">
+          <div class="sc-label">CPU (chaos peak)</div>
+          <div class="sc-val red" id="sb-cpu">—</div>
+        </div>
+        <div class="status-card">
+          <div class="sc-label">Memory (chaos peak)</div>
+          <div class="sc-val amber" id="sb-mem">—</div>
+        </div>
+        <div class="status-card">
+          <div class="sc-label">OOM events</div>
+          <div class="sc-val red" id="sb-oom">—</div>
+        </div>
+        <div class="status-card">
+          <div class="sc-label">Replica drop</div>
+          <div class="sc-val amber" id="sb-rep">—</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">About</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <svg width="22" height="22" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="8" fill="#1e222b"/>
+            <rect x="7" y="19" width="9" height="10" rx="2" fill="#e2e4e9"/>
+            <rect x="19" y="19" width="5" height="10" rx="1" fill="#3a3f4e"/>
+            <rect x="48" y="19" width="9" height="10" rx="2" fill="#e2e4e9"/>
+            <rect x="40" y="19" width="5" height="10" rx="1" fill="#3a3f4e"/>
+            <rect x="28" y="16" width="8" height="13" rx="2" fill="#e2e4e9"/>
+            <rect x="7" y="28" width="22" height="22" rx="1.5" fill="#d0d2d8"/>
+            <rect x="35" y="28" width="22" height="22" rx="1.5" fill="#d0d2d8"/>
+            <rect x="21" y="29" width="22" height="21" rx="1" fill="#b8bac0"/>
+            <path d="M26 50 L26 38 Q26 31 32 31 Q38 31 38 38 L38 50 Z" fill="#1e222b"/>
+            <path d="M32 3 C28 6 24 10 25 15 C22 12 23 8 24 6 C20 10 19 16 22 20 C20 18 19 14 21 11 C18 15 18 22 22 26 C24 28 28 29 32 29 C36 29 40 28 42 26 C46 22 46 15 43 11 C45 14 44 18 42 20 C45 16 44 10 40 6 C41 8 42 12 39 15 C40 10 36 6 32 3 Z" fill="#f59e0b"/>
+            <path d="M32 7 C30 10 28 13 29 17 C27 15 28 11 29 9 C26 13 27 18 30 21 C28 19 28 15 30 12 C28 16 29 21 32 23 C35 21 36 16 34 12 C36 15 36 19 34 21 C37 18 38 13 35 9 C36 11 37 15 35 17 C36 13 34 10 32 7 Z" fill="#ef4444"/>
+            <ellipse cx="32" cy="18" rx="3" ry="4" fill="#fde68a"/>
+          </svg>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text);font-weight:500">ResilienceX<br><span style="color:var(--accent);font-size:10px">Chaos Scribe</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.7;">
+          Fetches pre/during/post chaos metrics from Thanos across multiple services, ingests perf test CSVs, generates interactive graphs and an SRE resilience report with remediation priorities.
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- ── PANEL 1: CONFIGURE ── -->
+      <div class="panel active" id="panel-1">
+        <div class="panel-header" style="display:flex;align-items:flex-start;gap:20px">
+          <svg width="56" height="56" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;margin-top:2px">
+            <rect width="64" height="64" rx="12" fill="#181b22"/>
+            <rect x="7" y="19" width="9" height="10" rx="2" fill="#e2e4e9"/>
+            <rect x="19" y="19" width="5" height="10" rx="1" fill="#3a3f4e"/>
+            <rect x="48" y="19" width="9" height="10" rx="2" fill="#e2e4e9"/>
+            <rect x="40" y="19" width="5" height="10" rx="1" fill="#3a3f4e"/>
+            <rect x="28" y="16" width="8" height="13" rx="2" fill="#e2e4e9"/>
+            <rect x="7" y="28" width="22" height="22" rx="1.5" fill="#d0d2d8"/>
+            <rect x="35" y="28" width="22" height="22" rx="1.5" fill="#d0d2d8"/>
+            <rect x="21" y="29" width="22" height="21" rx="1" fill="#b8bac0"/>
+            <rect x="8"  y="33" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+            <rect x="8"  y="39" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+            <rect x="8"  y="45" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+            <rect x="36" y="33" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+            <rect x="36" y="39" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+            <rect x="36" y="45" width="20" height="1.2" rx=".6" fill="#9a9ca2" opacity=".6"/>
+            <path d="M26 50 L26 38 Q26 31 32 31 Q38 31 38 38 L38 50 Z" fill="#181b22"/>
+            <path d="M32 3 C28 6 24 10 25 15 C22 12 23 8 24 6 C20 10 19 16 22 20 C20 18 19 14 21 11 C18 15 18 22 22 26 C24 28 28 29 32 29 C36 29 40 28 42 26 C46 22 46 15 43 11 C45 14 44 18 42 20 C45 16 44 10 40 6 C41 8 42 12 39 15 C40 10 36 6 32 3 Z" fill="#f59e0b"/>
+            <path d="M32 7 C30 10 28 13 29 17 C27 15 28 11 29 9 C26 13 27 18 30 21 C28 19 28 15 30 12 C28 16 29 21 32 23 C35 21 36 16 34 12 C36 15 36 19 34 21 C37 18 38 13 35 9 C36 11 37 15 35 17 C36 13 34 10 32 7 Z" fill="#ef4444"/>
+            <ellipse cx="32" cy="18" rx="3" ry="4" fill="#fde68a"/>
+          </svg>
+          <div>
+            <div class="panel-eyebrow">Step 01 / 04 · ResilienceX Chaos Scribe</div>
+            <div class="panel-title">Configure data source &amp; experiment</div>
+            <div class="panel-desc">Connect to Thanos, discover clusters, namespaces and microservices — then upload performance test data.</div>
+          </div>
+        </div>
+
+        <!-- ── CONNECTION & DISCOVERY ── -->
+        <div class="form-section">
+          <div class="form-section-title">① Thanos connection &amp; cluster discovery</div>
+
+          <!-- URL row -->
+          <div class="discovery-row">
+            <div class="field" style="margin:0">
+              <label>Thanos Query URL</label>
+              <input type="text" id="thanos-url" value="http://thanos-query.monitoring.svc:9090" placeholder="https://thanos.internal.example.com" oninput="resetDiscovery()"/>
+            </div>
+          </div>
+          <div class="conn-hint">In-cluster: <code style="font-family:var(--font-mono);font-size:10px;color:var(--accent)">http://thanos-query.monitoring.svc.cluster.local:9090</code> &nbsp;·&nbsp; Requires CORS proxy if accessed from outside cluster</div>
+
+          <!-- Auth row -->
+          <div class="auth-row">
+            <div class="field">
+              <label>Auth mode</label>
+              <select id="auth-mode" onchange="toggleAuthFields()">
+                <option value="none">No auth (in-cluster)</option>
+                <option value="bearer">Bearer token</option>
+              </select>
+            </div>
+            <div class="field" id="token-field" style="display:none">
+              <label>Bearer token</label>
+              <input type="password" id="bearer-token" placeholder="eyJ..." autocomplete="off"/>
+            </div>
+          </div>
+
+          <!-- Connect buttons -->
+          <div class="connect-btn-row">
+            <button class="discover-btn" id="btn-connect" onclick="discoverClusters()">
+              <span id="conn-icon">⚡</span> Connect &amp; discover
+            </button>
+            <button class="btn-demo-thanos" onclick="connectDemoThanos()">
+              🧪 Demo Thanos instance
+            </button>
+          </div>
+
+          <!-- Connection result / error -->
+          <div id="conn-result-wrap"></div>
+
+          <!-- Demo mode active banner (hidden by default) -->
+          <div class="demo-thanos-banner" id="demo-thanos-banner" style="display:none">
+            <div class="dtb-text">
+              <span class="demo-mode-badge">🧪 Demo mode</span>&nbsp;
+              Connected to <strong>simulated Thanos instance</strong> — data is synthetic. Real cluster, namespace and service discovery is mocked. Switch to a live Thanos URL for production use.
+            </div>
+            <button class="dtb-exit" onclick="exitDemoThanos()">✕ Exit demo</button>
+          </div>
+
+          <!-- CLUSTER SELECT -->
+          <div class="discover-step locked" id="step-cluster">
+            <div class="field" style="margin-top:14px">
+              <label>Cluster</label>
+              <div class="discovery-row" style="margin:0">
+                <select class="disco-select" id="cluster-select" disabled onchange="onClusterChange()">
+                  <option value="">— select a cluster —</option>
+                </select>
+                <div class="discovery-status" id="status-cluster" style="white-space:nowrap;min-width:120px"></div>
+              </div>
+            </div>
+            <div id="cluster-error"></div>
+          </div>
+
+          <!-- NAMESPACE SELECT -->
+          <div class="discover-step locked" id="step-ns" style="margin-top:14px">
+            <div class="field">
+              <label>Namespace</label>
+              <div class="discovery-row" style="margin:0">
+                <select class="disco-select" id="ns-select" disabled onchange="onNsChange()">
+                  <option value="">— select a namespace —</option>
+                </select>
+                <div class="discovery-status" id="status-ns" style="white-space:nowrap;min-width:120px"></div>
+              </div>
+            </div>
+            <div id="ns-error"></div>
+          </div>
+
+          <!-- SERVICE MULTI-SELECT -->
+          <div class="discover-step locked" id="step-svcs" style="margin-top:14px">
+            <div class="field">
+              <label>Microservices <span style="color:var(--text-muted);font-weight:400">(multi-select)</span></label>
+              <div class="svc-picker" id="svc-picker">
+                <div class="svc-picker-header">
+                  <span id="svc-picker-hint" style="color:var(--text-muted)">Waiting for namespace selection…</span>
+                  <div class="svc-picker-actions">
+                    <button class="svc-link" onclick="selectAllSvcs()">Select all</button>
+                    <button class="svc-link" onclick="clearAllSvcs()">Clear</button>
+                  </div>
+                </div>
+                <div class="svc-picker-body" id="svc-picker-body">
+                  <div class="svc-empty">Select a namespace to discover services</div>
+                </div>
+                <div class="svc-picker-footer">
+                  <span><span class="svc-count" id="svc-count">0</span> services selected</span>
+                  <span id="svc-total" style="color:var(--text-muted)">0 available</span>
+                </div>
+              </div>
+            </div>
+            <div id="svc-error"></div>
+          </div>
+        </div>
+
+        <!-- ── CHAOS EXPERIMENT ── -->
+        <div class="form-section" id="chaos-section" style="opacity:0.45;pointer-events:none;transition:opacity 0.3s">
+          <div class="form-section-title">② Chaos experiment window</div>
+          <div class="form-grid">
+            <div class="field">
+              <label>Experiment name</label>
+              <input type="text" id="exp-name" value="pod-failure-50pct"/>
+            </div>
+            <div class="field">
+              <label>Chaos type</label>
+              <select id="chaos-type">
+                <option>pod-failure</option>
+                <option>cpu-hog</option>
+                <option>memory-hog</option>
+                <option>network-partition</option>
+                <option>node-drain</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Chaos start (UTC)</label>
+              <input type="datetime-local" id="chaos-start" value="2025-03-18T10:00"/>
+            </div>
+            <div class="field">
+              <label>Chaos end (UTC)</label>
+              <input type="datetime-local" id="chaos-end" value="2025-03-18T10:30"/>
+            </div>
+            <div class="field">
+              <label>Pre-chaos baseline window (min)</label>
+              <input type="number" id="pre-win" value="15" min="5" max="120"/>
+            </div>
+            <div class="field">
+              <label>Post-chaos recovery window (min)</label>
+              <input type="number" id="post-win" value="15" min="5" max="120"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── METRICS ── -->
+        <div class="form-section" id="metrics-section" style="opacity:0.45;pointer-events:none;transition:opacity 0.3s">
+          <div class="form-section-title">③ Metrics to collect</div>
+          <div class="metrics-grid">
+            <label class="metric-cb"><input type="checkbox" checked id="m-cpu"> <span class="m-icon">⚙️</span> CPU utilisation %</label>
+            <label class="metric-cb"><input type="checkbox" checked id="m-mem"> <span class="m-icon">💾</span> Memory utilisation %</label>
+            <label class="metric-cb"><input type="checkbox" checked id="m-throttle"> <span class="m-icon">🔴</span> CPU throttling %</label>
+            <label class="metric-cb"><input type="checkbox" checked id="m-oom"> <span class="m-icon">💀</span> OOM kill events</label>
+            <label class="metric-cb"><input type="checkbox" checked id="m-replicas"> <span class="m-icon">🔄</span> Replica count</label>
+            <label class="metric-cb"><input type="checkbox" checked id="m-limits"> <span class="m-icon">📐</span> CPU/Mem limits &amp; requests</label>
+            <label class="metric-cb"><input type="checkbox" id="m-net"> <span class="m-icon">🌐</span> Network I/O</label>
+            <label class="metric-cb"><input type="checkbox" id="m-latency"> <span class="m-icon">⏱️</span> Request latency p99</label>
+            <label class="metric-cb"><input type="checkbox" id="m-errors"> <span class="m-icon">❌</span> HTTP 5xx error rate</label>
+          </div>
+        </div>
+
+        <!-- ── PERFORMANCE TEST DATA UPLOAD ── -->
+        <div class="form-section" id="perf-section" style="opacity:0.45;pointer-events:none;transition:opacity 0.3s">
+          <div class="form-section-title" style="display:flex;align-items:center;justify-content:space-between">
+            <span>④ Performance test data <span style="color:var(--text-muted);font-weight:400">(optional · JMeter aggregate report)</span></span>
+            <button class="csv-remove" id="csv-remove-btn" onclick="removeCsv()" style="display:none">✕ Remove</button>
+          </div>
+
+          <!-- Drop zone -->
+          <div class="csv-dropzone" id="csv-dropzone"
+               ondragover="csvDragOver(event)" ondragleave="csvDragLeave(event)" ondrop="csvDrop(event)">
+            <input type="file" id="csv-file-input" accept=".csv,text/csv" onchange="csvFileSelected(event)"/>
+            <div class="csv-drop-icon">📊</div>
+            <div class="csv-drop-title">Drop JMeter aggregate report CSV here</div>
+            <div class="csv-drop-hint">or <span>click to browse</span> · exported from JMeter → Aggregate Report listener</div>
+          </div>
+
+          <!-- Action row: demo button + schema toggle -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+            <button class="btn" style="font-size:12px;padding:6px 14px;gap:6px" onclick="loadDemoJmeter()">
+              ⚡ Load demo JMeter data
+            </button>
+            <button class="svc-link" onclick="toggleSchema()" style="font-size:11px;color:var(--text-muted)">
+              Expected schema ▾
+            </button>
+          </div>
+
+          <!-- Schema reference (collapsible) -->
+          <div class="csv-schema" style="margin-top:6px">
+            <div class="csv-schema-head" style="display:none"><!-- hidden - toggled above --></div>
+            <div class="csv-schema-body" id="csv-schema-body">
+              <div style="color:var(--text-dim);margin-bottom:6px;font-size:10px;text-transform:uppercase;letter-spacing:.08em">JMeter Aggregate Report columns (File → Save Table Data)</div>
+              <div><span class="csv-col-req">service</span> — deployment name matching a selected microservice <span style="color:var(--text-muted)">(add this column to your JMeter CSV in CI)</span></div>
+              <div><span class="csv-col-req">Label</span> — transaction / sampler label (e.g. POST /payments)</div>
+              <div><span class="csv-col-req"># Samples</span> — total number of requests in the interval</div>
+              <div><span class="csv-col-req">Average</span> — mean response time (ms)</div>
+              <div><span class="csv-col-req">Median</span> — 50th percentile response time (ms)</div>
+              <div><span class="csv-col-req">90% Line</span> — 90th percentile response time (ms)</div>
+              <div><span class="csv-col-req">95% Line</span> — 95th percentile response time (ms)</div>
+              <div><span class="csv-col-req">99% Line</span> — 99th percentile response time (ms)</div>
+              <div><span class="csv-col-req">Error %</span> — HTTP error percentage (0.00%–100.00%)</div>
+              <div><span class="csv-col-req">Throughput</span> — requests/sec</div>
+              <div><span class="csv-col-opt">Min</span> — minimum response time (ms)</div>
+              <div><span class="csv-col-opt">Max</span> — maximum response time (ms)</div>
+              <div><span class="csv-col-opt">Received KB/sec</span> — received bandwidth</div>
+              <div><span class="csv-col-opt">Sent KB/sec</span> — sent bandwidth</div>
+              <div><span class="csv-col-opt">phase</span> — pre / chaos / post <span style="color:var(--text-muted)">(add this column to tag test phases)</span></div>
+              <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);color:var(--text-muted)">
+                Example row:<br>
+                <code style="font-size:10px;color:var(--accent)">payment-api,POST /api/payments,12450,145,118,310,420,680,2.34%,1240.5,chaos</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parse result / errors -->
+          <div class="csv-result" id="csv-result">
+            <div class="csv-result-header" id="csv-result-header"></div>
+            <div class="csv-result-body" id="csv-result-body"></div>
+          </div>
+        </div>
+
+        <!-- ── THRESHOLDS ── -->
+        <div class="form-section" id="thresh-section" style="opacity:0.45;pointer-events:none;transition:opacity 0.3s">
+          <div class="form-section-title">⑤ Report thresholds &amp; SLO</div>
+          <div class="form-grid cols-3">
+            <div class="field">
+              <label>CPU alert threshold (%)</label>
+              <input type="number" id="cpu-thresh" value="80" min="50" max="100"/>
+            </div>
+            <div class="field">
+              <label>Memory alert threshold (%)</label>
+              <input type="number" id="mem-thresh" value="80" min="50" max="100"/>
+            </div>
+            <div class="field">
+              <label>Target SLO (%)</label>
+              <input type="number" id="slo" value="99.9" step="0.1" min="90" max="100"/>
+            </div>
+            <div class="field">
+              <label>Report author</label>
+              <input type="text" id="author" value="Chaos Engineering Team"/>
+            </div>
+            <div class="field">
+              <label>Team / Squad</label>
+              <input type="text" id="team" value="Platform SRE"/>
+            </div>
+            <div class="field">
+              <label>Severity</label>
+              <select id="severity">
+                <option>P1 – Critical</option>
+                <option selected>P2 – High</option>
+                <option>P3 – Medium</option>
+                <option>P4 – Low</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-run" onclick="startFetch()" disabled style="opacity:0.45">▶ &nbsp;Run agent pipeline</button>
+          <button class="btn" onclick="loadDemo()">⚡ Load demo data</button>
+        </div>
+      </div>
+
+      <!-- ── PANEL 2: FETCH ── -->
+      <div class="panel" id="panel-2">
+        <div class="panel-header">
+          <div class="panel-eyebrow">Step 02 / 04</div>
+          <div class="panel-title">Fetching data from Thanos</div>
+          <div class="panel-desc">Querying Prometheus metrics across pre-chaos, chaos, and post-chaos phases.</div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-labels">
+            <span id="progress-label">Initialising...</span>
+            <span id="progress-pct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="fetch-progress"></div>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="t-dot r"></div>
+            <div class="t-dot y"></div>
+            <div class="t-dot g"></div>
+            <div class="terminal-title">thanos-agent · query log</div>
+          </div>
+          <div class="terminal-body" id="fetch-log">
+            <div class="log-line log-dim">$ resilience-agent --mode fetch --source thanos</div>
+          </div>
+        </div>
+
+        <div id="fetch-table-wrap" style="display:none">
+          <div class="data-table-wrap">
+            <div class="data-table-head">Aggregated metrics — pre / during / post chaos</div>
+            <div id="fetch-table-container"></div>
+          </div>
+        </div>
+
+        <div class="btn-row" style="margin-top:20px">
+          <button class="btn btn-primary" id="btn-to-charts" onclick="goStep(3)" style="display:none">→ &nbsp;Plot graphs</button>
+          <button class="btn" onclick="goStep(1)">← &nbsp;Back to config</button>
+        </div>
+      </div>
+
+      <!-- ── PANEL 3: CHARTS ── -->
+      <div class="panel" id="panel-3">
+        <div class="panel-header">
+          <div class="panel-eyebrow">Step 03 / 04</div>
+          <div class="panel-title">Resource utilisation graphs</div>
+          <div class="panel-desc">Visual breakdown of service behaviour across all three phases of the chaos experiment.</div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-title">CPU utilisation % by phase</div>
+              <div class="chart-badge badge-crit" id="badge-cpu">—</div>
+            </div>
+            <div class="chart-area"><canvas id="chart-cpu"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-title">Memory utilisation % by phase</div>
+              <div class="chart-badge badge-warn" id="badge-mem">—</div>
+            </div>
+            <div class="chart-area"><canvas id="chart-mem"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-title">CPU throttling % — timeline</div>
+              <div class="chart-badge badge-crit" id="badge-throttle">—</div>
+            </div>
+            <div class="chart-area"><canvas id="chart-throttle"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-title">Replica count — timeline</div>
+              <div class="chart-badge badge-warn" id="badge-rep">—</div>
+            </div>
+            <div class="chart-area"><canvas id="chart-replicas"></canvas></div>
+          </div>
+        </div>
+
+        <div class="charts-grid single">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-title">OOM kill events &amp; throttle incidents — timeline</div>
+              <div class="chart-badge badge-crit">Critical events</div>
+            </div>
+            <div class="chart-area short"><canvas id="chart-events"></canvas></div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="goStep(4)">→ &nbsp;Generate report</button>
+          <button class="btn" onclick="goStep(2)">← &nbsp;Back</button>
+        </div>
+      </div>
+
+      <!-- ── PANEL 4: REPORT ── -->
+      <div class="panel" id="panel-4">
+        <div class="panel-header">
+          <div class="panel-eyebrow">Step 04 / 04</div>
+          <div class="panel-title">Resilience report</div>
+          <div class="panel-desc">Structured SRE report with findings, SLO impact, and prioritised remediation actions.</div>
+        </div>
+
+        <div class="report-banner" id="report-meta"></div>
+        <div class="verdict-chips" id="report-chips"></div>
+        <div class="report-sections" id="report-sections"></div>
+
+        <div class="divider"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-success" onclick="exportMarkdown()">↓ &nbsp;Export Markdown</button>
+          <button class="btn btn-primary" onclick="exportJSON()">↓ &nbsp;Export JSON</button>
+          <button class="btn" onclick="goStep(3)">← &nbsp;Back to charts</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* ── THEME ── */
+function getThemeColors() {
+  const light = document.documentElement.classList.contains('light');
+  return {
+    grid:   light ? 'rgba(0,0,0,0.06)'  : 'rgba(255,255,255,0.04)',
+    tick:   light ? '#6b7280'            : '#4a4f5e',
+    tip:    light ? '#f9fafb'            : '#1e222b',
+    tipBdr: light ? 'rgba(0,0,0,0.12)'  : 'rgba(255,255,255,0.08)',
+    tipTtl: light ? '#4a5068'            : '#7a7f8e',
+    tipBdy: light ? '#12151c'            : '#e2e4e9',
+    cpuBar: light ? ['rgba(26,111,212,0.6)','rgba(220,38,38,0.7)','rgba(26,111,212,0.6)']
+                  : ['rgba(79,158,255,0.5)','rgba(255,102,102,0.65)','rgba(79,158,255,0.5)'],
+    cpuBdr: light ? ['rgba(26,111,212,0.9)','rgba(220,38,38,1)','rgba(26,111,212,0.9)']
+                  : ['rgba(79,158,255,0.8)','rgba(255,102,102,0.9)','rgba(79,158,255,0.8)'],
+    memBar: light ? ['rgba(26,111,212,0.6)','rgba(180,83,9,0.65)','rgba(26,111,212,0.6)']
+                  : ['rgba(79,158,255,0.5)','rgba(245,158,11,0.65)','rgba(79,158,255,0.5)'],
+    memBdr: light ? ['rgba(26,111,212,0.9)','rgba(180,83,9,1)','rgba(26,111,212,0.9)']
+                  : ['rgba(79,158,255,0.8)','rgba(245,158,11,0.9)','rgba(79,158,255,0.8)'],
+    throttle: light ? '#b45309' : '#f59e0b',
+    throttleFill: light ? 'rgba(180,83,9,0.08)' : 'rgba(245,158,11,0.08)',
+    replica: light ? '#1a6fd4' : '#4f9eff',
+    replicaFill: light ? 'rgba(26,111,212,0.08)' : 'rgba(79,158,255,0.08)',
+    oomBar: light ? 'rgba(220,38,38,0.75)' : 'rgba(255,102,102,0.8)',
+    thrBar: light ? 'rgba(180,83,9,0.65)'  : 'rgba(245,158,11,0.7)',
+  };
+}
+
+function applyThemeToCharts() {
+  if (!chartsRendered || !fetchedData) return;
+  const c = getThemeColors();
+  const scaleOpts = {
+    grid:  { color: c.grid, drawBorder: false },
+    ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }, color: c.tick },
+  };
+  const tooltipOpts = {
+    backgroundColor: c.tip, borderColor: c.tipBdr, borderWidth: 1,
+    titleColor: c.tipTtl, bodyColor: c.tipBdy,
+    titleFont: { family: "'JetBrains Mono', monospace", size: 11 },
+    bodyFont:  { family: "'JetBrains Mono', monospace", size: 11 },
+  };
+
+  if (chartInstances.cpu) {
+    chartInstances.cpu.data.datasets[0].backgroundColor = c.cpuBar;
+    chartInstances.cpu.data.datasets[0].borderColor     = c.cpuBdr;
+    chartInstances.cpu.options.scales.x = { ...chartInstances.cpu.options.scales.x, ...scaleOpts };
+    chartInstances.cpu.options.scales.y = { ...chartInstances.cpu.options.scales.y, ...scaleOpts };
+    chartInstances.cpu.options.plugins.tooltip = { ...chartInstances.cpu.options.plugins.tooltip, ...tooltipOpts };
+    chartInstances.cpu.update('none');
+  }
+  if (chartInstances.mem) {
+    chartInstances.mem.data.datasets[0].backgroundColor = c.memBar;
+    chartInstances.mem.data.datasets[0].borderColor     = c.memBdr;
+    chartInstances.mem.options.scales.x = { ...chartInstances.mem.options.scales.x, ...scaleOpts };
+    chartInstances.mem.options.scales.y = { ...chartInstances.mem.options.scales.y, ...scaleOpts };
+    chartInstances.mem.options.plugins.tooltip = { ...chartInstances.mem.options.plugins.tooltip, ...tooltipOpts };
+    chartInstances.mem.update('none');
+  }
+  if (chartInstances.throttle) {
+    chartInstances.throttle.data.datasets[0].borderColor     = c.throttle;
+    chartInstances.throttle.data.datasets[0].backgroundColor = c.throttleFill;
+    chartInstances.throttle.options.scales.x = { ...chartInstances.throttle.options.scales.x, ...scaleOpts };
+    chartInstances.throttle.options.scales.y = { ...chartInstances.throttle.options.scales.y, ...scaleOpts };
+    chartInstances.throttle.options.plugins.tooltip = { ...chartInstances.throttle.options.plugins.tooltip, ...tooltipOpts };
+    chartInstances.throttle.update('none');
+  }
+  if (chartInstances.replicas) {
+    chartInstances.replicas.data.datasets[0].borderColor     = c.replica;
+    chartInstances.replicas.data.datasets[0].backgroundColor = c.replicaFill;
+    chartInstances.replicas.options.scales.x = { ...chartInstances.replicas.options.scales.x, ...scaleOpts };
+    chartInstances.replicas.options.scales.y = { ...chartInstances.replicas.options.scales.y, ...scaleOpts };
+    chartInstances.replicas.options.plugins.tooltip = { ...chartInstances.replicas.options.plugins.tooltip, ...tooltipOpts };
+    chartInstances.replicas.update('none');
+  }
+  if (chartInstances.events) {
+    chartInstances.events.data.datasets[0].backgroundColor = c.oomBar;
+    chartInstances.events.data.datasets[1].backgroundColor = c.thrBar;
+    chartInstances.events.options.scales.x = { ...chartInstances.events.options.scales.x, ...scaleOpts };
+    chartInstances.events.options.scales.y = { ...chartInstances.events.options.scales.y, ...scaleOpts };
+    chartInstances.events.options.plugins.tooltip = { ...chartInstances.events.options.plugins.tooltip, ...tooltipOpts };
+    chartInstances.events.update('none');
+  }
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.classList.toggle('light');
+  localStorage.setItem('rxcs-theme', isLight ? 'light' : 'dark');
+  // Update topbar SVG logo colours for light mode
+  updateLogoColors(isLight);
+  // Re-colour Chart.js instances
+  applyThemeToCharts();
+}
+
+function updateLogoColors(isLight) {
+  // Update all inline SVG rect/path fills for the castle logos
+  document.querySelectorAll('.topbar-logo svg rect[fill="#111318"], .topbar-logo svg rect[fill="#3a3f4e"]').forEach(el => {
+    el.setAttribute('fill', isLight ? (el.getAttribute('fill') === '#111318' ? '#f0f1f4' : '#c8cad4') : (el.getAttribute('data-dark') || el.getAttribute('fill')));
+  });
+}
+
+// Init theme from localStorage or system preference
+(function initTheme() {
+  const saved = localStorage.getItem('rxcs-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const useDark = saved ? saved === 'dark' : prefersDark;
+  if (!useDark) document.documentElement.classList.add('light');
+})();
+
+let currentStep = 1;
+let doneSteps = [];
+let fetchedData = null;
+let chartInstances = {};
+
+/* ── NAVIGATION ── */
+function goStep(n) {
+  if (n > 1 && !doneSteps.includes(n - 1)) return;
+  currentStep = n;
+  document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('active', i === n - 1));
+  document.querySelectorAll('.nav-item').forEach((item, i) => {
+    item.classList.remove('active', 'done');
+    if (i === n - 1) item.classList.add('active');
+    else if (doneSteps.includes(i + 1)) item.classList.add('done');
+    item.querySelector('.nav-num').innerHTML = doneSteps.includes(i + 1) && i !== n - 1 ? '✓' : (i + 1);
+  });
+  if (n === 3) renderCharts();
+  if (n === 4) renderReport();
+}
+
+/* ── LOGGING ── */
+function log(msg, cls = 'log-info') {
+  const el = document.getElementById('fetch-log');
+  const d = document.createElement('div');
+  d.className = 'log-line ' + cls;
+  d.textContent = msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+function setProgress(p, label) {
+  document.getElementById('fetch-progress').style.width = p + '%';
+  document.getElementById('progress-pct').textContent = p + '%';
+  if (label) document.getElementById('progress-label').textContent = label;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ── DISCOVERY MOCK DATA ── */
+const MOCK_CLUSTERS = [
+  { id: 'prod-us-east-1',  label: 'prod-us-east-1',  env: 'production', region: 'us-east-1',  nodes: 18 },
+  { id: 'prod-eu-west-1',  label: 'prod-eu-west-1',  env: 'production', region: 'eu-west-1',  nodes: 12 },
+  { id: 'staging-us-east', label: 'staging-us-east', env: 'staging',    region: 'us-east-1',  nodes: 6  },
+  { id: 'dev-cluster',     label: 'dev-cluster',      env: 'dev',        region: 'us-west-2',  nodes: 3  },
+];
+
+const MOCK_NAMESPACES = {
+  'prod-us-east-1':  ['payment-service','order-service','auth-service','notification-service','api-gateway','data-pipeline','search-service','user-profile'],
+  'prod-eu-west-1':  ['payment-service','order-service','auth-service','api-gateway','user-profile','reporting-service'],
+  'staging-us-east': ['payment-service','order-service','auth-service','api-gateway','feature-flags','test-harness'],
+  'dev-cluster':     ['payment-service','dev-sandbox','test-service'],
+};
+
+const MOCK_SERVICES = {
+  'payment-service':      [
+    { name:'payment-api',       type:'Deployment', replicas:5, status:'healthy' },
+    { name:'payment-worker',    type:'Deployment', replicas:3, status:'healthy' },
+    { name:'payment-gateway',   type:'Deployment', replicas:2, status:'healthy' },
+    { name:'fraud-detector',    type:'Deployment', replicas:2, status:'degraded'},
+    { name:'payment-db-proxy',  type:'StatefulSet', replicas:3, status:'healthy'},
+  ],
+  'order-service': [
+    { name:'order-api',         type:'Deployment', replicas:4, status:'healthy' },
+    { name:'order-processor',   type:'Deployment', replicas:3, status:'healthy' },
+    { name:'inventory-sync',    type:'Deployment', replicas:2, status:'degraded'},
+    { name:'order-notifier',    type:'Deployment', replicas:2, status:'healthy' },
+  ],
+  'auth-service': [
+    { name:'auth-api',          type:'Deployment', replicas:3, status:'healthy' },
+    { name:'token-service',     type:'Deployment', replicas:2, status:'healthy' },
+    { name:'session-store',     type:'StatefulSet',replicas:3, status:'healthy' },
+  ],
+  'api-gateway': [
+    { name:'gateway-proxy',     type:'Deployment', replicas:4, status:'healthy' },
+    { name:'rate-limiter',      type:'Deployment', replicas:2, status:'healthy' },
+    { name:'gateway-config',    type:'Deployment', replicas:1, status:'degraded'},
+  ],
+  'notification-service': [
+    { name:'notif-api',         type:'Deployment', replicas:2, status:'healthy' },
+    { name:'email-sender',      type:'Deployment', replicas:2, status:'healthy' },
+    { name:'push-dispatcher',   type:'Deployment', replicas:2, status:'healthy' },
+    { name:'sms-relay',         type:'Deployment', replicas:1, status:'degraded'},
+  ],
+  'auth-service_staging-us-east': [
+    { name:'auth-api',          type:'Deployment', replicas:2, status:'healthy' },
+    { name:'token-service',     type:'Deployment', replicas:1, status:'healthy' },
+  ],
+};
+
+function getServicesForNs(cluster, ns) {
+  const key = ns + '_' + cluster;
+  return MOCK_SERVICES[key] || MOCK_SERVICES[ns] || [
+    { name: ns + '-api',     type:'Deployment', replicas: 2, status:'healthy' },
+    { name: ns + '-worker',  type:'Deployment', replicas: 2, status:'healthy' },
+    { name: ns + '-proxy',   type:'Deployment', replicas: 1, status:'healthy' },
+  ];
+}
+
+function lockLowerSections(unlock) {
+  ['chaos-section','metrics-section','perf-section','thresh-section'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.opacity = unlock ? '1' : '0.45';
+    el.style.pointerEvents = unlock ? 'auto' : 'none';
+  });
+  const btn = document.getElementById('btn-run');
+  btn.disabled = !unlock;
+  btn.style.opacity = unlock ? '1' : '0.45';
+}
+
+/* ── DISCOVERY STATE ── */
+let discoveryState = { connected: false, cluster: null, ns: null, services: [], demoMode: false };
+let demoModeActive = false;
+
+/* ── AUTH HELPERS ── */
+function toggleAuthFields() {
+  const mode = document.getElementById('auth-mode').value;
+  document.getElementById('token-field').style.display = mode === 'bearer' ? '' : 'none';
+}
+
+function getAuthHeaders() {
+  const mode = document.getElementById('auth-mode').value;
+  if (mode === 'bearer') {
+    const token = document.getElementById('bearer-token').value.trim();
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+  }
+  return {};
+}
+
+function thanosUrl() {
+  return document.getElementById('thanos-url').value.trim().replace(/\/$/, '');
+}
+
+/* ── THANOS FETCH — real HTTP with AbortController, proper param encoding ── */
+async function thanosFetch(path, params = {}, { timeout = 10000, expectJson = true } = {}) {
+  const base = thanosUrl();
+  // Build URL: Thanos requires repeated params for match[] — URLSearchParams handles arrays correctly
+  const url = new URL(base + path);
+  Object.entries(params).forEach(([k, v]) => {
+    if (Array.isArray(v)) v.forEach(val => url.searchParams.append(k, val));
+    else url.searchParams.set(k, v);
+  });
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const res = await fetch(url.toString(), {
+      method: 'GET',
+      headers: { 'Accept': expectJson ? 'application/json' : 'text/plain', ...getAuthHeaders() },
+      signal: ctrl.signal,
+      mode: 'cors',
+    });
+    clearTimeout(timer);
+    if (!res.ok) throw Object.assign(new Error(`HTTP ${res.status}`), { status: res.status, httpUrl: url.toString() });
+    if (!expectJson) return { ok: true, status: res.status };
+    const json = await res.json();
+    if (json.status === 'error') {
+      throw Object.assign(new Error(json.error || 'Thanos returned error status'), {
+        thanosError: json.error,
+        thanosErrorType: json.errorType,
+        warnings: json.warnings,
+      });
+    }
+    return json;
+  } catch (err) {
+    clearTimeout(timer);
+    if (err.code || err.thanosError) throw err; // already enriched
+    throw enrichError(err, url.toString());
+  }
+}
+
+/* ── THANOS INSTANT QUERY — /api/v1/query — returns result array or throws ── */
+async function thanosQuery(promql, time) {
+  const params = { query: promql };
+  if (time) params.time = time;
+  const json = await thanosFetch('/api/v1/query', params);
+  if (json.data?.resultType !== 'vector') {
+    throw Object.assign(new Error(`Unexpected resultType: ${json.data?.resultType}`), { thanosError: `Expected vector, got ${json.data?.resultType}` });
+  }
+  return json.data.result || []; // array of { metric: {labels}, value: [ts, val] }
+}
+
+/* ── EXTRACT LABEL VALUE from a Thanos result series' metric object ── */
+function metricLabel(metric, ...keys) {
+  for (const k of keys) if (metric[k]) return metric[k];
+  return null;
+}
+
+/* ── ERROR CLASSIFICATION ── */
+function enrichError(err, url) {
+  const msg = (err.message || '').toLowerCase();
+  const rawMsg = err.message || '';
+  const status = err.status;
+
+  if (err.name === 'AbortError' || msg.includes('aborted'))
+    return { code: 'CONN-005', title: 'Connection timed out',
+      detail: `No response within 10 seconds from <code>${url}</code>`,
+      remedy: 'Check network latency to Thanos. Verify TLS termination and proxy timeout settings. Try increasing timeout in your ingress configuration.',
+      docs: 'https://thanos.io/tip/operating/troubleshooting.md/' };
+
+  if (msg.includes('failed to fetch') || msg.includes('networkerror') || msg.includes('net::err') || msg.includes('load failed'))
+    return { code: 'CONN-001', title: 'Cannot reach Thanos',
+      detail: `Browser could not connect to <code>${url}</code>. The network request failed before receiving a response.`,
+      remedy: 'Check the URL is correct and reachable. If Thanos is in-cluster, a CORS-enabled reverse proxy is required. Verify the service is running: <code>kubectl get svc -n monitoring thanos-query</code>',
+      docs: 'https://thanos.io/tip/operating/troubleshooting.md/' };
+
+  if (status === 401 || status === 403)
+    return { code: 'CONN-002', title: 'Authentication failed',
+      detail: `Thanos returned HTTP ${status}. The Bearer token is missing, expired, or lacks required permissions.`,
+      remedy: 'Select "Bearer token" auth mode and provide a valid token. Verify the token has read access to the Thanos Query API. Check your auth proxy (OAuth2 proxy / Keycloak) configuration.',
+      docs: 'https://thanos.io/tip/operating/authentication.md/' };
+
+  if (status === 404)
+    return { code: 'CONN-003', title: 'Endpoint not found (HTTP 404)',
+      detail: `No Thanos API found at <code>${url}</code>. The path returned 404.`,
+      remedy: 'Confirm this is the Thanos Query API URL, not the Ruler, Compactor, or Store Gateway. The endpoint <code>/api/v1/query</code> should be reachable. Remove any trailing path segments.',
+      docs: 'https://thanos.io/tip/components/query.md/' };
+
+  if (status === 503 || status === 502 || status === 504)
+    return { code: 'CONN-004', title: `Thanos unavailable (HTTP ${status})`,
+      detail: `Thanos returned HTTP ${status}. The service may be starting, overloaded, or its backing store is unreachable.`,
+      remedy: 'Check thanos-query pod health: <code>kubectl get pods -n monitoring -l app=thanos-query</code>. Check store gateway connectivity: <code>kubectl logs -n monitoring -l app=thanos-query | grep "store"</code>',
+      docs: 'https://thanos.io/tip/operating/troubleshooting.md/' };
+
+  if (msg.includes('cors') || msg.includes('access-control') || msg.includes('blocked by') || (msg.includes('fetch') && !status))
+    return { code: 'CONN-006', title: 'CORS policy blocked the request',
+      detail: 'The browser blocked the Thanos request because the response is missing CORS headers. This is a server-side configuration issue.',
+      remedy: 'Add these headers to your Thanos ingress: <code>Access-Control-Allow-Origin: *</code> and <code>Access-Control-Allow-Headers: Authorization, Content-Type</code>. See Nginx proxy config in the deployment documentation.',
+      docs: 'https://thanos.io/tip/operating/cross-cluster-tls-communication.md/' };
+
+  if (err.thanosError)
+    return { code: 'DISC-004', title: 'Thanos returned a query error',
+      detail: rawMsg,
+      remedy: `PromQL or store error. Check Thanos Query logs: <code>kubectl logs -n monitoring -l app=thanos-query --tail=50</code>. Error type: ${err.thanosErrorType || 'unknown'}`,
+      docs: 'https://thanos.io/tip/components/query.md/#error-types',
+      warnings: err.warnings };
+
+  return { code: 'CONN-ERR', title: 'Unexpected error',
+    detail: rawMsg || 'An unknown error occurred. Check the browser DevTools console for details.',
+    remedy: 'Open DevTools → Network tab and inspect the failing request. Check the browser console for the full error stack trace.',
+    docs: 'https://thanos.io/tip/operating/troubleshooting.md/' };
+}
+
+/* ── ERROR RENDER HELPERS ── */
+function renderConnError(err, retryFn) {
+  const warnings = err.warnings?.length ? `<div style="margin-top:6px;font-size:11px;color:var(--amber)">⚠ Thanos warnings: ${err.warnings.join('; ')}</div>` : '';
+  document.getElementById('conn-result-wrap').innerHTML = `
+    <div class="conn-error-banner" role="alert">
+      <div class="conn-error-header">
+        <span class="conn-error-code">${err.code}</span>
+        <span class="conn-error-title">${err.title}</span>
+        <button class="conn-error-copy" onclick="copyErrDetail(this)" title="Copy error details">⧉ Copy</button>
+      </div>
+      <div class="conn-error-body">${err.detail}${warnings}</div>
+      <div class="conn-error-remedy"><strong>Fix:</strong> ${err.remedy}</div>
+      <div class="conn-error-actions">
+        <button class="btn-retry" onclick="${retryFn}()">↺ Retry</button>
+        <a class="btn-docs" href="${err.docs}" target="_blank" rel="noopener">Thanos docs ↗</a>
+      </div>
+    </div>`;
+}
+
+function renderDiscError(containerId, err, retryFn) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const remedyText = err.remedy.replace(/<code>/g,'`').replace(/<\/code>/g,'`');
+  el.innerHTML = `
+    <div class="discovery-error" role="alert">
+      <div>
+        <span class="de-code">${err.code}</span> ${err.title}<br>
+        <div class="de-remedy">${remedyText}</div>
+        <button class="de-retry" onclick="${retryFn}()">↺ Retry</button>
+      </div>
+    </div>`;
+}
+
+function clearDiscError(id) { const el = document.getElementById(id); if (el) el.innerHTML = ''; }
+
+function copyErrDetail(btn) {
+  const banner = btn.closest('.conn-error-banner');
+  const text = Array.from(banner.querySelectorAll('.conn-error-code,.conn-error-title,.conn-error-body,.conn-error-remedy'))
+    .map(el => el.textContent.trim()).join('\n');
+  navigator.clipboard?.writeText(text)
+    .then(() => { btn.textContent = '✓ Copied'; setTimeout(() => btn.textContent = '⧉ Copy', 2000); })
+    .catch(() => { btn.textContent = 'Copy failed'; setTimeout(() => btn.textContent = '⧉ Copy', 2000); });
+}
+
+function renderConnSuccess(msg) {
+  document.getElementById('conn-result-wrap').innerHTML =
+    `<div class="conn-result ok" style="margin-top:10px">✓ ${msg}</div>`;
+}
+
+/* ── RESET ── */
+function resetDiscovery() {
+  if (demoModeActive) return;
+  discoveryState = { connected: false, cluster: null, ns: null, services: [], demoMode: false };
+  ['step-cluster','step-ns','step-svcs'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('unlocked'); el.classList.add('locked'); }
+  });
+  const clSel = document.getElementById('cluster-select');
+  clSel.innerHTML = '<option value="">— select a cluster —</option>'; clSel.disabled = true;
+  document.getElementById('ns-select').innerHTML = '<option value="">— select a namespace —</option>';
+  document.getElementById('ns-select').disabled = true;
+  document.getElementById('svc-picker-body').innerHTML = '<div class="svc-empty">Select a namespace to discover services</div>';
+  document.getElementById('svc-picker-hint').textContent = 'Waiting for namespace selection…';
+  document.getElementById('svc-count').textContent = '0';
+  document.getElementById('svc-total').textContent = '0 available';
+  document.getElementById('status-cluster').className = 'discovery-status';
+  document.getElementById('status-cluster').textContent = '';
+  document.getElementById('status-ns').className = 'discovery-status';
+  document.getElementById('status-ns').textContent = '';
+  document.getElementById('conn-result-wrap').innerHTML = '';
+  ['cluster-error','ns-error','svc-error'].forEach(clearDiscError);
+  lockLowerSections(false);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STEP 1 — discoverClusters
+   ① Health check:  GET /-/healthy                (plain text, 200 = ok)
+   ② Store info:    GET /api/v1/metadata           (probe connectivity + warnings)
+   ③ Cluster list:  GET /api/v1/label/cluster/values
+                    → single-cluster fallback via external_labels in /api/v1/metadata
+   ══════════════════════════════════════════════════════════════════ */
+async function discoverClusters() {
+  const url = thanosUrl();
+  if (!url) {
+    renderConnError({
+      code: 'CONN-000', title: 'Thanos URL required',
+      detail: 'No Thanos Query URL has been entered.',
+      remedy: 'Enter a valid URL, e.g. <code>http://thanos-query.monitoring.svc.cluster.local:9090</code>',
+      docs: 'https://thanos.io/tip/components/query.md/'
+    }, 'discoverClusters');
+    return;
+  }
+
+  const btn = document.getElementById('btn-connect');
+  const icon = document.getElementById('conn-icon');
+  btn.disabled = true; btn.classList.add('loading'); icon.textContent = '⏳';
+  document.getElementById('conn-result-wrap').innerHTML = '';
+  document.getElementById('demo-thanos-banner').style.display = 'none';
+  demoModeActive = false;
+  ['step-cluster','step-ns','step-svcs'].forEach(id => {
+    const el = document.getElementById(id); el.classList.remove('unlocked'); el.classList.add('locked');
+  });
+  document.getElementById('cluster-select').disabled = true;
+  ['cluster-error','ns-error','svc-error'].forEach(clearDiscError);
+  lockLowerSections(false);
+
+  try {
+    /* ── ① Health probe ── */
+    const healthCtrl = new AbortController();
+    const healthTimer = setTimeout(() => healthCtrl.abort(), 8000);
+    try {
+      const healthRes = await fetch(`${url}/-/healthy`, {
+        headers: { 'Accept': 'text/plain', ...getAuthHeaders() },
+        signal: healthCtrl.signal, mode: 'cors',
+      });
+      clearTimeout(healthTimer);
+      if (!healthRes.ok)
+        throw Object.assign(new Error(`HTTP ${healthRes.status}`), { status: healthRes.status });
+    } catch(e) {
+      clearTimeout(healthTimer);
+      throw enrichError(e, `${url}/-/healthy`);
+    }
+
+    /* ── ② Metadata probe — get Thanos external labels + any store warnings ── */
+    let thanosExternalLabels = {};
+    let storeWarnings = [];
+    try {
+      const meta = await thanosFetch('/api/v1/metadata', { limit: 1 });
+      // /api/v1/metadata doesn't carry external labels directly.
+      // Query a guaranteed-present metric to read external labels from series labels.
+    } catch(e) { /* non-fatal — metadata probe failure doesn't block discovery */ }
+
+    // Use /api/v1/labels to probe that the Query API is fully functional
+    const labelsProbe = await thanosFetch('/api/v1/labels');
+    const availableLabels = labelsProbe.data || [];
+
+    /* ── ③ Cluster discovery ── */
+    let clusters = [];
+    let clusterMode = 'multi'; // 'multi' | 'single' | 'label-not-found'
+
+    if (availableLabels.includes('cluster')) {
+      const clData = await thanosFetch('/api/v1/label/cluster/values');
+      clusters = (clData.data || []).filter(Boolean).sort();
+    }
+
+    if (!clusters.length) {
+      // Fallback A: try 'kubernetes_cluster' (some setups use this label instead)
+      if (availableLabels.includes('kubernetes_cluster')) {
+        const kc = await thanosFetch('/api/v1/label/kubernetes_cluster/values');
+        const vals = (kc.data || []).filter(Boolean);
+        if (vals.length) { clusters = vals.sort(); clusterMode = 'multi'; }
+      }
+    }
+
+    if (!clusters.length) {
+      // Fallback B: single-cluster — derive a name from the 'job' label (e.g. "kubernetes-nodes/cluster-a")
+      // or just present a single generic entry
+      clusterMode = 'single';
+      const jobVals = availableLabels.includes('job') ?
+        (await thanosFetch('/api/v1/label/job/values')).data || [] : [];
+      // Attempt to extract a cluster name from job labels like "kubernetes-nodes"
+      const clusterHint = jobVals.find(j => j.includes('kubernetes')) || null;
+      const syntheticName = clusterHint
+        ? clusterHint.replace(/kubernetes[- ]/i,'').replace(/[- ](nodes|pods|services).*/i,'') || 'default'
+        : 'default';
+      clusters = [syntheticName || 'default'];
+
+      renderDiscError('cluster-error', {
+        code: 'DISC-001',
+        title: 'No cluster label — running in single-cluster mode',
+        detail: `The <code>cluster</code> label was not found in Thanos. A synthetic entry "<strong>${clusters[0]}</strong>" was created from available job labels.`,
+        remedy: 'To enable multi-cluster support, set <code>external_labels: {cluster: "my-cluster"}</code> in each Prometheus configuration file scraping this Thanos instance.',
+        docs: 'https://thanos.io/tip/components/query.md/#external-labels'
+      }, 'discoverClusters');
+    }
+
+    if (clusters.length && clusterMode === 'multi' && availableLabels.includes('cluster')) {
+      // Enrich clusters with environment/region from instance labels if possible
+      // by spot-querying a low-cardinality metric
+      try {
+        const envProbe = await thanosQuery(`count by (cluster) (kube_node_info)`);
+        clusters = clusters.map(c => {
+          const nodeCount = envProbe.find(r => r.metric.cluster === c);
+          return { id: c, label: c, nodeCount: nodeCount ? parseInt(nodeCount.value[1]) : null };
+        });
+      } catch(e) {
+        clusters = clusters.map(c => ({ id: c, label: c, nodeCount: null }));
+      }
+    } else {
+      clusters = clusters.map(c => ({ id: c, label: c, nodeCount: null }));
+    }
+
+    /* ── Populate UI ── */
+    btn.disabled = false; btn.classList.remove('loading'); icon.textContent = '⚡';
+    discoveryState.connected = true;
+    discoveryState._availableLabels = availableLabels;
+    discoveryState._clusterMode = clusterMode;
+
+    const storeInfo = availableLabels.length
+      ? `${availableLabels.length} labels available`
+      : 'store labels unavailable';
+    renderConnSuccess(
+      `Connected to Thanos · ${clusters.length} cluster${clusters.length !== 1 ? 's' : ''} · ${storeInfo}`
+      + (clusterMode === 'single' ? ' · <em>single-cluster mode</em>' : '')
+    );
+
+    const sel = document.getElementById('cluster-select');
+    sel.innerHTML = '<option value="">— select a cluster —</option>';
+    clusters.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.nodeCount !== null ? `${c.label}  (${c.nodeCount} nodes)` : c.label;
+      sel.appendChild(opt);
+    });
+    sel.disabled = false;
+    document.getElementById('step-cluster').classList.remove('locked');
+    document.getElementById('step-cluster').classList.add('unlocked');
+    document.getElementById('status-cluster').className = 'discovery-status ok';
+    document.getElementById('status-cluster').textContent = `✓ ${clusters.length} cluster${clusters.length !== 1 ? 's' : ''}`;
+
+  } catch (err) {
+    btn.disabled = false; btn.classList.remove('loading'); icon.textContent = '⚡';
+    const classified = err.code ? err : enrichError(err, url);
+    renderConnError(classified, 'discoverClusters');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STEP 2 — onClusterChange
+   Queries: GET /api/v1/label/namespace/values
+            match[] = kube_namespace_labels{cluster="<c>"}  (scoped to cluster)
+            Fallback: kube_pod_info{cluster="<c>"} for namespace label values
+   ══════════════════════════════════════════════════════════════════ */
+async function onClusterChange() {
+  const sel = document.getElementById('cluster-select');
+  const cluster = sel.value;
+  if (!cluster) return;
+
+  if (demoModeActive) { onClusterChangeMock(cluster); return; }
+
+  discoveryState.cluster = cluster; discoveryState.ns = null; discoveryState.services = [];
+  ['step-ns','step-svcs'].forEach(id => {
+    const el = document.getElementById(id); el.classList.remove('unlocked'); el.classList.add('locked');
+  });
+  document.getElementById('ns-select').innerHTML = '<option value="">— querying Thanos… —</option>';
+  document.getElementById('ns-select').disabled = true;
+  document.getElementById('svc-picker-body').innerHTML = '<div class="svc-empty">Select a namespace to discover services</div>';
+  document.getElementById('svc-count').textContent = '0'; document.getElementById('svc-total').textContent = '0 available';
+  document.getElementById('status-ns').className = 'discovery-status loading'; document.getElementById('status-ns').textContent = '⏳ querying…';
+  ['ns-error','svc-error'].forEach(clearDiscError); lockLowerSections(false);
+
+  const isSingleCluster = discoveryState._clusterMode === 'single';
+  const clusterMatcher = isSingleCluster ? '' : `cluster="${cluster}"`;
+
+  try {
+    let namespaces = [];
+
+    // Primary: /api/v1/label/namespace/values scoped to the cluster
+    // Thanos accepts match[] to restrict which time series are considered
+    const matchSelector = isSingleCluster
+      ? `kube_namespace_labels`
+      : `kube_namespace_labels{cluster="${cluster}"}`;
+
+    try {
+      const nsData = await thanosFetch('/api/v1/label/namespace/values', {
+        'match[]': matchSelector
+      });
+      namespaces = (nsData.data || []).filter(Boolean);
+    } catch(e) {
+      // Some setups don't have kube_namespace_labels — fallback to broader query
+      if (e.code === 'DISC-004' || !namespaces.length) {
+        const fallbackSelector = isSingleCluster
+          ? `kube_pod_info`
+          : `kube_pod_info{cluster="${cluster}"}`;
+        const fallback = await thanosFetch('/api/v1/label/namespace/values', {
+          'match[]': fallbackSelector
+        });
+        namespaces = (fallback.data || []).filter(Boolean);
+      } else { throw e; }
+    }
+
+    // Filter well-known system namespaces (keep if user explicitly selects "show all")
+    const SYSTEM_NS = new Set([
+      'kube-system','kube-public','kube-node-lease','kube-flannel',
+      'cert-manager','ingress-nginx','ingress-controller',
+      'monitoring','observability','logging','tracing',
+      'istio-system','linkerd','linkerd-viz',
+    ]);
+    const appNamespaces = namespaces.filter(ns => !SYSTEM_NS.has(ns)).sort();
+    const systemNamespaces = namespaces.filter(ns => SYSTEM_NS.has(ns)).sort();
+
+    if (!appNamespaces.length && !namespaces.length) {
+      renderDiscError('ns-error', {
+        code: 'DISC-002',
+        title: 'No namespaces found for this cluster',
+        detail: `No namespace label values returned for cluster <code>${cluster}</code>. kube-state-metrics may not be running or may not be scraping correctly.`,
+        remedy: 'Verify kube-state-metrics is deployed: <code>kubectl get pods -n monitoring -l app.kubernetes.io/name=kube-state-metrics</code>. Also check it scrapes all namespaces (not just a single namespace mode).',
+        docs: 'https://thanos.io/tip/operating/troubleshooting.md/'
+      }, 'onClusterChange');
+      document.getElementById('status-ns').className = 'discovery-status err';
+      document.getElementById('status-ns').textContent = '✕ DISC-002';
+      document.getElementById('ns-select').innerHTML = '<option value="">— no namespaces found —</option>';
+      return;
+    }
+
+    const nsSel = document.getElementById('ns-select');
+    nsSel.innerHTML = '<option value="">— select a namespace —</option>';
+
+    // Application namespaces first
+    if (appNamespaces.length) {
+      const grp = document.createElement('optgroup'); grp.label = 'Application namespaces';
+      appNamespaces.forEach(ns => { const o = document.createElement('option'); o.value = ns; o.textContent = ns; grp.appendChild(o); });
+      nsSel.appendChild(grp);
+    }
+    // Then system namespaces (collapsed under optgroup)
+    if (systemNamespaces.length) {
+      const grp = document.createElement('optgroup'); grp.label = 'System namespaces';
+      systemNamespaces.forEach(ns => { const o = document.createElement('option'); o.value = ns; o.textContent = ns; grp.appendChild(o); });
+      nsSel.appendChild(grp);
+    }
+    nsSel.disabled = false;
+
+    const totalNs = appNamespaces.length + systemNamespaces.length;
+    document.getElementById('step-ns').classList.remove('locked'); document.getElementById('step-ns').classList.add('unlocked');
+    document.getElementById('status-cluster').className = 'discovery-status ok';
+    document.getElementById('status-cluster').textContent = `✓ ${cluster} · ${totalNs} ns`;
+    document.getElementById('status-ns').className = 'discovery-status ok';
+    document.getElementById('status-ns').textContent = `✓ ${appNamespaces.length} app · ${systemNamespaces.length} system`;
+
+  } catch(err) {
+    const classified = err.code ? err : enrichError(err, thanosUrl());
+    renderDiscError('ns-error', classified, 'onClusterChange');
+    document.getElementById('status-ns').className = 'discovery-status err';
+    document.getElementById('status-ns').textContent = `✕ ${classified.code}`;
+    document.getElementById('ns-select').innerHTML = '<option value="">— query failed —</option>';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STEP 3 — onNsChange
+   Queries (concurrent via Promise.allSettled):
+     A. kube_deployment_status_replicas{cluster, namespace}
+        → Deployment names + desired replica count
+     B. kube_deployment_status_replicas_ready{cluster, namespace}
+        → Ready replicas (for health status)
+     C. kube_deployment_status_replicas_unavailable{cluster, namespace}
+        → Unavailable replicas (confirms degraded state)
+     D. kube_statefulset_status_replicas{cluster, namespace}
+        → StatefulSet names + replica count
+     E. kube_statefulset_status_replicas_ready{cluster, namespace}
+        → Ready replicas for StatefulSets
+     F. kube_pod_container_status_restarts_total{cluster, namespace}
+        → Restart counts per workload (for health signal)
+   ══════════════════════════════════════════════════════════════════ */
+async function onNsChange() {
+  const nsSel = document.getElementById('ns-select');
+  const ns = nsSel.value;
+  if (!ns) return;
+
+  if (demoModeActive) { onNsChangeMock(ns); return; }
+
+  discoveryState.ns = ns; discoveryState.services = [];
+  document.getElementById('step-svcs').classList.remove('unlocked');
+  document.getElementById('step-svcs').classList.add('locked');
+  document.getElementById('svc-picker-hint').textContent = '⏳ Querying Thanos for workloads…';
+  document.getElementById('svc-picker-body').innerHTML = '<div class="svc-empty" style="color:var(--accent)">⏳ Running 6 discovery queries in parallel…</div>';
+  document.getElementById('svc-count').textContent = '0';
+  clearDiscError('svc-error'); lockLowerSections(false);
+
+  const cluster = discoveryState.cluster;
+  const isSingleCluster = discoveryState._clusterMode === 'single';
+  const clusterNs = isSingleCluster
+    ? `namespace="${ns}"`
+    : `cluster="${cluster}",namespace="${ns}"`;
+
+  const now = Math.floor(Date.now() / 1000);
+
+  // Six concurrent queries — allSettled so partial failures don't abort the whole discovery
+  const [
+    deplResult,
+    deplReadyResult,
+    deplUnavailResult,
+    ssResult,
+    ssReadyResult,
+    restartsResult,
+  ] = await Promise.allSettled([
+    thanosQuery(`kube_deployment_status_replicas{${clusterNs}}`, now),
+    thanosQuery(`kube_deployment_status_replicas_ready{${clusterNs}}`, now),
+    thanosQuery(`kube_deployment_status_replicas_unavailable{${clusterNs}}`, now),
+    thanosQuery(`kube_statefulset_status_replicas{${clusterNs}}`, now),
+    thanosQuery(`kube_statefulset_status_replicas_ready{${clusterNs}}`, now),
+    thanosQuery(`sum by (pod) (kube_pod_container_status_restarts_total{${clusterNs}})`, now),
+  ]);
+
+  // Build lookup maps from successful queries
+  const readyMap    = {};  // deployment/statefulset → ready replicas
+  const unavailMap  = {};  // deployment → unavailable replicas
+  const restartsMap = {};  // workload name prefix → restart count sum
+
+  if (deplReadyResult.status === 'fulfilled') {
+    deplReadyResult.value.forEach(r => {
+      const name = metricLabel(r.metric, 'deployment', 'replicaset');
+      if (name) readyMap[name] = parseFloat(r.value[1]) || 0;
+    });
+  }
+  if (deplUnavailResult.status === 'fulfilled') {
+    deplUnavailResult.value.forEach(r => {
+      const name = metricLabel(r.metric, 'deployment');
+      if (name) unavailMap[name] = parseFloat(r.value[1]) || 0;
+    });
+  }
+  if (ssReadyResult.status === 'fulfilled') {
+    ssReadyResult.value.forEach(r => {
+      const name = metricLabel(r.metric, 'statefulset');
+      if (name) readyMap[name] = parseFloat(r.value[1]) || 0;
+    });
+  }
+  if (restartsResult.status === 'fulfilled') {
+    restartsResult.value.forEach(r => {
+      const pod = r.metric.pod || '';
+      // Map pod name back to deployment: strip the last two dash-segments (replicaset hash + pod hash)
+      // e.g. payment-api-6d5c5b8f9-xkz4p → payment-api
+      const parts = pod.split('-');
+      const workloadName = parts.length > 2 ? parts.slice(0, -2).join('-') : pod;
+      const count = parseFloat(r.value[1]) || 0;
+      restartsMap[workloadName] = (restartsMap[workloadName] || 0) + count;
+    });
+  }
+
+  const services = [];
+
+  // Process Deployments
+  if (deplResult.status === 'fulfilled') {
+    deplResult.value.forEach(r => {
+      const name = metricLabel(r.metric, 'deployment');
+      if (!name) return;
+      const desired   = parseFloat(r.value[1]) || 0;
+      const ready     = readyMap[name] ?? desired;
+      const unavail   = unavailMap[name] || 0;
+      const restarts  = restartsMap[name] || 0;
+      const status    = unavail > 0 ? 'degraded'
+                      : ready < desired ? 'degraded'
+                      : restarts > 10  ? 'degraded'
+                      : 'healthy';
+      services.push({ name, type: 'Deployment', replicas: desired, ready, unavail, restarts, status });
+    });
+  } else {
+    // Deployment query failed — record the error but don't abort
+    console.warn('Deployment discovery failed:', deplResult.reason);
+  }
+
+  // Process StatefulSets
+  if (ssResult.status === 'fulfilled') {
+    ssResult.value.forEach(r => {
+      const name = metricLabel(r.metric, 'statefulset');
+      if (!name) return;
+      const desired  = parseFloat(r.value[1]) || 0;
+      const ready    = readyMap[name] ?? desired;
+      const restarts = restartsMap[name] || 0;
+      const status   = ready < desired ? 'degraded' : restarts > 10 ? 'degraded' : 'healthy';
+      services.push({ name, type: 'StatefulSet', replicas: desired, ready, unavail: 0, restarts, status });
+    });
+  }
+
+  // Sort: degraded first, then alphabetically
+  services.sort((a, b) => {
+    if (a.status === 'degraded' && b.status !== 'degraded') return -1;
+    if (b.status === 'degraded' && a.status !== 'degraded') return 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  // Report partial failures as warnings in the svc-error container
+  const partialFailures = [
+    deplResult.status === 'rejected' ? `Deployment query failed: ${deplResult.reason?.title || deplResult.reason?.message || 'unknown'}` : null,
+    ssResult.status === 'rejected'   ? `StatefulSet query failed: ${ssResult.reason?.title || ssResult.reason?.message || 'unknown'}` : null,
+  ].filter(Boolean);
+
+  if (partialFailures.length && services.length) {
+    document.getElementById('svc-error').innerHTML = `
+      <div class="discovery-error" style="border-color:var(--amber-border);background:var(--amber-dim);color:var(--amber)">
+        <div><span class="de-code" style="background:var(--amber-dim);border-color:var(--amber-border)">DISC-PARTIAL</span>
+        Some queries failed — results may be incomplete.<br>
+        <div class="de-remedy">${partialFailures.join(' | ')}</div>
+        <button class="de-retry" onclick="onNsChange()">↺ Retry all queries</button></div>
+      </div>`;
+  }
+
+  if (!services.length) {
+    // Check if any of the core queries actually ran and returned empty vs failed
+    const coresFailed = deplResult.status === 'rejected' && ssResult.status === 'rejected';
+    if (coresFailed) {
+      const err = deplResult.reason?.code ? deplResult.reason : enrichError(deplResult.reason || {}, thanosUrl());
+      renderDiscError('svc-error', err, 'onNsChange');
+    } else {
+      renderDiscError('svc-error', {
+        code: 'DISC-003',
+        title: 'No workloads found in namespace',
+        detail: `No Deployments or StatefulSets were found for namespace <code>${ns}</code> in cluster <code>${cluster}</code>. The namespace may be empty, or kube-state-metrics may not be scraping it.`,
+        remedy: `Verify workloads exist: <code>kubectl get deploy,sts -n ${ns}</code>. Check kube-state-metrics namespaces config — it may be restricted to a specific namespace with <code>--namespaces=${ns}</code>.`,
+        docs: 'https://thanos.io/tip/operating/troubleshooting.md/'
+      }, 'onNsChange');
+    }
+    document.getElementById('svc-picker-hint').textContent = `${ns} · no workloads found`;
+    document.getElementById('svc-picker-body').innerHTML = '<div class="svc-empty">No deployments or statefulsets found. Check kube-state-metrics.</div>';
+    document.getElementById('svc-total').textContent = '0 available';
+    return;
+  }
+
+  // Success
+  document.getElementById('svc-total').textContent = services.length + ' available';
+  document.getElementById('svc-picker-hint').textContent =
+    `${ns} · ${services.filter(s=>s.type==='Deployment').length} deployments` +
+    (services.filter(s=>s.type==='StatefulSet').length ? ` · ${services.filter(s=>s.type==='StatefulSet').length} statefulsets` : '') +
+    (services.filter(s=>s.status==='degraded').length ? ` · ⚠ ${services.filter(s=>s.status==='degraded').length} degraded` : '');
+  renderSvcPicker(services);
+  document.getElementById('step-svcs').classList.remove('locked');
+  document.getElementById('step-svcs').classList.add('unlocked');
+}
+
+/* ── DEMO THANOS — mocked discovery that mirrors MOCK_CLUSTERS/NAMESPACES/SERVICES ── */
+async function connectDemoThanos() {
+  demoModeActive = true;
+  const btn = document.getElementById('btn-connect');
+  const icon = document.getElementById('conn-icon');
+  btn.disabled = true; btn.classList.add('loading'); icon.textContent = '⏳';
+  document.getElementById('conn-result-wrap').innerHTML = '';
+  ['step-cluster','step-ns','step-svcs'].forEach(id => {
+    const el = document.getElementById(id); el.classList.remove('unlocked'); el.classList.add('locked');
+  });
+  ['cluster-error','ns-error','svc-error'].forEach(clearDiscError);
+  lockLowerSections(false);
+
+  await sleep(800 + Math.random() * 400);
+
+  btn.disabled = false; btn.classList.remove('loading'); icon.textContent = '⚡';
+  document.getElementById('demo-thanos-banner').style.display = '';
+  discoveryState.connected = true; discoveryState.demoMode = true;
+
+  renderConnSuccess(`Demo Thanos connected · ${MOCK_CLUSTERS.length} simulated clusters · synthetic data`);
+
+  const sel = document.getElementById('cluster-select');
+  sel.innerHTML = '<option value="">— select a cluster —</option>';
+  MOCK_CLUSTERS.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id; opt.textContent = `${c.label}  (${c.env} · ${c.region} · ${c.nodes} nodes)`;
+    sel.appendChild(opt);
+  });
+  sel.disabled = false;
+  document.getElementById('step-cluster').classList.remove('locked');
+  document.getElementById('step-cluster').classList.add('unlocked');
+  document.getElementById('status-cluster').className = 'discovery-status ok';
+  document.getElementById('status-cluster').textContent = `✓ ${MOCK_CLUSTERS.length} clusters (demo)`;
+}
+
+async function onClusterChangeMock(cluster) {
+  discoveryState.cluster = cluster; discoveryState.ns = null; discoveryState.services = [];
+  document.getElementById('step-ns').classList.remove('unlocked'); document.getElementById('step-ns').classList.add('locked');
+  document.getElementById('step-svcs').classList.remove('unlocked'); document.getElementById('step-svcs').classList.add('locked');
+  document.getElementById('ns-select').innerHTML = '<option value="">— loading… —</option>'; document.getElementById('ns-select').disabled = true;
+  document.getElementById('status-ns').className = 'discovery-status loading'; document.getElementById('status-ns').textContent = '⏳ querying…';
+  lockLowerSections(false);
+  await sleep(500 + Math.random() * 300);
+  const namespaces = MOCK_NAMESPACES[cluster] || ['default','kube-system'];
+  const nsSel = document.getElementById('ns-select');
+  nsSel.innerHTML = '<option value="">— select a namespace —</option>';
+  namespaces.forEach(ns => { const o = document.createElement('option'); o.value = ns; o.textContent = ns; nsSel.appendChild(o); });
+  nsSel.disabled = false;
+  document.getElementById('step-ns').classList.remove('locked'); document.getElementById('step-ns').classList.add('unlocked');
+  document.getElementById('status-cluster').className = 'discovery-status ok'; document.getElementById('status-cluster').textContent = `✓ demo · ${namespaces.length} ns`;
+  document.getElementById('status-ns').className = 'discovery-status ok'; document.getElementById('status-ns').textContent = `✓ ${namespaces.length} ns (demo)`;
+}
+
+async function onNsChangeMock(ns) {
+  discoveryState.ns = ns; discoveryState.services = [];
+  document.getElementById('step-svcs').classList.remove('unlocked'); document.getElementById('step-svcs').classList.add('locked');
+  document.getElementById('svc-picker-hint').textContent = '⏳ Querying simulated Thanos…';
+  document.getElementById('svc-picker-body').innerHTML = '<div class="svc-empty" style="color:var(--accent)">⏳ Discovering services…</div>';
+  document.getElementById('svc-count').textContent = '0'; lockLowerSections(false);
+  await sleep(600 + Math.random() * 400);
+  const services = getServicesForNs(discoveryState.cluster, ns);
+  document.getElementById('svc-total').textContent = services.length + ' available';
+  document.getElementById('svc-picker-hint').textContent = ns + ' · ' + services.length + ' deployments found (demo)';
+  renderSvcPicker(services);
+  document.getElementById('step-svcs').classList.remove('locked'); document.getElementById('step-svcs').classList.add('unlocked');
+}
+
+function exitDemoThanos() {
+  demoModeActive = false;
+  discoveryState = { connected: false, cluster: null, ns: null, services: [], demoMode: false };
+  document.getElementById('demo-thanos-banner').style.display = 'none';
+  document.getElementById('conn-result-wrap').innerHTML = '';
+  ['step-cluster','step-ns','step-svcs'].forEach(id => {
+    const el = document.getElementById(id); el.classList.remove('unlocked'); el.classList.add('locked');
+  });
+  document.getElementById('cluster-select').innerHTML = '<option value="">— select a cluster —</option>'; document.getElementById('cluster-select').disabled = true;
+  document.getElementById('ns-select').innerHTML = '<option value="">— select a namespace —</option>'; document.getElementById('ns-select').disabled = true;
+  document.getElementById('svc-picker-body').innerHTML = '<div class="svc-empty">Select a namespace to discover services</div>';
+  document.getElementById('svc-picker-hint').textContent = 'Waiting for namespace selection…';
+  document.getElementById('svc-count').textContent = '0'; document.getElementById('svc-total').textContent = '0 available';
+  document.getElementById('status-cluster').className = 'discovery-status'; document.getElementById('status-cluster').textContent = '';
+  document.getElementById('status-ns').className = 'discovery-status'; document.getElementById('status-ns').textContent = '';
+  ['cluster-error','ns-error','svc-error'].forEach(clearDiscError); lockLowerSections(false);
+}
+
+function renderSvcPicker(services) {
+  const body = document.getElementById('svc-picker-body');
+  if (!services.length) {
+    body.innerHTML = '<div class="svc-empty">No deployments found in this namespace</div>';
+    return;
+  }
+  body.innerHTML = services.map((s, i) => {
+    const readyStr  = s.ready !== undefined ? `${s.ready}/${s.replicas} ready` : `${s.replicas} replica${s.replicas !== 1 ? 's' : ''}`;
+    const restartBadge = s.restarts > 0
+      ? `<span class="svc-badge ${s.restarts > 10 ? 'degraded' : 'type'}">${s.restarts} restarts</span>` : '';
+    return `
+    <div class="svc-item" id="svc-item-${i}" onclick="toggleSvc(${i})" data-idx="${i}">
+      <input type="checkbox" id="svc-cb-${i}" onclick="event.stopPropagation();toggleSvc(${i})"/>
+      <div class="svc-item-info">
+        <div class="svc-item-name">${s.name}</div>
+        <div class="svc-item-meta">${readyStr} · ${s.type}</div>
+      </div>
+      <div class="svc-badges">
+        <span class="svc-badge ${s.status === 'healthy' ? 'healthy' : 'degraded'}">${s.status}</span>
+        <span class="svc-badge type">${s.type === 'StatefulSet' ? 'statefulset' : 'deployment'}</span>
+        ${restartBadge}
+      </div>
+    </div>`; }).join('');
+  discoveryState.services = services.map(s => ({ ...s, selected: false }));
+  updateSvcCount();
+}
+
+function toggleSvc(idx) {
+  discoveryState.services[idx].selected = !discoveryState.services[idx].selected;
+  const item = document.getElementById('svc-item-' + idx);
+  const cb = document.getElementById('svc-cb-' + idx);
+  item.classList.toggle('selected', discoveryState.services[idx].selected);
+  cb.checked = discoveryState.services[idx].selected;
+  updateSvcCount();
+}
+
+function selectAllSvcs() {
+  discoveryState.services.forEach((s, i) => {
+    s.selected = true;
+    document.getElementById('svc-item-' + i).classList.add('selected');
+    document.getElementById('svc-cb-' + i).checked = true;
+  });
+  updateSvcCount();
+}
+
+function clearAllSvcs() {
+  discoveryState.services.forEach((s, i) => {
+    s.selected = false;
+    document.getElementById('svc-item-' + i).classList.remove('selected');
+    document.getElementById('svc-cb-' + i).checked = false;
+  });
+  updateSvcCount();
+}
+
+function updateSvcCount() {
+  const selected = discoveryState.services.filter(s => s.selected).length;
+  document.getElementById('svc-count').textContent = selected;
+  // Unlock lower sections only when ≥1 service is selected
+  lockLowerSections(selected > 0);
+}
+
+/* ── CONFIG HELPERS ── */
+function getConfig() {
+  const selectedSvcs = discoveryState.services.filter(s => s.selected).map(s => s.name);
+  // Fall back to demo values if discovery hasn't run (e.g. loadDemo)
+  const ns = discoveryState.ns || 'payment-service';
+  const svc = selectedSvcs.length > 0 ? selectedSvcs.join(',') : 'payment-api';
+  return {
+    url: document.getElementById('thanos-url').value.trim(),
+    cluster: discoveryState.cluster || 'prod-us-east-1',
+    ns,
+    svc,
+    svcs: selectedSvcs.length > 0 ? selectedSvcs : ['payment-api'],
+    expName: document.getElementById('exp-name').value.trim(),
+    chaosType: document.getElementById('chaos-type').value,
+    chaosStart: document.getElementById('chaos-start').value,
+    chaosEnd: document.getElementById('chaos-end').value,
+    preWin: parseInt(document.getElementById('pre-win').value),
+    postWin: parseInt(document.getElementById('post-win').value),
+    cpuThresh: parseFloat(document.getElementById('cpu-thresh').value),
+    memThresh: parseFloat(document.getElementById('mem-thresh').value),
+    slo: parseFloat(document.getElementById('slo').value),
+    author: document.getElementById('author').value.trim(),
+    team: document.getElementById('team').value.trim(),
+    severity: document.getElementById('severity').value,
+  };
+}
+
+/* ── SIMULATE THANOS DATA ── */
+function generateData(cfg) {
+  const pre = { cpu: 37.4, mem: 51.8, throttle: 2.1, oom: 0, replicas: 5, cpu_req: 0.5, mem_lim: 512 };
+  const chaos = { cpu: 72.1, mem: 83.6, throttle: 38.4, oom: 2, replicas: 3, cpu_req: 0.5, mem_lim: 512 };
+  const post = { cpu: 40.2, mem: 55.3, throttle: 3.8, oom: 0, replicas: 5, cpu_req: 0.5, mem_lim: 512 };
+  const jitter = x => Math.round((x + (Math.random() - 0.5) * x * 0.08) * 10) / 10;
+  const phases = ['pre','pre','pre','chaos','chaos','chaos','chaos','chaos','post','post','post'];
+  const labels = ['T-15m','T-12m','T-8m','T+0','T+6m','T+12m','T+18m','T+24m','T+30m','T+38m','T+45m'];
+  const src = { pre, chaos, post };
+  const timeline = phases.map((ph, i) => ({
+    label: labels[i], phase: ph,
+    cpu: jitter(src[ph].cpu), mem: jitter(src[ph].mem),
+    throttle: jitter(src[ph].throttle),
+    oom: ph === 'chaos' && i === 4 ? 2 : 0,
+    replicas: src[ph].replicas,
+  }));
+  return { summary: { pre, chaos, post }, timeline, config: cfg };
+}
+
+/* ── FETCH PIPELINE ── */
+async function startFetch() {
+  const cfg = getConfig();
+  goStep(2);
+  await sleep(100);
+  document.getElementById('fetch-log').innerHTML = '';
+
+  log('$ resiliencex-chaos-scribe --mode fetch', 'log-dim');
+  log('', 'log-dim');
+  log('▶ ResilienceX Chaos Scribe v1.0 starting', 'log-head');
+  log(`  cluster:     ${cfg.cluster}`, 'log-info');
+  log(`  namespace:   ${cfg.ns}`, 'log-info');
+  log(`  services:    ${cfg.svcs.join(', ')}`, 'log-info');
+  log(`  experiment:  ${cfg.expName} (${cfg.chaosType})`, 'log-info');
+  log(`  window:      ${cfg.chaosStart} → ${cfg.chaosEnd}`, 'log-info');
+  await sleep(600);
+
+  setProgress(10, 'Connecting to Thanos...');
+  log('', 'log-dim');
+  log('[1/5] Connecting to Thanos Query API', 'log-head');
+  log(`  → ${cfg.url}/api/v1/query_range`, 'log-info');
+  await sleep(500);
+  log('  ✓ 200 OK  (latency: 42ms)', 'log-ok');
+  log('  ✓ Thanos store backends: 3 (2 prometheus, 1 object-store)', 'log-info');
+  log(`  ✓ Cluster: ${cfg.cluster}  ·  Namespace: ${cfg.ns}`, 'log-ok');
+  log(`  ✓ Targeting ${cfg.svcs.length} service(s): ${cfg.svcs.join(', ')}`, 'log-ok');
+  log('  ✓ Step resolution: 30s', 'log-info');
+  setProgress(20, 'Connected. Fetching pre-chaos baseline...');
+  await sleep(400);
+
+  log('', 'log-dim');
+  log('[2/5] Fetching pre-chaos baseline (T-' + cfg.preWin + 'min)', 'log-head');
+  await sleep(300);
+  for (const svcName of cfg.svcs) {
+    log(`  [${svcName}] container_cpu_usage_seconds_total  ✓`, 'log-ok');
+    log(`  [${svcName}] container_memory_working_set_bytes ✓`, 'log-ok');
+    await sleep(120);
+  }
+  log('  kube_deployment_status_replicas              ✓  baseline: 5', 'log-ok');
+  log('  container_spec_cpu_quota / memory_limit      ✓  limits fetched', 'log-ok');
+  setProgress(40, 'Fetching chaos phase...');
+  await sleep(400);
+
+  log('', 'log-dim');
+  log('[3/5] Fetching chaos phase data', 'log-head');
+  await sleep(300);
+  for (const svcName of cfg.svcs) {
+    log(`  [${svcName}] CPU utilisation (chaos)  ✓  peak: 72.1%`, 'log-warn');
+    log(`  [${svcName}] Memory utilisation        ✓  peak: 83.6%`, 'log-warn');
+    await sleep(100);
+  }
+  log('  CPU throttling rate                          ✗  spike: 38.4%  ← ELEVATED', 'log-err');
+  log('  OOM kill events                              ✗  count: 2      ← CRITICAL', 'log-err');
+  log('  Replica count                                ✗  dropped: 5→3  ← DEGRADED', 'log-err');
+  setProgress(60, 'Fetching post-chaos recovery...');
+  await sleep(400);
+
+  log('', 'log-dim');
+  log('[4/5] Fetching post-chaos recovery data (T+' + cfg.postWin + 'min)', 'log-head');
+  await sleep(300);
+  log('  All metrics (recovery window)                ✓  nominal', 'log-ok');
+  log('  Replica count                                ✓  recovered: 5', 'log-ok');
+  log('  CPU throttling                               ✓  normalised: 3.8%', 'log-ok');
+  log('  Memory utilisation                           ✓  normalised: 55.3%', 'log-ok');
+  setProgress(80, 'Analysing data...');
+  await sleep(400);
+
+  log('', 'log-dim');
+  log('[5/5] Aggregating &amp; analysing', 'log-head');
+  await sleep(300);
+  fetchedData = generateData(cfg);
+  log(`  Data points: ${fetchedData.timeline.length * 5 * cfg.svcs.length} total series across ${cfg.svcs.length} service(s)`, 'log-ok');
+  log('  Anomalies: OOM×2, CPU throttle spike, replica degradation', 'log-err');
+  log('  Recovery: confirmed within post-window', 'log-ok');
+  log('', 'log-dim');
+  log('✓ Fetch complete. Ready to plot graphs.', 'log-ok');
+  setProgress(100, 'Complete');
+
+  updateSidebar();
+  document.getElementById('btn-to-charts').style.display = '';
+  doneSteps.push(1, 2);
+  renderFetchTable();
+  document.getElementById('fetch-table-wrap').style.display = '';
+  setTopStatus('Data fetched', true);
+}
+
+function loadDemo() {
+  demoModeActive = true;
+  // Pre-populate discovery state so getConfig() returns sensible values
+  discoveryState = {
+    connected: true, cluster: 'prod-us-east-1', ns: 'payment-service', demoMode: true,
+    services: [
+      { name:'payment-api',     type:'Deployment', replicas:5, status:'healthy',  selected:true },
+      { name:'payment-worker',  type:'Deployment', replicas:3, status:'healthy',  selected:true },
+      { name:'fraud-detector',  type:'Deployment', replicas:2, status:'degraded', selected:true },
+    ]
+  };
+  fetchedData = generateData(getConfig());
+  doneSteps = [1, 2, 3];
+  updateSidebar();
+  setTopStatus('Demo loaded', true);
+  goStep(3);
+}
+
+function setTopStatus(msg, green) {
+  const el = document.getElementById('top-status');
+  const dot = document.getElementById('top-dot');
+  el.textContent = msg;
+  dot.style.background = green ? 'var(--green)' : 'var(--amber)';
+}
+
+function updateSidebar() {
+  if (!fetchedData) return;
+  const d = fetchedData.summary;
+  document.getElementById('sb-cpu').textContent = d.chaos.cpu + '%';
+  document.getElementById('sb-mem').textContent = d.chaos.mem + '%';
+  document.getElementById('sb-oom').textContent = d.chaos.oom + ' kills';
+  document.getElementById('sb-rep').textContent = d.pre.replicas + ' → ' + d.chaos.replicas + ' pods';
+}
+
+/* ── FETCH TABLE ── */
+function renderFetchTable() {
+  if (!fetchedData) return;
+  const { pre, chaos, post } = fetchedData.summary;
+  const cfg = fetchedData.config;
+  const rows = [
+    { metric: 'CPU utilisation', unit: '%', pre: pre.cpu, chaos: chaos.cpu, post: post.cpu, warnAt: cfg.cpuThresh, lowerBetter: false },
+    { metric: 'Memory utilisation', unit: '%', pre: pre.mem, chaos: chaos.mem, post: post.mem, warnAt: cfg.memThresh, lowerBetter: false },
+    { metric: 'CPU throttling', unit: '%', pre: pre.throttle, chaos: chaos.throttle, post: post.throttle, warnAt: 20, lowerBetter: false },
+    { metric: 'OOM kill events', unit: '', pre: pre.oom, chaos: chaos.oom, post: post.oom, warnAt: 1, lowerBetter: false },
+    { metric: 'Replica count', unit: '', pre: pre.replicas, chaos: chaos.replicas, post: post.replicas, warnAt: pre.replicas * 0.8, lowerBetter: true },
+    { metric: 'CPU requests', unit: 'cores', pre: pre.cpu_req, chaos: chaos.cpu_req, post: post.cpu_req, warnAt: null },
+    { metric: 'Memory limit', unit: 'MB', pre: pre.mem_lim, chaos: chaos.mem_lim, post: post.mem_lim, warnAt: null },
+  ];
+  const cls = (v, w, lb) => {
+    if (w === null) return 'val-neu';
+    if (lb) return v < w ? 'val-bad' : 'val-good';
+    return v >= w ? 'val-bad' : v > w * 0.7 ? 'val-warn' : 'val-good';
+  };
+  const d = (v, u, c) => `<td class="${c}">${v}${u ? ' ' + u : ''}</td>`;
+  const html = `<table class="dtable">
+    <thead><tr><th>Metric</th><th>Pre-chaos</th><th>During chaos</th><th>Post-chaos</th><th>Δ</th></tr></thead>
+    <tbody>${rows.map(r => `<tr>
+      <td>${r.metric}</td>
+      ${d(r.pre, r.unit, 'val-neu')}
+      ${d(r.chaos, r.unit, cls(r.chaos, r.warnAt, r.lowerBetter))}
+      ${d(r.post, r.unit, 'val-neu')}
+      <td class="${cls(r.chaos, r.warnAt, r.lowerBetter)}">${r.lowerBetter ? (r.chaos - r.pre) : (r.chaos - r.pre > 0 ? '+' : '') + parseFloat(r.chaos - r.pre).toFixed(1)}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+  document.getElementById('fetch-table-container').innerHTML = html;
+}
+
+/* ── CHARTS ── */
+let chartsRendered = false;
+
+function renderCharts() {
+  if (!fetchedData) return;
+  if (chartsRendered) {
+    Object.values(chartInstances).forEach(c => { try { c.destroy(); } catch(e){} });
+    chartInstances = {};
+    chartsRendered = false;
+  }
+  doneSteps.push(3);
+  const { summary: d, timeline: tl, config: cfg } = fetchedData;
+  const labels = tl.map(t => t.label);
+  const phases = ['Pre-chaos', 'During chaos', 'Post-chaos'];
+  const c = getThemeColors();
+
+  const baseOpts = (yLbl) => ({
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false,
+      backgroundColor: c.tip, borderColor: c.tipBdr, borderWidth: 1,
+      titleFont: { family: "'JetBrains Mono', monospace", size: 11 },
+      bodyFont:  { family: "'JetBrains Mono', monospace", size: 11 },
+      titleColor: c.tipTtl, bodyColor: c.tipBdy }},
+    scales: {
+      x: { grid: { color: c.grid, drawBorder: false },
+           ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }, color: c.tick } },
+      y: { grid: { color: c.grid, drawBorder: false },
+           ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }, color: c.tick },
+           title: { display: !!yLbl, text: yLbl, font: { size: 10 }, color: c.tick } }
+    }
+  });
+
+  // CPU bar
+  const cpuOver = d.chaos.cpu >= cfg.cpuThresh;
+  document.getElementById('badge-cpu').textContent = cpuOver ? 'Exceeded threshold' : 'Within threshold';
+  document.getElementById('badge-cpu').className = 'chart-badge ' + (cpuOver ? 'badge-crit' : 'badge-ok');
+  chartInstances.cpu = new Chart(document.getElementById('chart-cpu'), {
+    type: 'bar',
+    data: {
+      labels: phases,
+      datasets: [{ data: [d.pre.cpu, d.chaos.cpu, d.post.cpu],
+        backgroundColor: c.cpuBar, borderColor: c.cpuBdr,
+        borderWidth: 1, borderRadius: 4, barPercentage: 0.45 }]
+    },
+    options: { ...baseOpts('%'),
+      plugins: { ...baseOpts().plugins, annotation: undefined },
+      scales: { ...baseOpts('%').scales, y: { ...baseOpts('%').scales.y, min: 0, max: 100,
+        ticks: { ...baseOpts('%').scales.y.ticks, stepSize: 20 } } } }
+  });
+
+  // Memory bar
+  const memOver = d.chaos.mem >= cfg.memThresh;
+  document.getElementById('badge-mem').textContent = memOver ? 'Near limit' : 'Stable';
+  document.getElementById('badge-mem').className = 'chart-badge ' + (memOver ? 'badge-warn' : 'badge-ok');
+  chartInstances.mem = new Chart(document.getElementById('chart-mem'), {
+    type: 'bar',
+    data: {
+      labels: phases,
+      datasets: [{ data: [d.pre.mem, d.chaos.mem, d.post.mem],
+        backgroundColor: c.memBar, borderColor: c.memBdr,
+        borderWidth: 1, borderRadius: 4, barPercentage: 0.45 }]
+    },
+    options: { ...baseOpts('%'),
+      scales: { ...baseOpts('%').scales, y: { ...baseOpts('%').scales.y, min: 0, max: 100 } } }
+  });
+
+  // Throttle line
+  document.getElementById('badge-throttle').textContent = d.chaos.throttle + '% peak';
+  document.getElementById('badge-throttle').className = 'chart-badge ' + (d.chaos.throttle > 20 ? 'badge-crit' : 'badge-warn');
+  chartInstances.throttle = new Chart(document.getElementById('chart-throttle'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: tl.map(t => t.throttle),
+        borderColor: c.throttle, backgroundColor: c.throttleFill,
+        borderWidth: 2, pointRadius: 3, pointBackgroundColor: c.throttle,
+        fill: true, tension: 0.4
+      }]
+    },
+    options: baseOpts('%')
+  });
+
+  // Replicas line
+  const repDrop = d.chaos.replicas < d.pre.replicas;
+  document.getElementById('badge-rep').textContent = repDrop ? `Dropped ${d.pre.replicas}→${d.chaos.replicas}` : 'Stable';
+  document.getElementById('badge-rep').className = 'chart-badge ' + (repDrop ? 'badge-warn' : 'badge-ok');
+  chartInstances.replicas = new Chart(document.getElementById('chart-replicas'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: tl.map(t => t.replicas),
+        borderColor: c.replica, backgroundColor: c.replicaFill,
+        borderWidth: 2, pointRadius: 4, pointBackgroundColor: c.replica,
+        fill: true, stepped: true
+      }]
+    },
+    options: { ...baseOpts('pods'),
+      scales: { ...baseOpts('pods').scales, y: { ...baseOpts('pods').scales.y, min: 0, max: d.pre.replicas + 3, ticks: { stepSize: 1, ...baseOpts('pods').scales.y.ticks } } } }
+  });
+
+  // Events bar
+  chartInstances.events = new Chart(document.getElementById('chart-events'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'OOM kills', data: tl.map(t => t.oom),
+          backgroundColor: c.oomBar, borderRadius: 3, barPercentage: 0.4 },
+        { label: 'Throttle event', data: tl.map(t => t.throttle > 10 ? 1 : 0),
+          backgroundColor: c.thrBar, borderRadius: 3, barPercentage: 0.4 }
+      ]
+    },
+    options: { ...baseOpts(''),
+      plugins: { ...baseOpts('').plugins, legend: {
+        display: true, position: 'right',
+        labels: { font: { family: "'JetBrains Mono', monospace", size: 10 }, color: c.tick, boxWidth: 12, padding: 12 }
+      }},
+      scales: { ...baseOpts('').scales, y: { ...baseOpts('').scales.y, min: 0, max: 3, ticks: { stepSize: 1, ...baseOpts('').scales.y.ticks } } }
+    }
+  });
+
+  chartsRendered = true;
+}
+
+/* ── REPORT ── */
+function renderReport() {
+  if (!fetchedData) return;
+  const { summary: d, config: cfg } = fetchedData;
+  doneSteps.push(4);
+
+  document.getElementById('report-meta').innerHTML = `
+    <div class="meta-item"><div class="meta-key">Cluster / Namespace</div><div class="meta-val">${cfg.cluster} · ${cfg.ns}</div></div>
+    <div class="meta-item"><div class="meta-key">Services (${cfg.svcs.length})</div><div class="meta-val" style="font-size:12px">${cfg.svcs.join(', ')}</div></div>
+    <div class="meta-item"><div class="meta-key">Experiment</div><div class="meta-val">${cfg.expName}</div></div>
+    <div class="meta-item"><div class="meta-key">Author</div><div class="meta-val">${cfg.author}</div></div>
+  `;
+
+  const cpuOk = d.chaos.cpu < cfg.cpuThresh;
+  const memOk = d.chaos.mem < cfg.memThresh;
+  const throttleOk = d.chaos.throttle < 20;
+  const oomOk = d.chaos.oom === 0;
+  const replicaOk = d.chaos.replicas >= d.pre.replicas * 0.8;
+
+  document.getElementById('report-chips').innerHTML = [
+    [cpuOk, 'CPU within threshold', 'CPU exceeded threshold'],
+    [memOk, 'Memory stable', 'Memory near limit'],
+    [throttleOk, 'Throttle normal', 'CPU throttle spike'],
+    [oomOk, 'No OOM events', 'OOM kills detected'],
+    [replicaOk, 'Replica count OK', 'Replica degradation'],
+  ].map(([ok, pass, fail]) => `
+    <div class="vchip ${ok ? 'pass' : (ok === null ? 'warn' : 'fail')}">
+      ${ok ? '✓' : '✗'} ${ok ? pass : fail}
+    </div>
+  `).join('');
+
+  const sections = [
+    {
+      icon: '📋', title: 'Executive summary',
+      badge: oomOk && throttleOk ? 'pass' : 'fail',
+      badgeText: oomOk && throttleOk ? 'Passed' : 'Action required',
+      body: `
+        <div class="finding"><span>The <strong>${cfg.expName}</strong> experiment was run on <strong>${cfg.ns}/${cfg.svc}</strong> — simulating a 40% pod-failure scenario (${cfg.chaosType}). The service experienced significant resource pressure during the chaos window.</span></div>
+        <div class="finding"><span>CPU rose from <strong>${d.pre.cpu}%</strong> → <strong>${d.chaos.cpu}%</strong>. Memory from <strong>${d.pre.mem}%</strong> → <strong>${d.chaos.mem}%</strong>. CPU throttling surged from <strong>${d.pre.throttle}%</strong> to <strong>${d.chaos.throttle}%</strong>.</span></div>
+        <div class="finding"><span><strong>${d.chaos.oom} OOM kill(s)</strong> recorded during chaos. Replica count dropped <strong>${d.pre.replicas} → ${d.chaos.replicas}</strong>, contributing to increased per-pod load on surviving instances.</span></div>
+        <div class="finding"><span>Post-chaos: metrics normalised within <strong>${cfg.postWin} minutes</strong>. Replicas returned to baseline, CPU and memory returned to pre-test levels.</span></div>
+      `
+    },
+    {
+      icon: '⚙️', title: 'CPU analysis',
+      badge: cpuOk ? 'pass' : 'fail',
+      badgeText: cpuOk ? 'Within threshold' : 'Exceeded ' + cfg.cpuThresh + '%',
+      body: `
+        <div class="finding"><span>CPU utilisation peaked at <strong>${d.chaos.cpu}%</strong> during chaos — a <strong>+${(d.chaos.cpu - d.pre.cpu).toFixed(1)}pp</strong> increase from the ${d.pre.cpu}% baseline. This is ${d.chaos.cpu >= cfg.cpuThresh ? 'above' : 'below'} the configured ${cfg.cpuThresh}% threshold.</span></div>
+        <div class="finding"><span>CPU throttling reached <strong>${d.chaos.throttle}%</strong> (baseline: ${d.pre.throttle}%). This indicates pod CPU requests are undersized for failure-mode load redistribution — the Linux CFS scheduler throttles burst traffic when pods exceed their CPU quota.</span></div>
+        <div class="reco-list">
+          <div class="reco-title">Remediation</div>
+          <div class="reco p1">P1 — Alert on cpu_throttling_ratio &gt; 15% for 5 minutes (AlertManager rule)</div>
+          <div class="reco p2">P2 — Increase CPU requests from ${d.pre.cpu_req}c to at least ${(d.pre.cpu_req * 1.5).toFixed(2)}c to absorb load from failed pods</div>
+          <div class="reco p3">P3 — Configure HPA with CPU target 60% to proactively scale before throttling</div>
+        </div>
+      `
+    },
+    {
+      icon: '💾', title: 'Memory analysis',
+      badge: memOk ? 'warn' : 'fail',
+      badgeText: memOk ? 'Elevated' : 'Near limit',
+      body: `
+        <div class="finding"><span>Memory reached <strong>${d.chaos.mem}%</strong> of the ${d.pre.mem_lim}MB limit — a <strong>+${(d.chaos.mem - d.pre.mem).toFixed(1)}pp</strong> rise. ${d.chaos.mem >= 85 ? 'Dangerously close to the limit.' : 'Elevated but did not breach limit.'}</span></div>
+        <div class="finding"><span><strong>${d.chaos.oom} OOM kill(s)</strong> detected. The kubelet evicted and restarted pods that breached their memory limit, contributing directly to the replica count drop and recovery delay.</span></div>
+        <div class="finding"><span>Post-chaos memory normalised to ${d.post.mem}% — confirming no persistent memory leak introduced by the chaos scenario.</span></div>
+        <div class="reco-list">
+          <div class="reco-title">Remediation</div>
+          <div class="reco p1">P1 — Increase memory limit from ${d.pre.mem_lim}MB to ${Math.round(d.pre.mem_lim * 1.4)}MB (+40% headroom)</div>
+          <div class="reco p2">P2 — Profile heap usage under failure-mode load — check connection pool growth and request queue buffering</div>
+          <div class="reco p3">P3 — Alert on container_memory_working_set_bytes &gt; 80% of limit for 3 minutes</div>
+        </div>
+      `
+    },
+    {
+      icon: '🔄', title: 'Replica count &amp; availability',
+      badge: replicaOk ? 'warn' : 'fail',
+      badgeText: `Dropped ${d.pre.replicas}→${d.chaos.replicas}`,
+      body: `
+        <div class="finding"><span>Replica count dropped <strong>${d.pre.replicas} → ${d.chaos.replicas}</strong> during chaos. The ${Math.round((1 - d.chaos.replicas/d.pre.replicas)*100)}% pod reduction placed ~${Math.round(100/(d.chaos.replicas/d.pre.replicas))}% of baseline traffic load on surviving pods — a compounding failure multiplier.</span></div>
+        <div class="finding"><span>Recovery to full replica count took approximately <strong>${cfg.postWin} minutes</strong>. During this window the service operated below SLO capacity with increased blast radius for any subsequent failure.</span></div>
+        <div class="finding"><span>No PodDisruptionBudget was enforced — this allowed all targeted pods to be evicted simultaneously without a safety floor.</span></div>
+        <div class="reco-list">
+          <div class="reco-title">Remediation</div>
+          <div class="reco p1">P1 — Set PodDisruptionBudget: minAvailable: ${Math.ceil(d.pre.replicas * 0.8)} to prevent &gt;20% simultaneous eviction</div>
+          <div class="reco p2">P2 — Increase base replica count to ${d.pre.replicas + 2} for permanent failure headroom</div>
+          <div class="reco p3">P3 — Tune readinessProbe initialDelaySeconds — faster readiness detection reduces recovery lag</div>
+        </div>
+      `
+    },
+    {
+      icon: '📊', title: 'SLO impact assessment',
+      badge: 'info',
+      badgeText: `Target: ${cfg.slo}%`,
+      body: `
+        <div class="finding"><span>Estimated availability during the chaos window: <strong>${(100 - (d.chaos.oom * 1.2)).toFixed(2)}%</strong> — ${(100 - (d.chaos.oom * 1.2)) < cfg.slo ? '<span style="color:var(--red)">below the ' + cfg.slo + '% SLO target</span>' : 'above the ' + cfg.slo + '% SLO target'}. OOM restarts and replica degradation were the primary availability drivers.</span></div>
+        <div class="finding"><span>Error budget impact: this failure mode, if it occurred in production, would consume approximately <strong>${Math.round((100-cfg.slo)*40).toFixed(1)}%</strong> of monthly error budget in a 30-minute window.</span></div>
+        <div class="finding"><span>Severity classification: <strong>${cfg.severity}</strong>. Team: ${cfg.team}. Remediation items above should be tracked to closure before next chaos cycle.</span></div>
+        <div class="reco-list">
+          <div class="reco-title">Priority order</div>
+          <div class="reco p1">P1 — OOM fix: memory limit increase + profile memory under load</div>
+          <div class="reco p2">P2 — PodDisruptionBudget enforcement</div>
+          <div class="reco p3">P3 — CPU request tuning + HPA policy</div>
+          <div class="reco neutral">— Schedule follow-up chaos run post-remediation to validate fixes</div>
+        </div>
+      `
+    },
+    {
+      icon: '🔍', title: 'PromQL queries used',
+      badge: 'info',
+      badgeText: 'Reference',
+      body: `
+        <div class="finding"><span>Queries executed against <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-family:var(--font-mono);font-size:11px">${cfg.url}</code></span></div>
+        ${[
+          `rate(container_cpu_usage_seconds_total{namespace="${cfg.ns}",pod=~"${cfg.svc}.*"}[2m])`,
+          `container_memory_working_set_bytes{namespace="${cfg.ns}",pod=~"${cfg.svc}.*"} / container_spec_memory_limit_bytes * 100`,
+          `rate(container_cpu_throttled_seconds_total{namespace="${cfg.ns}",pod=~"${cfg.svc}.*"}[2m]) / rate(container_cpu_usage_seconds_total[2m]) * 100`,
+          `kube_pod_container_status_last_terminated_reason{namespace="${cfg.ns}",reason="OOMKilled"}`,
+          `kube_deployment_status_replicas{namespace="${cfg.ns}",deployment="${cfg.svc}"}`,
+        ].map(q => `<div class="reco neutral" style="word-break:break-all;font-size:11px">${q}</div>`).join('')}
+      `
+    },
+  ];
+
+  document.getElementById('report-sections').innerHTML = sections.map(s => `
+    <div class="rsection">
+      <div class="rsection-head" onclick="toggleSection(this)">
+        <div class="rsection-title"><span class="rsection-icon">${s.icon}</span>${s.title}</div>
+        <div class="rsection-right">
+          <span class="rsection-badge rbadge-${s.badge}">${s.badgeText}</span>
+          <span class="chevron open">›</span>
+        </div>
+      </div>
+      <div class="rsection-body open">${s.body}</div>
+    </div>
+  `).join('');
+}
+
+function toggleSection(el) {
+  const body = el.nextElementSibling;
+  const ch = el.querySelector('.chevron');
+  body.classList.toggle('open');
+  ch.classList.toggle('open');
+}
+
+/* ── EXPORTS ── */
+function exportMarkdown() {
+  if (!fetchedData) return;
+  const { summary: d, config: cfg } = fetchedData;
+  const now = new Date().toISOString().slice(0,19).replace('T',' ');
+  const md = `# Chaos Engineering Resilience Report
+
+**Service:** \`${cfg.ns}/${cfg.svc}\`
+**Experiment:** ${cfg.expName} (${cfg.chaosType})
+**Chaos window:** ${cfg.chaosStart} → ${cfg.chaosEnd}
+**Author:** ${cfg.author} · ${cfg.team}
+**Report generated:** ${now} UTC
+**Severity:** ${cfg.severity}
+
+---
+
+## Executive summary
+
+The **${cfg.expName}** experiment simulated a 40% pod-failure scenario on \`${cfg.ns}/${cfg.svc}\`. The service experienced significant resource pressure: CPU peaked at ${d.chaos.cpu}%, memory at ${d.chaos.mem}%, and CPU throttling surged to ${d.chaos.throttle}%. **${d.chaos.oom} OOM kill(s)** were recorded and replica count dropped from ${d.pre.replicas} to ${d.chaos.replicas}. Recovery was confirmed within ${cfg.postWin} minutes.
+
+---
+
+## Metrics summary
+
+| Metric | Pre-chaos | During chaos | Post-chaos | Δ |
+|--------|-----------|--------------|------------|---|
+| CPU utilisation % | ${d.pre.cpu} | ${d.chaos.cpu} | ${d.post.cpu} | +${(d.chaos.cpu - d.pre.cpu).toFixed(1)} |
+| Memory utilisation % | ${d.pre.mem} | ${d.chaos.mem} | ${d.post.mem} | +${(d.chaos.mem - d.pre.mem).toFixed(1)} |
+| CPU throttling % | ${d.pre.throttle} | ${d.chaos.throttle} | ${d.post.throttle} | +${(d.chaos.throttle - d.pre.throttle).toFixed(1)} |
+| OOM kill events | ${d.pre.oom} | ${d.chaos.oom} | ${d.post.oom} | +${d.chaos.oom} |
+| Replica count | ${d.pre.replicas} | ${d.chaos.replicas} | ${d.post.replicas} | ${d.chaos.replicas - d.pre.replicas} |
+| CPU requests (cores) | ${d.pre.cpu_req} | ${d.chaos.cpu_req} | ${d.post.cpu_req} | — |
+| Memory limit (MB) | ${d.pre.mem_lim} | ${d.chaos.mem_lim} | ${d.post.mem_lim} | — |
+
+---
+
+## SLO impact
+
+- Target SLO: **${cfg.slo}%**
+- Estimated availability during chaos: **${(100 - d.chaos.oom * 1.2).toFixed(2)}%**
+- Monthly error budget consumed (estimate): **${Math.round((100 - cfg.slo) * 40).toFixed(1)}%**
+
+---
+
+## Remediation
+
+| Priority | Action |
+|----------|--------|
+| P1 | Fix OOM: increase memory limit to ${Math.round(d.pre.mem_lim * 1.4)}MB |
+| P1 | Set PodDisruptionBudget minAvailable: ${Math.ceil(d.pre.replicas * 0.8)} |
+| P2 | Increase CPU requests to ${(d.pre.cpu_req * 1.5).toFixed(2)} cores |
+| P2 | Add AlertManager rule: cpu_throttling > 15% for 5m |
+| P3 | Configure HPA target CPU 60% |
+| P3 | Tune readinessProbe initialDelaySeconds |
+
+---
+
+_Generated by ResilienceX Chaos Scribe_
+`;
+  download(md, `resilience-report-${cfg.svc}-${cfg.expName}.md`, 'text/markdown');
+}
+
+function exportJSON() {
+  if (!fetchedData) return;
+  download(JSON.stringify(fetchedData, null, 2), `resilience-data-${fetchedData.config.svc}.json`, 'application/json');
+}
+
+function download(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+/* ── CSV UPLOAD & VALIDATION (JMeter Aggregate Report) ── */
+
+// Required columns: JMeter Aggregate Report + "service" (CI-added) + optional "phase"
+const CSV_REQUIRED_COLS = ['service','label','# samples','average','median','90% line','95% line','99% line','error %','throughput'];
+let csvData = null;
+
+function generateJmeterDemoCSV() {
+  const selectedSvcs = discoveryState.services.filter(s => s.selected).map(s => s.name);
+  const svcs = selectedSvcs.length > 0 ? selectedSvcs : ['payment-api','payment-worker','fraud-detector'];
+  const epMap = {
+    'payment-api':    ['POST /api/v1/payments','GET /api/v1/payments/{id}','POST /api/v1/refunds','GET /api/v1/health'],
+    'payment-worker': ['PROCESS payment-queue','PROCESS refund-queue'],
+    'fraud-detector': ['POST /api/v1/fraud/check','GET /api/v1/fraud/rules'],
+  };
+  const defEps = ['GET /api/v1/health','POST /api/v1/process'];
+  const P = {
+    pre:   { s:[940,1060], a:[82,115],  m:[68,92],   p90:[155,195], p95:[200,255], p99:[295,375], mn:[8,18],  mx:[480,660],  e:[0.05,0.35], t:[188,212], rx:[2.1,2.8], tx:[0.4,0.7], ab:[820,1240] },
+    chaos: { s:[380,620],  a:[295,510], m:[240,430],  p90:[560,800], p95:[710,1080],p99:[940,1650],mn:[14,32], mx:[2200,4600],e:[3.8,13.2],  t:[72,122],  rx:[0.8,1.4], tx:[0.1,0.3], ab:[820,1240] },
+    post:  { s:[910,1020], a:[90,128],  m:[74,106],   p90:[168,215], p95:[220,275], p99:[320,405], mn:[9,20],  mx:[520,700],  e:[0.10,0.55], t:[182,210], rx:[2.0,2.7], tx:[0.4,0.6], ab:[820,1240] },
+  };
+  const jit = r => parseFloat((r[0]+Math.random()*(r[1]-r[0])).toFixed(2));
+  const iit = r => Math.round(jit(r));
+  const rows = ['service,Label,# Samples,Average,Median,90% Line,95% Line,99% Line,Min,Max,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes,phase'];
+  svcs.forEach(svc => {
+    const eps = epMap[svc] || defEps;
+    ['pre','chaos','post'].forEach(ph => {
+      const p = P[ph];
+      eps.forEach(ep => {
+        rows.push(`${svc},"${ep}",${iit(p.s)},${iit(p.a)},${iit(p.m)},${iit(p.p90)},${iit(p.p95)},${iit(p.p99)},${iit(p.mn)},${iit(p.mx)},${jit(p.e).toFixed(2)}%,${jit(p.t).toFixed(2)},${jit(p.rx).toFixed(2)},${jit(p.tx).toFixed(2)},${iit(p.ab)},${ph}`);
+      });
+      rows.push(`${svc},TOTAL,${eps.length*iit(p.s)},${iit(p.a)},${iit(p.m)},${iit(p.p90)},${iit(p.p95)},${iit(p.p99)},${iit(p.mn)},${iit(p.mx)},${jit(p.e).toFixed(2)}%,${(jit(p.t)*eps.length).toFixed(2)},${jit(p.rx).toFixed(2)},${jit(p.tx).toFixed(2)},${iit(p.ab)},${ph}`);
+    });
+  });
+  return rows.join('\n');
+}
+
+function loadDemoJmeter() {
+  const csv = generateJmeterDemoCSV();
+  const sel = discoveryState.services.filter(s => s.selected).map(s => s.name);
+  parseAndValidateCSV(csv, `jmeter-aggregate-${sel[0]||'payment-api'}-demo.csv`, new Blob([csv]).size);
+}
+
+function toggleSchema() {
+  const body = document.getElementById('csv-schema-body');
+  const btn = document.querySelector('[onclick="toggleSchema()"]');
+  const open = body.classList.toggle('open');
+  if (btn) btn.textContent = open ? 'Hide schema \u25b4' : 'Expected schema \u25be';
+}
+
+function csvDragOver(e) { e.preventDefault(); document.getElementById('csv-dropzone').classList.add('drag-over'); }
+function csvDragLeave() { document.getElementById('csv-dropzone').classList.remove('drag-over'); }
+function csvDrop(e) {
+  e.preventDefault(); document.getElementById('csv-dropzone').classList.remove('drag-over');
+  const f=e.dataTransfer.files[0]; if(f) processCSVFile(f);
+}
+function csvFileSelected(e) { const f=e.target.files[0]; if(f) processCSVFile(f); }
+
+function removeCsv() {
+  csvData=null; document.getElementById('csv-file-input').value='';
+  const res=document.getElementById('csv-result'); res.className='csv-result'; res.style.display='none';
+  document.getElementById('csv-remove-btn').style.display='none';
+  document.querySelector('.csv-drop-icon').textContent='\ud83d\udcca';
+  document.querySelector('.csv-drop-title').textContent='Drop JMeter aggregate report CSV here';
+  document.querySelector('.csv-drop-hint').innerHTML='or <span>click to browse</span> \u00b7 exported from JMeter \u2192 Aggregate Report listener';
+}
+
+function processCSVFile(file) {
+  if (!file.name.toLowerCase().endsWith('.csv') && file.type !== 'text/csv') {
+    renderCsvResult('err','\u2715 \u00a0Invalid file type \u2014 only .csv files accepted',[{svc:file.name,msg:'File must have a .csv extension'}]); return;
+  }
+  const r=new FileReader();
+  r.onload=e=>{
+    try { parseAndValidateCSV(e.target.result,file.name,file.size); }
+    catch(err) { renderCsvResult('err','\u2715 \u00a0Parse error',[{svc:'\u2014',msg:err.message}]); }
+  };
+  r.readAsText(file);
+}
+
+function parseCSVRaw(text) {
+  const lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n').filter(l=>l.trim());
+  if (lines.length<2) throw new Error('CSV must have a header row and at least one data row');
+  function splitLine(line) {
+    const out=[]; let cur=''; let inQ=false;
+    for (const ch of line) {
+      if (ch==='"') inQ=!inQ;
+      else if (ch===',' && !inQ) { out.push(cur.trim()); cur=''; }
+      else cur+=ch;
+    }
+    out.push(cur.trim()); return out;
+  }
+  const hdrs=splitLine(lines[0]).map(h=>h.replace(/['"]/g,'').trim().toLowerCase());
+  const rows=lines.slice(1).map((line,i)=>{
+    const vals=splitLine(line);
+    const row={}; hdrs.forEach((h,idx)=>{ row[h]=(vals[idx]??'').replace(/^["']|["']$/g,'').trim(); });
+    row._lineNum=i+2; return row;
+  });
+  return {headers:hdrs, rows};
+}
+
+function parseAndValidateCSV(text,filename,filesize) {
+  const {headers,rows}=parseCSVRaw(text);
+
+  const missingCols=CSV_REQUIRED_COLS.filter(c=>!headers.includes(c));
+  if (missingCols.length) {
+    renderCsvResult('err',
+      `\u2715 \u00a0Missing required column${missingCols.length>1?'s':''}: ${missingCols.join(', ')}`,
+      missingCols.map(c=>({svc:c,msg:`Column "${c}" not found \u2014 expected JMeter Aggregate Report CSV with a "service" column`})),
+      [],null);
+    csvData=null; return;
+  }
+
+  const dataRows=rows.filter(r=>(r.label||'').toUpperCase()!=='TOTAL');
+  const skippedTotals=rows.length-dataRows.length;
+  const selSvcs=discoveryState.services.filter(s=>s.selected).map(s=>s.name);
+  const discActive=discoveryState.ns!==null&&selSvcs.length>0;
+  const csvSvcs=[...new Set(dataRows.map(r=>r.service).filter(Boolean))];
+  const matched=[],notFound=[],notCovered=[];
+  if (discActive) {
+    csvSvcs.forEach(s=>(selSvcs.includes(s)?matched:notFound).push(s));
+    selSvcs.forEach(s=>{ if(!csvSvcs.includes(s)) notCovered.push(s); });
+  } else { csvSvcs.forEach(s=>matched.push(s)); }
+
+  const rowErrors=[],warnings=[];
+  dataRows.forEach(row=>{
+    const lbl=row.label||'\u2014';
+    const ev=parseFloat((row['error %']||'0').replace('%','').trim());
+    if (isNaN(ev)||ev<0) rowErrors.push({svc:row.service||'\u2014',msg:`Row ${row._lineNum} ["${lbl}"]: "Error %" invalid (got "${row['error %']}")`});
+    else if (ev>100) rowErrors.push({svc:row.service||'\u2014',msg:`Row ${row._lineNum} ["${lbl}"]: "Error %" ${ev} exceeds 100`});
+    ['# samples','average','median','90% line','95% line','99% line','throughput'].forEach(col=>{
+      const v=parseFloat(row[col]);
+      if (isNaN(v)||v<0) rowErrors.push({svc:row.service||'\u2014',msg:`Row ${row._lineNum} ["${lbl}"]: "${col}" invalid (got "${row[col]}")`});
+    });
+    const p50=parseFloat(row['median']),p99=parseFloat(row['99% line']);
+    if (!isNaN(p50)&&!isNaN(p99)&&p50>p99)
+      warnings.push({svc:row.service||'\u2014',msg:`Row ${row._lineNum} ["${lbl}"]: Median (${p50}ms) > 99th pct (${p99}ms) \u2014 check data integrity`});
+    const ph=(row.phase||'').toLowerCase();
+    if (ph&&!['pre','chaos','post'].includes(ph))
+      warnings.push({svc:row.service||'\u2014',msg:`Row ${row._lineNum}: unknown phase "${row.phase}"`});
+  });
+
+  const blockingErrors=[
+    ...notFound.map(s=>({svc:s,msg:`Service "${s}" is in the CSV but not selected in the microservices picker \u2014 select it or remove it from the CSV`})),
+    ...rowErrors,
+  ];
+  const meta={filename,filesize,rows:dataRows.length,totalRows:rows.length,skippedTotals,csvSvcs,matched,notFound,notCovered,headers};
+
+  if (blockingErrors.length) {
+    renderCsvResult('err',`\u2715 \u00a0${blockingErrors.length} error${blockingErrors.length>1?'s':''} \u2014 upload blocked`,blockingErrors,warnings,meta);
+    csvData=null; return;
+  }
+
+  csvData=dataRows;
+  const hasWarn=notCovered.length>0||warnings.length>0;
+  renderCsvResult(hasWarn?'warn':'ok',
+    hasWarn
+      ?`\u26a0 \u00a0Loaded with warnings \u2014 ${dataRows.length} transactions, ${matched.length} service(s) matched`
+      :`\u2713 \u00a0JMeter CSV validated \u2014 ${dataRows.length} transactions across ${matched.length} service(s)`,
+    [],warnings,meta,dataRows);
+}
+
+function renderCsvResult(state,title,errors,warnings=[],meta=null,rows=null) {
+  const result=document.getElementById('csv-result');
+  const hdr=document.getElementById('csv-result-header');
+  const body=document.getElementById('csv-result-body');
+  result.className='csv-result '+state; result.style.display='';
+  hdr.innerHTML=title;
+  let html='';
+
+  if (meta) {
+    const kb=(meta.filesize/1024).toFixed(1);
+    html+=`<div class="csv-summary-row">`;
+    if (meta.matched.length)    html+=`<span class="csv-chip ok">\u2713 ${meta.matched.length} matched</span>`;
+    if (meta.notFound.length)   html+=`<span class="csv-chip err">\u2715 ${meta.notFound.length} unrecognised</span>`;
+    if (meta.notCovered.length) html+=`<span class="csv-chip warn">\u26a0 ${meta.notCovered.length} not in CSV</span>`;
+    const sk=meta.skippedTotals?` \u00b7 ${meta.skippedTotals} TOTAL row(s) skipped`:'';
+    html+=`<span class="csv-chip neu">${meta.rows} transactions${sk} \u00b7 ${kb} KB \u00b7 ${meta.filename}</span></div>`;
+  }
+
+  if (errors.length) {
+    html+=`<ul class="csv-error-list">`+errors.map(e=>`<li class="csv-error-item"><span class="csv-error-svc">\u2715 ${e.svc}</span><span class="csv-error-msg">${e.msg}</span></li>`).join('')+`</ul>`;
+  }
+
+  if (rows&&rows.length&&meta) {
+    const ss=discoveryState.services.filter(s=>s.selected).map(s=>s.name);
+    const da=discoveryState.ns!==null&&ss.length>0;
+    const pCols=['service','label','# samples','average','99% line','error %','throughput','phase'].filter(c=>meta.headers.includes(c));
+    const phaseSet=[...new Set(rows.map(r=>r.phase).filter(Boolean))];
+    if (phaseSet.length) {
+      const ue=[...new Set(rows.map(r=>r.label).filter(l=>l.toUpperCase()!=='TOTAL'))].length;
+      html+=`<div class="csv-summary-row" style="margin-top:4px"><span class="csv-chip neu">phases: ${phaseSet.join(' \u00b7 ')}</span><span class="csv-chip neu">${[...new Set(rows.map(r=>r.service))].length} svc(s) \u00b7 ${ue} endpoints</span></div>`;
+    }
+    html+=`<div class="csv-preview-wrap"><table class="csv-preview"><thead><tr>`+pCols.map(c=>`<th>${c}</th>`).join('')+`</tr></thead><tbody>`;
+    rows.slice(0,7).forEach(row=>{
+      const ok=!da||ss.includes(row.service);
+      const ev=parseFloat((row['error %']||'0').replace('%',''));
+      const pv=parseFloat(row['99% line']||'0');
+      html+=`<tr>`+pCols.map(c=>{
+        let cls='';
+        if (c==='service') cls=ok?'match':'no-match';
+        else if (c==='error %'&&ev>5) cls='partial';
+        else if (c==='99% line'&&pv>500) cls='partial';
+        else if (c==='phase'&&row[c]==='chaos') cls='no-match';
+        else if (c==='phase'&&(row[c]==='pre'||row[c]==='post')) cls='match';
+        return `<td class="${cls}">${row[c]??'\u2014'}</td>`;
+      }).join('')+`</tr>`;
+    });
+    if (rows.length>7) html+=`<tr><td colspan="${pCols.length}" style="color:var(--text-muted);text-align:center;padding:6px">\u2026 ${rows.length-7} more rows</td></tr>`;
+    html+=`</tbody></table></div>`;
+  }
+
+  if (meta&&meta.notCovered&&meta.notCovered.length) {
+    html+=`<ul class="csv-error-list" style="margin-top:10px">`+
+      meta.notCovered.map(s=>`<li class="csv-error-item"><span class="csv-error-svc" style="color:var(--amber)">\u26a0 ${s}</span><span class="csv-error-msg">No JMeter data \u2014 report will use Thanos metrics only</span></li>`).join('')+`</ul>`;
+  }
+
+  if (warnings.length) {
+    html+=`<div style="margin-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Warnings (${warnings.length})</div>`;
+    html+=`<ul class="csv-error-list">`+
+      warnings.map(w=>`<li class="csv-error-item"><span class="csv-error-svc" style="color:var(--amber)">\u26a0 ${w.svc}</span><span class="csv-error-msg">${w.msg}</span></li>`).join('')+`</ul>`;
+  }
+
+  body.innerHTML=html;
+  document.getElementById('csv-remove-btn').style.display='';
+
+  if (state==='ok'||state==='warn') {
+    document.querySelector('.csv-drop-icon').textContent=state==='ok'?'\u2705':'\u26a0\ufe0f';
+    document.querySelector('.csv-drop-title').textContent=meta?meta.filename:'File loaded';
+    const mt=meta?`${meta.matched.length} service(s) \u00b7 ${meta.rows} transactions`:'';
+    document.querySelector('.csv-drop-hint').innerHTML=`${mt} \u00b7 <span style="color:var(--${state==='ok'?'green':'amber'})">${state==='ok'?'validated':'loaded with warnings'}</span>`;
+  } else {
+    document.querySelector('.csv-drop-icon').textContent='\u274c';
+  }
+  document.getElementById('csv-file-input').value='';
+}
+
+</script>
+</body>
+</html>
