@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔥 Group 1 — Bible Quest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fire: #ff6b35;
+      --fire2: #ff4500;
+      --gold: #ffd700;
+      --glow: #ff8c42;
+      --bg1: #0d0208;
+      --bg2: #1a0510;
+      --card: rgba(255, 80, 30, 0.08);
+      --border: rgba(255, 107, 53, 0.3);
+      --real: #7eff9a;
+      --fake: #ff5f7e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg1);
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 107, 53, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 107, 53, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridScroll 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes gridScroll {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
+
+    /* Particles */
+    .sparks { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .spark {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--fire);
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(110vh) scale(1); opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(0); opacity: 0; }
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      animation: dropIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes dropIn {
+      from { transform: translateY(-60px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .group-tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55em;
+      color: var(--fire);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2em, 6vw, 3.2em);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 60px rgba(255, 107, 53, 0.3);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45em;
+      color: rgba(255,255,255,0.5);
+      margin-top: 10px;
+      letter-spacing: 2px;
+    }
+
+    /* XP / Score bar */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      animation: dropIn 0.6s 0.1s both;
+    }
+
+    .level-badge {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5em;
+      background: var(--fire2);
+      border-radius: 8px;
+      padding: 6px 10px;
+      white-space: nowrap;
+      box-shadow: 0 0 12px rgba(255,69,0,0.6);
+      flex-shrink: 0;
+    }
+
+    .xp-wrap { flex: 1; }
+    .xp-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4em;
+      color: var(--gold);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .xp-track {
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px;
+      height: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--fire2), var(--gold));
+      border-radius: 100px;
+      width: 0%;
+      transition: width 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+      position: relative;
+    }
+    .xp-fill::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 6px;
+      background: white;
+      border-radius: 100px;
+      opacity: 0.8;
+    }
+
+    .score-pill {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.6em;
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(255,215,0,0.5);
+      flex-shrink: 0;
+    }
+
+    /* Section labels */
+    .section-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5em;
+      letter-spacing: 3px;
+      margin: 20px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: dropIn 0.5s 0.15s both;
+    }
+    .section-label .line { flex: 1; height: 1px; background: var(--border); }
+    .section-label.real { color: var(--real); }
+    .section-label.fake { color: var(--fake); }
+
+    /* Verse cards */
+    .verse-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      animation: slideIn 0.4s both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .verse-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--fire);
+      border-radius: 3px 0 0 3px;
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .verse-card:hover {
+      transform: translateX(6px);
+      background: rgba(255, 107, 53, 0.15);
+      border-color: var(--fire);
+    }
+    .verse-card:hover::before { transform: scaleY(1); }
+
+    .verse-card.checked {
+      background: rgba(126, 255, 154, 0.08);
+      border-color: var(--real);
+    }
+    .verse-card.checked::before {
+      background: var(--real);
+      transform: scaleY(1);
+    }
+
+    .verse-card.fake-verse {
+      border-color: rgba(255, 95, 126, 0.2);
+    }
+    .verse-card.fake-verse::before { background: var(--fake); }
+    .verse-card.fake-verse:hover {
+      background: rgba(255, 95, 126, 0.1);
+      border-color: var(--fake);
+    }
+    .verse-card.fake-verse.checked {
+      background: rgba(255, 95, 126, 0.1);
+      border-color: var(--fake);
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Custom checkbox */
+    .check-box {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1em;
+      transition: all 0.2s;
+      background: rgba(255,255,255,0.05);
+    }
+    .verse-card.checked .check-box {
+      background: var(--real);
+      border-color: var(--real);
+      box-shadow: 0 0 12px rgba(126, 255, 154, 0.5);
+    }
+    .verse-card.fake-verse.checked .check-box {
+      background: var(--fake);
+      border-color: var(--fake);
+      box-shadow: 0 0 12px rgba(255, 95, 126, 0.5);
+    }
+
+    .verse-text {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 1.15em;
+      flex: 1;
+    }
+
+    .verse-icon {
+      font-size: 1.2em;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .verse-card:hover .verse-icon, .verse-card.checked .verse-icon { opacity: 1; }
+
+    /* Hint badge on fake verses (hidden by default) */
+    .trap-tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.35em;
+      background: rgba(255,95,126,0.2);
+      color: var(--fake);
+      border: 1px solid var(--fake);
+      padding: 3px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      letter-spacing: 1px;
+    }
+
+    /* Completion overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      gap: 20px;
+    }
+    .overlay.show { display: flex; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .overlay-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2em, 8vw, 4em);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 40px var(--gold);
+      animation: pulse 1s ease infinite alternate;
+    }
+    @keyframes pulse {
+      from { text-shadow: 0 0 20px var(--gold); transform: scale(1); }
+      to { text-shadow: 0 0 60px var(--gold), 0 0 100px var(--fire); transform: scale(1.04); }
+    }
+
+    .overlay-sub {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7em;
+      color: var(--fire);
+      letter-spacing: 2px;
+    }
+
+    .overlay-emoji { font-size: 4em; animation: spin 1.5s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .close-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6em;
+      background: var(--fire2);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 0 20px rgba(255,69,0,0.5);
+      transition: transform 0.15s;
+    }
+    .close-btn:hover { transform: scale(1.05); }
+
+    /* Floating +XP text */
+    .xp-popup {
+      position: fixed;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.4em;
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(255,215,0,0.8);
+      pointer-events: none;
+      z-index: 200;
+      animation: floatXP 1.2s ease forwards;
+    }
+    @keyframes floatXP {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      80% { opacity: 1; transform: translateY(-70px) scale(1.2); }
+      100% { opacity: 0; transform: translateY(-90px) scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sparks -->
+  <div class="sparks" id="sparks"></div>
+
+  <div class="wrapper">
+    <div class="header">
+      <span class="group-tag">⚔️ PLAYER SELECT ⚔️</span>
+      <h1>🔥 GROUP 1<br>BIBLE QUEST</h1>
+      <div class="subtitle">Find the real verses • Spot the fakes</div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="level-badge">LVL <span id="levelNum">1</span></div>
+      <div class="xp-wrap">
+        <div class="xp-label">
+          <span>XP</span>
+          <span id="xpText">0 / 15</span>
+        </div>
+        <div class="xp-track">
+          <div class="xp-fill" id="xpFill"></div>
+        </div>
+      </div>
+      <div class="score-pill" id="scoreNum">0</div>
+    </div>
+
+    <!-- Real verses -->
+    <div class="section-label real">
+      <div class="line"></div>
+      <span>📖 REAL VERSES</span>
+      <div class="line"></div>
+    </div>
+
+    <div id="verseList">
+      <!-- Real verses -->
+      <div class="verse-card" data-index="0" onclick="toggle(this, event)">
+        <div class="check-box" id="cb0">—</div>
+        <div class="verse-text">Genesis 1:1</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="1" onclick="toggle(this, event)">
+        <div class="check-box" id="cb1">—</div>
+        <div class="verse-text">Exodus 20:12</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="2" onclick="toggle(this, event)">
+        <div class="check-box" id="cb2">—</div>
+        <div class="verse-text">Psalm 23:1</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="3" onclick="toggle(this, event)">
+        <div class="check-box" id="cb3">—</div>
+        <div class="verse-text">Proverbs 3:5</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="4" onclick="toggle(this, event)">
+        <div class="check-box" id="cb4">—</div>
+        <div class="verse-text">Isaiah 40:31</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="5" onclick="toggle(this, event)">
+        <div class="check-box" id="cb5">—</div>
+        <div class="verse-text">Matthew 5:14</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="6" onclick="toggle(this, event)">
+        <div class="check-box" id="cb6">—</div>
+        <div class="verse-text">John 3:16</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="7" onclick="toggle(this, event)">
+        <div class="check-box" id="cb7">—</div>
+        <div class="verse-text">Romans 8:28</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="8" onclick="toggle(this, event)">
+        <div class="check-box" id="cb8">—</div>
+        <div class="verse-text">Philippians 4:13</div>
+        <div class="verse-icon">📜</div>
+      </div>
+      <div class="verse-card" data-index="9" onclick="toggle(this, event)">
+        <div class="check-box" id="cb9">—</div>
+        <div class="verse-text">1 Thessalonians 5:16</div>
+        <div class="verse-icon">📜</div>
+      </div>
+
+      <!-- Fake verses -->
+      <div class="section-label fake" style="animation-delay:0.3s">
+        <div class="line"></div>
+        <span>🚨 SPOT THE FAKES</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="verse-card fake-verse" data-index="10" onclick="toggle(this, event)">
+        <div class="check-box" id="cb10">—</div>
+        <div class="verse-text">Hezekiah 3:5</div>
+        <span class="trap-tag">⚠ TRAP?</span>
+        <div class="verse-icon">💀</div>
+      </div>
+      <div class="verse-card fake-verse" data-index="11" onclick="toggle(this, event)">
+        <div class="check-box" id="cb11">—</div>
+        <div class="verse-text">Matthew 29:11</div>
+        <span class="trap-tag">⚠ TRAP?</span>
+        <div class="verse-icon">💀</div>
+      </div>
+      <div class="verse-card fake-verse" data-index="12" onclick="toggle(this, event)">
+        <div class="check-box" id="cb12">—</div>
+        <div class="verse-text">Genesis 52:4</div>
+        <span class="trap-tag">⚠ TRAP?</span>
+        <div class="verse-icon">💀</div>
+      </div>
+      <div class="verse-card fake-verse" data-index="13" onclick="toggle(this, event)">
+        <div class="check-box" id="cb13">—</div>
+        <div class="verse-text">Jude 2:5</div>
+        <span class="trap-tag">⚠ TRAP?</span>
+        <div class="verse-icon">💀</div>
+      </div>
+      <div class="verse-card fake-verse" data-index="14" onclick="toggle(this, event)">
+        <div class="check-box" id="cb14">—</div>
+        <div class="verse-text">Revelations 5:10</div>
+        <span class="trap-tag">⚠ TRAP?</span>
+        <div class="verse-icon">💀</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Win overlay -->
+  <div class="overlay" id="winOverlay">
+    <div class="overlay-emoji">🏆</div>
+    <div class="overlay-title">QUEST<br>COMPLETE!</div>
+    <div class="overlay-sub">Group 1 Wins!! 🔥🔥🔥</div>
+    <button class="close-btn" onclick="document.getElementById('winOverlay').classList.remove('show')">▶ CONTINUE</button>
+  </div>
+
+  <script>
+    // Sparks
+    const sparksEl = document.getElementById('sparks');
+    for (let i = 0; i < 25; i++) {
+      const s = document.createElement('div');
+      s.className = 'spark';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.animationDuration = (4 + Math.random() * 8) + 's';
+      s.style.animationDelay = (Math.random() * 8) + 's';
+      s.style.width = s.style.height = (2 + Math.random() * 4) + 'px';
+      s.style.background = Math.random() > 0.5 ? '#ff6b35' : '#ffd700';
+      sparksEl.appendChild(s);
+    }
+
+    const checked = new Array(15).fill(false);
+    const scoreEl = document.getElementById('scoreNum');
+    const xpFill = document.getElementById('xpFill');
+    const xpText = document.getElementById('xpText');
+    const levelEl = document.getElementById('levelNum');
+
+    // Stagger slide-in
+    document.querySelectorAll('.verse-card').forEach((c, i) => {
+      c.style.animationDelay = (i * 0.06) + 's';
+    });
+
+    function toggle(card, e) {
+      const idx = parseInt(card.dataset.index);
+      checked[idx] = !checked[idx];
+      card.classList.toggle('checked', checked[idx]);
+
+      const cb = card.querySelector('.check-box');
+      cb.textContent = checked[idx] ? '✓' : '—';
+
+      const count = checked.filter(Boolean).length;
+      scoreEl.textContent = count;
+      xpFill.style.width = (count / 15 * 100) + '%';
+      xpText.textContent = count + ' / 15';
+      levelEl.textContent = count < 5 ? 1 : count < 10 ? 2 : count < 15 ? 3 : '⭐';
+
+      // Floating XP popup
+      if (checked[idx]) {
+        const popup = document.createElement('div');
+        popup.className = 'xp-popup';
+        popup.textContent = '+1 XP';
+        popup.style.left = (e.clientX - 20) + 'px';
+        popup.style.top = (e.clientY - 10) + 'px';
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 1200);
+      }
+
+      if (count === 15) {
+        setTimeout(() => {
+          document.getElementById('winOverlay').classList.add('show');
+          launchConfetti();
+        }, 400);
+      }
+    }
+
+    function launchConfetti() {
+      for (let i = 0; i < 60; i++) {
+        const c = document.createElement('div');
+        c.style.cssText = `
+          position:fixed;
+          left:${Math.random()*100}vw;
+          top:-10px;
+          width:${6+Math.random()*8}px;
+          height:${6+Math.random()*8}px;
+          background:${['#ffd700','#ff6b35','#7eff9a','#ff5f7e','white'][Math.floor(Math.random()*5)]};
+          border-radius:${Math.random()>0.5?'50%':'2px'};
+          z-index:300;
+          animation:fall ${1.5+Math.random()*2}s ease forwards;
+          animation-delay:${Math.random()*0.5}s;
+        `;
+        document.body.appendChild(c);
+        const style = document.createElement('style');
+        style.textContent = `@keyframes fall{to{transform:translateY(110vh) rotate(${Math.random()*720}deg);opacity:0;}}`;
+        document.head.appendChild(style);
+        setTimeout(()=>c.remove(), 3000);
+      }
+    }
+  </script>
+</body>
+</html>
