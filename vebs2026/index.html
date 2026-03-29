@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="VEBS 2026 Summer Camp Scoreboard — Track team scores across indoor, outdoor, and water games in real-time."/>
+<meta name="theme-color" content="#1A1A2E"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>"/>
 <title>VEBS 2026 🏆 Scoreboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
@@ -297,17 +303,94 @@ main{position:relative;z-index:1;padding:20px 16px 100px;max-width:700px;margin:
   .podium{gap:6px;}.podium-score{font-size:24px;}
   .sk-grid{grid-template-columns:1fr 1fr;}
 }
+
+/* ─── DARK MODE ─── */
+[data-theme="dark"]{
+  --bg:#121220;--card:#1E1E32;--dark:#F0F0F5;--muted:#8892A4;
+  --shadow:0 8px 32px rgba(0,0,0,0.35);
+}
+[data-theme="dark"] body{background:var(--bg);color:#E0E0E8;}
+[data-theme="dark"] body::before{
+  background-image:
+    radial-gradient(circle at 15% 20%,rgba(255,107,53,0.06) 0%,transparent 40%),
+    radial-gradient(circle at 85% 80%,rgba(17,138,178,0.06) 0%,transparent 40%),
+    radial-gradient(circle at 50% 50%,rgba(6,214,160,0.04) 0%,transparent 60%);}
+[data-theme="dark"] .card{background:var(--card);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+[data-theme="dark"] .game-card{background:var(--card);box-shadow:0 3px 12px rgba(0,0,0,0.25);}
+[data-theme="dark"] .rank-row{border-color:rgba(255,255,255,0.08);}
+[data-theme="dark"] .team-score-row{border-bottom-color:rgba(255,255,255,0.06);}
+[data-theme="dark"] .history-item{background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+[data-theme="dark"] .sk-modal{background:#1E1E32;}
+[data-theme="dark"] .sk-btn{background:#262640;border-color:#333;color:#E0E0E8;}
+[data-theme="dark"] .sk-btn:hover{border-color:var(--c4);background:rgba(17,138,178,0.12);}
+[data-theme="dark"] .sk-btn.selected{border-color:var(--c3);background:rgba(6,214,160,0.12);}
+[data-theme="dark"] .sk-item{background:#262640;border-color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+[data-theme="dark"] .sk-overlay{background:rgba(0,0,0,0.88);}
+[data-theme="dark"] .team-edit-card{background:rgba(255,255,255,0.04);}
+[data-theme="dark"] .team-name-input,
+[data-theme="dark"] .member-input,
+[data-theme="dark"] .sk-input,
+[data-theme="dark"] .custom-pts-row select,
+[data-theme="dark"] .custom-pts-row input{background:#262640;border-color:#444;color:#E0E0E8;}
+[data-theme="dark"] .member-chip{background:#262640;border-color:#444;color:#E0E0E8;}
+[data-theme="dark"] .game-audit{background:rgba(255,255,255,0.04);}
+[data-theme="dark"] .game-audit.fresh{background:rgba(6,214,160,0.08);color:#6EE7B7;}
+[data-theme="dark"] .game-audit.warn{background:rgba(255,210,63,0.08);color:#FCD34D;}
+[data-theme="dark"] .refresh-bar{background:rgba(17,138,178,0.12);}
+[data-theme="dark"] .btn-minus{background:#3D2030;color:var(--c5);}
+[data-theme="dark"] .bar-track{background:#2A2A40;}
+[data-theme="dark"] .btn-clear-history{background:#3D2030;}
+[data-theme="dark"] .toast{background:#2D2D5E;}
+.theme-toggle{background:none;border:2px solid rgba(255,255,255,0.2);border-radius:20px;padding:5px 12px;
+  font-size:16px;cursor:pointer;transition:all 0.2s;color:white;display:flex;align-items:center;gap:5px;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;}
+.theme-toggle:hover{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.08);}
+
+/* ─── LARGER BUTTONS (Accessibility) ─── */
+.btn-score{width:44px;height:44px;font-size:22px;}
+.tab{padding:14px 4px;font-size:12px;}
+.btn-apply{padding:10px 18px;font-size:13px;}
+.btn-add-sk{padding:12px 20px;font-size:14px;}
+.btn-add-member{padding:10px 18px;font-size:14px;}
+.sk-btn{padding:18px 12px;font-size:15px;}
+.btn-confirm-sk{padding:18px;font-size:26px;}
+.sk-skip{padding:12px;font-size:13px;}
+.btn-refresh{padding:8px 16px;font-size:13px;}
+.btn-clear-history{padding:14px 24px;font-size:14px;}
+.chip-remove{font-size:16px;padding:2px 4px;min-width:28px;min-height:28px;display:flex;align-items:center;justify-content:center;}
+.btn-remove-sk{font-size:18px;padding:8px 10px;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center;}
+.btn-remove-team{font-size:20px;padding:8px 10px;}
+.custom-pts-row select,.custom-pts-row input{padding:10px 12px;font-size:14px;}
+
+/* ─── UNDO BAR ─── */
+.undo-bar{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);
+  z-index:9997;background:var(--dark);color:var(--bg);padding:14px 22px;border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.3);display:flex;align-items:center;gap:14px;
+  font-weight:700;font-size:14px;transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);
+  max-width:90vw;}
+.undo-bar.visible{transform:translateX(-50%) translateY(0);}
+.btn-undo{padding:10px 18px;background:var(--c2);color:var(--dark);border:none;border-radius:10px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn-undo:hover{background:#FFE066;transform:scale(1.05);}
+[data-theme="dark"] .undo-bar{background:#E0E0E8;color:#1E1E32;}
+.kbd-hint{position:fixed;bottom:8px;right:12px;font-size:10px;color:var(--muted);font-weight:700;
+  opacity:0.5;z-index:1;display:none;}@media(min-width:768px){.kbd-hint{display:block;}}
 </style>
 </head>
 <body>
 
 <canvas id="confetti-canvas"></canvas>
 <div class="toast-container" id="toastContainer"></div>
+<div class="undo-bar" id="undoBar" role="alert">
+  <span id="undoText">Score changed</span>
+  <button class="btn-undo" id="btnUndo" onclick="undoLast()" aria-label="Undo last score change">↩ Undo</button>
+</div>
+<div class="kbd-hint" aria-hidden="true">⌨️ Shortcuts: ← → tabs · Ctrl+Z undo</div>
 
 <!-- ══════════════════════════════════
      SCOREKEEPER SELECTION MODAL
 ══════════════════════════════════ -->
-<div class="sk-overlay" id="skOverlay">
+<div class="sk-overlay" id="skOverlay" role="dialog" aria-modal="true" aria-label="Select scorekeeper">
   <div class="sk-modal">
     <div class="sk-modal-logo">
       <h1>VEBS <span>2026</span> 🏕️</h1>
@@ -336,6 +419,7 @@ main{position:relative;z-index:1;padding:20px 16px 100px;max-width:700px;margin:
       <small>🏕️ Summer Camp Scoreboard</small>
     </div>
     <div class="header-right">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌙 Dark</button>
       <div class="sync-badge"><div class="sync-dot"></div><span>Live Sync</span></div>
       <button class="sk-active-badge" id="skActiveBadge" onclick="showSkModal()">
         <div class="sk-active-dot"></div>
@@ -343,11 +427,11 @@ main{position:relative;z-index:1;padding:20px 16px 100px;max-width:700px;margin:
       </button>
     </div>
   </div>
-  <nav class="tabs">
-    <button class="tab active" onclick="switchPage('leaderboard')">🏆 Board</button>
-    <button class="tab" onclick="switchPage('scores')">🎮 Scores</button>
-    <button class="tab" onclick="switchPage('history')">📜 Log</button>
-    <button class="tab" onclick="switchPage('config')">⚙️ Config</button>
+  <nav class="tabs" role="tablist" aria-label="Scoreboard sections">
+    <button class="tab active" role="tab" aria-selected="true" onclick="switchPage('leaderboard')">🏆 Board</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="switchPage('scores')">🎮 Scores</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="switchPage('history')">📜 Log</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="switchPage('config')">⚙️ Config</button>
   </nav>
 </header>
 
@@ -362,7 +446,7 @@ main{position:relative;z-index:1;padding:20px 16px 100px;max-width:700px;margin:
   <div id="page-leaderboard" class="page" style="display:none">
     <div class="refresh-bar">
       <span>🔄 Auto-syncs every 10 sec</span>
-      <button class="btn-refresh" onclick="loadData(true)">Refresh Now</button>
+      <button class="btn-refresh" onclick="loadData(true)" aria-label="Refresh scores now">Refresh Now</button>
     </div>
     <div id="podium-container"></div>
     <div class="card">
@@ -379,7 +463,7 @@ main{position:relative;z-index:1;padding:20px 16px 100px;max-width:700px;margin:
 
   <!-- HISTORY -->
   <div id="page-history" class="page" style="display:none">
-    <button class="btn-clear-history" onclick="clearHistory()">🗑️ Clear History</button>
+    <button class="btn-clear-history" onclick="clearHistory()" aria-label="Clear all score history">🗑️ Clear History</button>
     <div id="history-content" class="history-list"></div>
   </div>
 
@@ -448,29 +532,53 @@ let state = { teams:[], scorekeepers:[], history:[], lastLeader:null, gameAudit:
 let activeKeeper = null;
 let selectedInModal = null;
 let saveTimer = null;
+let undoStack = [];
+let undoTimer = null;
+let confettiFrame = null;
 
 // ══════════════════════════════════════════
-//  STORAGE
+//  STORAGE (with localStorage fallback)
 // ══════════════════════════════════════════
+const storageAPI = {
+  async set(key, value) {
+    try {
+      if (window.storage && typeof window.storage.set === 'function') {
+        await window.storage.set(key, value, true);
+        return;
+      }
+    } catch(e) {}
+    try { localStorage.setItem(key, value); } catch(e) {}
+  },
+  async get(key) {
+    try {
+      if (window.storage && typeof window.storage.get === 'function') {
+        const r = await window.storage.get(key, true);
+        if (r && r.value) return r.value;
+      }
+    } catch(e) {}
+    try { return localStorage.getItem(key); } catch(e) { return null; }
+  }
+};
+
 async function saveData() {
   try {
-    await window.storage.set(STORAGE_KEY, JSON.stringify(state), true);
+    await storageAPI.set(STORAGE_KEY, JSON.stringify(state));
     showSaveStatus('saved');
   } catch(e) { showSaveStatus('error'); }
 }
 
-async function loadData(showToast=false) {
+async function loadData(isRefresh=false) {
   try {
-    const r = await window.storage.get(STORAGE_KEY, true);
-    if (r && r.value) {
-      const loaded = JSON.parse(r.value);
+    const raw = await storageAPI.get(STORAGE_KEY);
+    if (raw) {
+      const loaded = JSON.parse(raw);
       if (loaded.teams && loaded.teams.length > 0) state = loaded;
     }
   } catch(e) {}
   if (!state.gameAudit) state.gameAudit = {};
   if (!state.scorekeepers) state.scorekeepers = [];
   renderAll();
-  if (showToast) showToast_('🔄 Scores refreshed!');
+  if (isRefresh) showToast_('🔄 Scores refreshed!');
 }
 
 function showSaveStatus(s) {
@@ -502,10 +610,15 @@ function initDefault() {
 
 async function init() {
   initDefault();
+  loadTheme();
   await loadData();
   document.getElementById('loadingScreen').style.display='none';
   showSkModal();
   setInterval(loadData, POLL_INTERVAL);
+  // Register service worker for offline support
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
 }
 
 // ══════════════════════════════════════════
@@ -516,6 +629,11 @@ function showSkModal() {
   document.getElementById('btnConfirmSk').disabled = true;
   renderSkModal();
   document.getElementById('skOverlay').style.display = 'flex';
+  // Focus management for accessibility
+  setTimeout(() => {
+    const firstBtn = document.querySelector('#skGrid .sk-btn, .sk-skip');
+    if (firstBtn) firstBtn.focus();
+  }, 120);
 }
 
 function renderSkModal() {
@@ -580,7 +698,8 @@ function adjustScore(teamId, gameId, delta, gameName, teamName) {
   const team = state.teams.find(t=>t.id===teamId);
   if (!team) return;
   if (!team.scores) team.scores={};
-  team.scores[gameId] = Math.max(0,(team.scores[gameId]||0)+delta);
+  const previousScore = team.scores[gameId] || 0;
+  team.scores[gameId] = Math.max(0, previousScore + delta);
 
   // Audit record for this game
   const now = new Date();
@@ -593,14 +712,21 @@ function adjustScore(teamId, gameId, delta, gameName, teamName) {
   };
 
   // History
+  const historyId = 'h_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
   state.history.unshift({
-    id:Date.now(), teamId, teamName, gameId, gameName, delta,
+    id:historyId, teamId, teamName, gameId, gameName, delta,
     newScore:team.scores[gameId], total:getTotalScore(team),
     time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
     keeperName:activeKeeper.name, keeperColorIdx:activeKeeper.colorIdx,
     type:delta>0?'positive':'negative'
   });
   if (state.history.length>100) state.history.pop();
+
+  // Undo stack
+  undoStack.push({ teamId, gameId, previousScore, historyId,
+    description: `${delta>0?'+':''}${delta} ${gameName} (${teamName})` });
+  if (undoStack.length > 20) undoStack.shift();
+  showUndo(`${delta>0?'+':''}${delta} to ${teamName}`);
 
   checkLeaderChange();
   scheduleSave();
@@ -747,8 +873,8 @@ function renderScores() {
           return `<div class="team-score-row" id="row-${team.id}-${game.id}">
             <div class="tsrow-name" style="color:${TEAM_COLORS[ci]}">${esc(team.name)}</div>
             <div class="tsrow-score" id="score-${team.id}-${game.id}" style="color:${TEAM_COLORS[ci]}">${score}</div>
-            <button class="btn-score btn-minus" onclick="adjustScore('${team.id}','${game.id}',-1,'${esc(game.name)}','${esc(team.name)}')">−</button>
-            <button class="btn-score btn-plus" onclick="adjustScore('${team.id}','${game.id}',1,'${esc(game.name)}','${esc(team.name)}')">+</button>
+            <button class="btn-score btn-minus" data-action="adjust" data-team="${team.id}" data-game="${game.id}" data-delta="-1" aria-label="Subtract point from ${esc(team.name)}">−</button>
+            <button class="btn-score btn-plus" data-action="adjust" data-team="${team.id}" data-game="${game.id}" data-delta="1" aria-label="Add point to ${esc(team.name)}">+</button>
           </div>`;
         }).join('')}
         <div class="custom-pts-row">
@@ -816,7 +942,7 @@ function renderTeams() {
       </div>
       <div class="members-area">
         ${(team.members||[]).map(m=>`<span class="member-chip">${esc(m)}
-          <button class="chip-remove" onclick="removeMember('${team.id}','${esc(m)}')">✕</button>
+          <button class="chip-remove" data-action="remove-member" data-team="${team.id}" data-member="${esc(m)}" aria-label="Remove ${esc(m)} from team">✕</button>
         </span>`).join('')}
         ${(team.members||[]).length===0?'<span style="font-size:12px;color:var(--muted);font-weight:700">No members yet</span>':''}
       </div>
@@ -930,19 +1056,20 @@ function clearHistory(){
 // ══════════════════════════════════════════
 function switchPage(page){
   document.querySelectorAll('.page').forEach(p=>p.style.display='none');
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
   const pg=document.getElementById('page-'+page);
   if(pg) pg.style.display='block';
   const order=['leaderboard','scores','history','config'];
   const tabs=document.querySelectorAll('.tab');
   const idx=order.indexOf(page);
-  if(tabs[idx]) tabs[idx].classList.add('active');
+  if(tabs[idx]){tabs[idx].classList.add('active');tabs[idx].setAttribute('aria-selected','true');}
 }
 
 // ══════════════════════════════════════════
 //  CONFETTI
 // ══════════════════════════════════════════
 function launchConfetti(){
+  if (confettiFrame) cancelAnimationFrame(confettiFrame);
   const canvas=document.getElementById('confetti-canvas');
   const ctx=canvas.getContext('2d');
   canvas.width=window.innerWidth;canvas.height=window.innerHeight;
@@ -954,7 +1081,6 @@ function launchConfetti(){
     vx:(Math.random()-0.5)*4,vy:Math.random()*4+2,
     rot:Math.random()*360,vr:(Math.random()-0.5)*8,alpha:1
   }));
-  let frame;
   (function animate(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     pieces.forEach(p=>{
@@ -963,8 +1089,8 @@ function launchConfetti(){
       ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
       ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();
     });
-    if(pieces.some(p=>p.alpha>0)){frame=requestAnimationFrame(animate);}
-    else ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(pieces.some(p=>p.alpha>0)){confettiFrame=requestAnimationFrame(animate);}
+    else{ctx.clearRect(0,0,canvas.width,canvas.height);confettiFrame=null;}
   })();
 }
 
@@ -985,6 +1111,106 @@ function esc(s){
   if(!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
+
+// ══════════════════════════════════════════
+//  GAME LOOKUP
+// ══════════════════════════════════════════
+function findGameById(id) {
+  for (const cat of Object.values(GAMES)) {
+    const g = cat.find(g => g.id === id);
+    if (g) return g;
+  }
+  return null;
+}
+
+// ══════════════════════════════════════════
+//  UNDO
+// ══════════════════════════════════════════
+function showUndo(description) {
+  document.getElementById('undoText').textContent = description;
+  document.getElementById('undoBar').classList.add('visible');
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(hideUndo, 8000);
+}
+function hideUndo() {
+  document.getElementById('undoBar').classList.remove('visible');
+  clearTimeout(undoTimer);
+}
+function undoLast() {
+  if (undoStack.length === 0) { showToast_('Nothing to undo'); return; }
+  const entry = undoStack.pop();
+  const team = state.teams.find(t => t.id === entry.teamId);
+  if (!team) { showToast_('⚠️ Team no longer exists'); hideUndo(); return; }
+  if (!team.scores) team.scores = {};
+  team.scores[entry.gameId] = entry.previousScore;
+  state.history = state.history.filter(h => h.id !== entry.historyId);
+  hideUndo();
+  scheduleSave();
+  renderAll();
+  showToast_(`↩ Undone: ${entry.description}`);
+}
+
+// ══════════════════════════════════════════
+//  DARK MODE
+// ══════════════════════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+  html.setAttribute('data-theme', newTheme);
+  try { localStorage.setItem('vebs_theme', newTheme); } catch(e) {}
+  updateThemeButton(newTheme);
+}
+function loadTheme() {
+  let theme = 'light';
+  try { theme = localStorage.getItem('vebs_theme') || 'light'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeButton(theme);
+}
+function updateThemeButton(theme) {
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+}
+
+// ══════════════════════════════════════════
+//  EVENT DELEGATION (fixes XSS onclick bug)
+// ══════════════════════════════════════════
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  if (action === 'adjust') {
+    const teamId = btn.dataset.team;
+    const gameId = btn.dataset.game;
+    const delta = parseInt(btn.dataset.delta);
+    const team = state.teams.find(t => t.id === teamId);
+    const game = findGameById(gameId);
+    if (team && game) adjustScore(teamId, gameId, delta, game.name, team.name);
+  } else if (action === 'remove-member') {
+    const teamId = btn.dataset.team;
+    const member = btn.dataset.member;
+    removeMember(teamId, member);
+  }
+});
+
+// ══════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ══════════════════════════════════════════
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+  // Escape closes modal
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('skOverlay');
+    if (overlay && overlay.style.display === 'flex') { skipScorekeeper(); return; }
+  }
+  // Ctrl/Cmd+Z to undo
+  if (e.key === 'z' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); undoLast(); return; }
+  // Arrow keys to switch tabs
+  const pages = ['leaderboard','scores','history','config'];
+  const current = pages.findIndex(p => { const el = document.getElementById('page-'+p); return el && el.style.display === 'block'; });
+  if (e.key === 'ArrowRight' && current < pages.length - 1) switchPage(pages[current + 1]);
+  if (e.key === 'ArrowLeft' && current > 0) switchPage(pages[current - 1]);
+});
 
 window.addEventListener('load',init);
 </script>
