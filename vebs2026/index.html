@@ -701,6 +701,18 @@ async function init() {
   document.getElementById('loadingScreen').style.display='none';
   showSkModal();
   setInterval(loadData, POLL_INTERVAL);
+  // Instant sync when user returns to the tab (critical for cross-device)
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      loadData();
+      flashSyncBadge();
+    }
+  });
+  // Also sync on window focus (covers alt-tab between browser windows)
+  window.addEventListener('focus', () => {
+    loadData();
+    flashSyncBadge();
+  });
   // Register service worker for offline support
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
