@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance Data Processor</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
+  .app { max-width: 880px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+  .header { margin-bottom: 1.75rem; }
+  .header h1 { font-size: 22px; font-weight: 600; color: #111; }
+  .header p  { font-size: 13px; color: #666; margin-top: 4px; }
+  .card { background: #fff; border: 1px solid #e5e5e3; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #999; margin-bottom: 10px; }
+  .upload-zone { border: 1.5px dashed #ccc; border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: background .15s, border-color .15s; position: relative; }
+  .upload-zone:hover, .upload-zone.drag-over { background: #f9f9f7; border-color: #1D9E75; }
+  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-zone .up-icon { font-size: 24px; margin-bottom: 6px; color: #aaa; }
+  .upload-zone p { font-size: 14px; color: #555; }
+  .fmt-badges { display: flex; gap: 6px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
+  .fmt-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+  .fmt-csv  { background: #dcfce7; color: #166534; }
+  .fmt-xlsx { background: #dbeafe; color: #1e40af; }
+  .fmt-pdf  { background: #fee2e2; color: #991b1b; }
+  .file-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .file-chip { display: flex; align-items: center; gap: 8px; background: #f5f5f3; border-radius: 8px; padding: 7px 10px; font-size: 13px; }
+  .fname { flex: 1; color: #222; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+  .badge-template { background: #dbeafe; color: #1e40af; }
+  .badge-bank     { background: #dcfce7; color: #166534; }
+  .badge-card     { background: #fef3c7; color: #92400e; }
+  .badge-pdf      { background: #fee2e2; color: #991b1b; }
+  .parse-status      { font-size: 11px; white-space: nowrap; }
+  .parse-status.ok   { color: #166534; }
+  .parse-status.err  { color: #991b1b; }
+  .parse-status.busy { color: #555; }
+  .remove-btn { cursor: pointer; color: #aaa; font-size: 18px; line-height: 1; padding: 0 2px; border: none; background: none; }
+  .remove-btn:hover { color: #dc2626; }
+  .pdf-note { font-size: 12px; color: #888; margin-top: 8px; padding: 8px 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; line-height: 1.5; }
+  /* AI Config */
+  .ai-config-grid { display: grid; grid-template-columns: auto auto 1fr; gap: 12px; align-items: end; }
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+  .field-label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
+  .field-label small { font-weight: 400; text-transform: none; letter-spacing: 0; color: #aaa; }
+  select.ai-sel, input.ai-inp { padding: 8px 10px; font-size: 13px; border: 1px solid #ddd; border-radius: 7px; background: #fff; color: #111; outline: none; transition: border-color .15s; }
+  select.ai-sel:focus, input.ai-inp:focus { border-color: #1D9E75; }
+  select.ai-sel { min-width: 170px; }
+  .model-sel { min-width: 210px; }
+  .apikey-field { position: relative; }
+  .apikey-field input { width: 100%; padding-right: 38px; }
+  .eye-btn { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #bbb; font-size: 15px; padding: 2px; line-height: 1; }
+  .eye-btn:hover { color: #555; }
+  .native-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #0a6640; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 6px 10px; margin-top: 8px; }
+  .rec-note { font-size: 11px; color: #888; margin-top: 4px; }
+  .rec-note b { color: #1D9E75; font-weight: 600; }
+  /* Month */
+  .month-picker-row { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .year-ctrl { display: flex; align-items: center; gap: 6px; padding-top: 4px; }
+  .year-btn  { width: 28px; height: 28px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: #333; }
+  .year-btn:hover { background: #f5f5f3; }
+  .year-display { font-size: 15px; font-weight: 600; color: #111; min-width: 40px; text-align: center; }
+  .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; flex: 1; min-width: 260px; }
+  .month-btn { padding: 7px 4px; font-size: 12px; text-align: center; border: 1px solid #e5e5e3; border-radius: 6px; cursor: pointer; color: #555; background: #fff; transition: all .1s; }
+  .month-btn:hover { background: #f5f5f3; border-color: #bbb; }
+  .month-btn.selected { background: #e6f9f2; border-color: #1D9E75; color: #0a5c3c; font-weight: 600; }
+  .selected-pill { display: inline-block; margin-top: 10px; font-size: 13px; color: #555; }
+  .selected-pill strong { color: #111; }
+  /* Account */
+  .acct-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .acct-row label { font-size: 13px; color: #555; min-width: 200px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .acct-row select { flex: 1; padding: 6px 8px; font-size: 13px; border: 1px solid #ddd; border-radius: 6px; background: #fff; color: #111; }
+  /* Process */
+  .process-btn { width: 100%; padding: 11px; font-size: 14px; font-weight: 600; background: #111; color: #fff; border: none; border-radius: 8px; cursor: pointer; transition: background .15s; }
+  .process-btn:hover:not(:disabled) { background: #333; }
+  .process-btn:disabled { background: #ccc; cursor: not-allowed; }
+  .status-bar { font-size: 13px; color: #666; margin-top: 10px; min-height: 20px; display: flex; align-items: center; gap: 8px; }
+  .spinner { width: 14px; height: 14px; border: 2px solid #ddd; border-top-color: #666; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .progress-track { height: 3px; background: #eee; border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .progress-fill  { height: 100%; background: #1D9E75; border-radius: 2px; transition: width .4s ease; }
+  .error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 13px; color: #991b1b; line-height: 1.5; }
+  /* Results */
+  .tabs { display: flex; margin-bottom: 1rem; border-bottom: 1px solid #e5e5e3; }
+  .tab { padding: 8px 16px; font-size: 13px; cursor: pointer; color: #888; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; border-top: none; border-left: none; border-right: none; }
+  .tab:hover { color: #333; }
+  .tab.active { color: #111; border-bottom-color: #111; font-weight: 600; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1rem; }
+  .stat-card  { background: #f9f9f7; border-radius: 8px; padding: 12px; }
+  .stat-label { font-size: 11px; color: #888; margin-bottom: 3px; }
+  .stat-value { font-size: 18px; font-weight: 600; color: #111; }
+  .stat-sub   { font-size: 11px; color: #aaa; margin-top: 2px; }
+  .pos { color: #0a6640; } .neg { color: #b91c1c; }
+  .table-wrap { overflow-x: auto; border: 1px solid #e5e5e3; border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 700px; }
+  th { background: #f9f9f7; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #888; padding: 9px 10px; text-align: left; border-bottom: 1px solid #e5e5e3; white-space: nowrap; }
+  td { padding: 8px 10px; border-bottom: 1px solid #f0f0ee; color: #222; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafaf8; }
+  .cat-pill { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+  .cat-food{background:#fef3c7;color:#92400e}.cat-groceries{background:#dcfce7;color:#166534}
+  .cat-travel{background:#dbeafe;color:#1e3a8a}.cat-shopping{background:#fce7f3;color:#9d174d}
+  .cat-recurring{background:#ede9fe;color:#4c1d95}.cat-transfer{background:#f3f4f6;color:#374151}
+  .cat-giving{background:#ffedd5;color:#9a3412}.cat-tithe{background:#fef9c3;color:#713f12}
+  .cat-dividends{background:#d1fae5;color:#065f46}.cat-saving{background:#cffafe;color:#164e63}
+  .cat-creditcard{background:#fee2e2;color:#991b1b}.cat-fine{background:#fef2f2;color:#7f1d1d}
+  .cat-miscellaneous{background:#f3f4f6;color:#6b7280}
+  .action-row { display: flex; gap: 8px; margin-top: 12px; }
+  .dl-btn  { flex: 1; padding: 9px; font-size: 13px; font-weight: 600; background: #fff; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; color: #111; }
+  .dl-btn:hover { background: #f5f5f3; }
+  .sec-btn { padding: 9px 16px; font-size: 13px; background: #fff; border: 1px solid #e5e5e3; border-radius: 8px; cursor: pointer; color: #666; }
+  .sec-btn:hover { background: #f5f5f3; }
+  .cat-breakdown { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .cat-row-s { display: flex; align-items: center; gap: 10px; }
+  .cat-row-s .cn { min-width: 120px; font-size: 13px; }
+  .bar-wrap { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: #1D9E75; border-radius: 4px; }
+  .cat-row-s .ca { min-width: 90px; text-align: right; font-size: 12px; color: #888; }
+  .tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .tag { font-size: 12px; padding: 3px 9px; border-radius: 4px; background: #f3f4f6; color: #374151; }
+  @media (max-width: 680px) {
+    .ai-config-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .month-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>Finance data processor</h1>
+    <p>Upload bank &amp; credit card statements — extract, clean, and categorize transactions for any month</p>
+  </div>
+
+  <!-- Upload -->
+  <div class="card">
+    <div class="section-label">Upload files</div>
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" multiple accept=".csv,.xls,.xlsx,.txt,.pdf">
+      <div class="up-icon">&#11014;</div>
+      <p>Drop files here or click to browse</p>
+      <div class="fmt-badges">
+        <span class="fmt-badge fmt-csv">CSV</span>
+        <span class="fmt-badge fmt-xlsx">XLS / XLSX</span>
+        <span class="fmt-badge fmt-pdf">PDF</span>
+      </div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+    <div class="pdf-note" id="pdfNote" style="display:none">
+      &#128196; PDF files are parsed in-browser using PDF.js. Password-protected or image-only (scanned) PDFs cannot be parsed automatically.
+    </div>
+  </div>
+
+  <!-- AI Config -->
+  <div class="card">
+    <div class="section-label">AI configuration</div>
+    <div class="ai-config-grid">
+      <div class="field-group">
+        <div class="field-label">Provider</div>
+        <select class="ai-sel" id="providerSelect">
+          <option value="native">&#9989; Claude — native (no key needed)</option>
+          <option value="claude">Claude API</option>
+          <option value="openai">ChatGPT (OpenAI)</option>
+          <option value="gemini">Gemini (Google)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Model</div>
+        <select class="ai-sel model-sel" id="modelSelect"></select>
+        <div class="rec-note" id="recNote"></div>
+      </div>
+      <div class="field-group" id="apikeyGroup" style="display:none">
+        <div class="field-label">API key <small>(session only — never stored)</small></div>
+        <div class="apikey-field">
+          <input class="ai-inp" type="password" id="apikeyInput" placeholder="Paste your API key&#8230;" autocomplete="off" spellcheck="false">
+          <button class="eye-btn" id="eyeBtn" title="Toggle visibility">&#128065;</button>
+        </div>
+      </div>
+    </div>
+    <div class="native-badge" id="nativeBadge" style="display:none">
+      &#9989; Running inside Claude.ai — native Claude is used automatically. No API key required.
+    </div>
+  </div>
+
+  <!-- Month Picker -->
+  <div class="card">
+    <div class="section-label">Select month to extract</div>
+    <div class="month-picker-row">
+      <div class="year-ctrl">
+        <button class="year-btn" id="yearDown">&#8249;</button>
+        <span class="year-display" id="yearDisplay">2026</span>
+        <button class="year-btn" id="yearUp">&#8250;</button>
+      </div>
+      <div class="month-grid" id="monthGrid"></div>
+    </div>
+    <div class="selected-pill" id="selectedLabel">Extracting: <strong>March 2026</strong></div>
+  </div>
+
+  <!-- Account Mapping -->
+  <div class="card" id="accountCard" style="display:none">
+    <div class="section-label">Account mapping</div>
+    <p style="font-size:13px;color:#888;margin-bottom:10px;">Assign each file to a bank account</p>
+    <div id="accountRows"></div>
+  </div>
+
+  <!-- Process -->
+  <div class="card">
+    <button class="process-btn" id="processBtn" disabled>Process statements with AI</button>
+    <div class="status-bar" id="statusBar"></div>
+    <div class="progress-track" style="display:none" id="progressTrack">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div id="errorBox"></div>
+  </div>
+
+  <!-- Results -->
+  <div id="resultsSection" style="display:none">
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" id="tabTx">Transactions</button>
+        <button class="tab" id="tabSum">Summary</button>
+      </div>
+      <div id="tab-transactions">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Date</th><th>Type</th><th>Account</th><th>Category</th>
+              <th>Details</th><th>Mode</th><th style="text-align:right">Amount (&#8377;)</th>
+            </tr></thead>
+            <tbody id="txBody"></tbody>
+          </table>
+        </div>
+        <div class="action-row">
+          <button class="dl-btn" id="dlBtn1">&#11015; Download CSV</button>
+          <button class="sec-btn" id="toSummaryBtn">View summary &#8594;</button>
+        </div>
+      </div>
+      <div id="tab-summary" style="display:none">
+        <div id="summaryContent"></div>
+        <div class="action-row"><button class="dl-btn" id="dlBtn2">&#11015; Download CSV</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+
+/* ─── constants ─────────────────────────────────────────────────────────── */
+const MONTHS      = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const ACCOUNTS    = ['Kotak','ICICI Amazon','ICICI Rupay','HDFC','SBI','Axis','OneCard','Unknown'];
+
+const MODELS = {
+  native: [{ id:'claude-sonnet-4-6', label:'Claude Sonnet 4.6', rec:true }],
+  claude: [
+    { id:'claude-sonnet-4-6',          label:'Claude Sonnet 4.6 ★ recommended', rec:true },
+    { id:'claude-opus-4-5',            label:'Claude Opus 4.5' },
+    { id:'claude-haiku-4-5-20251001',  label:'Claude Haiku 4.5 (fast)' },
+  ],
+  openai: [
+    { id:'gpt-4.5',     label:'GPT-4.5 ★ recommended', rec:true },
+    { id:'gpt-4.5-mini',label:'GPT-4.5-mini' },
+    { id:'gpt-4o',      label:'GPT-4o' },
+    { id:'gpt-4o-mini', label:'GPT-4o Mini (fast)' },
+    { id:'o3',          label:'o3' },
+    { id:'o4-mini',     label:'o4-mini' },
+  ],
+  gemini: [
+    { id:'gemini-2.5-pro-preview-05-06',   label:'Gemini 2.5 Pro ★ recommended', rec:true },
+    { id:'gemini-2.5-flash-preview-04-17', label:'Gemini 2.5 Flash (fast)' },
+    { id:'gemini-2.0-flash',               label:'Gemini 2.0 Flash' },
+  ]
+};
+
+const REC_NOTES = {
+  native: '',
+  claude: 'Recommended: <b>Claude Sonnet 4.6</b> — best balance of speed &amp; accuracy',
+  openai: 'Recommended: <b>GPT-4.5</b> — OpenAI latest flagship',
+  gemini: 'Recommended: <b>Gemini 2.5 Pro</b> — Google latest flagship',
+};
+
+/* ─── state ─────────────────────────────────────────────────────────────── */
+let uploadedFiles = [], processedRows = [], selYear = 2026, selMonth = 2;
+
+/* ─── helpers ───────────────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmt    = n => Math.abs(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtInt = n => Math.round(n).toLocaleString('en-IN');
+const catCls = d => 'cat-' + ({Food:'food',Groceries:'groceries',Travel:'travel',Shopping:'shopping',Recurring:'recurring',Transfer:'transfer',Giving:'giving',Tithe:'tithe',Dividends:'dividends',Saving:'saving','Credit Card':'creditcard',Fine:'fine',Miscellaneous:'miscellaneous'}[d]||'miscellaneous');
+const setStatus   = (m,s) => { $('statusBar').innerHTML = s ? `<div class="spinner"></div><span>${m}</span>` : `<span>${m}</span>`; };
+const setProgress = p  => { $('progressTrack').style.display='block'; $('progressFill').style.width=p+'%'; };
+
+/* ─── native env detection ──────────────────────────────────────────────── */
+function isNative() {
+  if (typeof window.claude !== 'undefined') return true;
+  try {
+    const ref = document.referrer || '';
+    return ref.includes('claude.ai') || ref.includes('anthropic.com');
+  } catch { return false; }
+}
+
+/* ─── AI config ─────────────────────────────────────────────────────────── */
+function initAiConfig() {
+  const native = isNative();
+  const pSel   = $('providerSelect');
+  const nOpt   = pSel.querySelector('option[value=native]');
+
+  if (!native) {
+    nOpt.textContent = 'Claude — native (only in Claude.ai)';
+    nOpt.disabled    = true;
+    pSel.value       = 'claude';
+  } else {
+    pSel.value = 'native';
+  }
+
+  refreshModelList();
+  pSel.addEventListener('change', refreshModelList);
+  $('eyeBtn').addEventListener('click', () => {
+    const i = $('apikeyInput');
+    i.type  = i.type === 'password' ? 'text' : 'password';
+  });
+}
+
+function refreshModelList() {
+  const p    = $('providerSelect').value;
+  const mods = MODELS[p] || [];
+  $('modelSelect').innerHTML = mods.map(m => `<option value="${m.id}">${esc(m.label)}</option>`).join('');
+  const rec = mods.find(m => m.rec);
+  if (rec) $('modelSelect').value = rec.id;
+
+  const needKey = (p !== 'native');
+  $('apikeyGroup').style.display = needKey ? 'block' : 'none';
+  $('nativeBadge').style.display = (p === 'native' && isNative()) ? 'flex' : 'none';
+  $('recNote').innerHTML = REC_NOTES[p] || '';
+  updateProcessBtn();
+}
+
+function getConfig() {
+  return { provider: $('providerSelect').value, model: $('modelSelect').value, key: $('apikeyInput').value.trim() };
+}
+
+function validateConfig() {
+  const { provider, key } = getConfig();
+  if (provider === 'native') return null;
+  if (!key) return 'Please enter an API key for the selected provider.';
+  if (provider === 'claude' && !key.startsWith('sk-ant-')) return "Claude API keys start with 'sk-ant-' — please check your key.";
+  if (provider === 'openai' && !key.startsWith('sk-'))     return "OpenAI API keys start with 'sk-' — please check your key.";
+  return null;
+}
+
+/* ─── LLM dispatch ──────────────────────────────────────────────────────── */
+async function callLLM(prompt) {
+  const { provider, model, key } = getConfig();
+  if (provider === 'native' || provider === 'claude') return callClaude(prompt, model, key);
+  if (provider === 'openai')  return callOpenAI(prompt, model, key);
+  if (provider === 'gemini')  return callGemini(prompt, model, key);
+  throw new Error('Unknown provider');
+}
+
+async function callClaude(prompt, model, key) {
+  // In native context window.claude.complete may be available
+  if (typeof window.claude !== 'undefined' && typeof window.claude.complete === 'function') {
+    return await window.claude.complete(prompt);
+  }
+  const headers = {
+    'Content-Type': 'application/json',
+    'anthropic-version': '2023-06-01',
+    'anthropic-dangerous-direct-browser-access': 'true'
+  };
+  if (key) headers['x-api-key'] = key;
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST', headers,
+    body: JSON.stringify({ model, max_tokens: 4096, messages: [{ role:'user', content: prompt }] })
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error?.message || `Claude API ${r.status}`); }
+  const d = await r.json();
+  return d.content.map(b => b.text||'').join('');
+}
+
+async function callOpenAI(prompt, model, key) {
+  const r = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({ model, max_tokens: 4096, messages:[{ role:'user', content: prompt }] })
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error?.message || `OpenAI API ${r.status}`); }
+  return (await r.json()).choices?.[0]?.message?.content || '';
+}
+
+async function callGemini(prompt, model, key) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+  const r = await fetch(url, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ contents:[{parts:[{text:prompt}]}], generationConfig:{maxOutputTokens:4096} })
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error?.message || `Gemini API ${r.status}`); }
+  const d = await r.json();
+  return d.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+}
+
+/* ─── month picker ──────────────────────────────────────────────────────── */
+function renderMonthGrid() {
+  $('monthGrid').innerHTML = MONTHS.map((m,i)=>`<button class="month-btn ${i===selMonth?'selected':''}" data-idx="${i}">${m}</button>`).join('');
+  $('selectedLabel').innerHTML = `Extracting: <strong>${MONTH_NAMES[selMonth]} ${selYear}</strong>`;
+  updateProcessBtn();
+}
+$('monthGrid').addEventListener('click', e => { const b=e.target.closest('.month-btn'); if(!b)return; selMonth=+b.dataset.idx; renderMonthGrid(); });
+$('yearDown').addEventListener('click', ()=>{ selYear--; $('yearDisplay').textContent=selYear; renderMonthGrid(); });
+$('yearUp').addEventListener('click',   ()=>{ selYear++; $('yearDisplay').textContent=selYear; renderMonthGrid(); });
+
+/* ─── file upload ───────────────────────────────────────────────────────── */
+const uz = $('uploadZone');
+$('fileInput').addEventListener('change', e => addFiles(Array.from(e.target.files)));
+uz.addEventListener('dragover',  e=>{ e.preventDefault(); uz.classList.add('drag-over'); });
+uz.addEventListener('dragleave', ()=> uz.classList.remove('drag-over'));
+uz.addEventListener('drop', e=>{ e.preventDefault(); uz.classList.remove('drag-over'); addFiles(Array.from(e.dataTransfer.files)); });
+
+function addFiles(files) {
+  files.forEach(f => {
+    if (uploadedFiles.find(u=>u.name===f.name)) return;
+    const isPdf=/\.pdf$/i.test(f.name), isTemplate=/march|template/i.test(f.name), isCreditCard=/credit|card/i.test(f.name);
+    const entry={ file:f, name:f.name, account:guessAccount(f.name), isTemplate, isCreditCard, isPdf, parsedText:null, parseStatus:isPdf?'busy':'ok', parseError:'' };
+    uploadedFiles.push(entry);
+    if (isPdf) parsePdf(entry);
+  });
+  renderFileList(); renderAccountRows(); updateProcessBtn();
+  $('pdfNote').style.display = uploadedFiles.some(f=>f.isPdf)?'block':'none';
+}
+
+function guessAccount(n) {
+  if (/kotak/i.test(n))                          return 'Kotak';
+  if (/icici.*amazon|amazon.*icici/i.test(n))    return 'ICICI Amazon';
+  if (/icici.*rupay|rupay.*icici/i.test(n))      return 'ICICI Rupay';
+  if (/icici/i.test(n))                          return 'ICICI Amazon';
+  if (/hdfc/i.test(n))                           return 'HDFC';
+  if (/sbi|state.*bank/i.test(n))                return 'SBI';
+  if (/axis/i.test(n))                           return 'Axis';
+  if (/onecard|one.?card/i.test(n))              return 'OneCard';
+  return 'Unknown';
+}
+
+$('fileList').addEventListener('click', e=>{ const b=e.target.closest('.remove-btn'); if(!b)return; uploadedFiles.splice(+b.dataset.idx,1); renderFileList(); renderAccountRows(); updateProcessBtn(); $('pdfNote').style.display=uploadedFiles.some(f=>f.isPdf)?'block':'none'; });
+$('accountRows').addEventListener('change', e=>{ const s=e.target.closest('select'); if(!s)return; uploadedFiles.filter(f=>!f.isTemplate)[+s.dataset.idx].account=s.value; });
+
+function renderFileList() {
+  $('fileList').innerHTML = uploadedFiles.map((f,i)=>{
+    const bc=f.isTemplate?'badge-template':f.isPdf?'badge-pdf':f.isCreditCard?'badge-card':'badge-bank';
+    const bt=f.isTemplate?'Template':f.isPdf?'PDF':f.isCreditCard?'Credit card':'Bank stmt';
+    let ps='';
+    if (f.isPdf) ps = f.parseStatus==='busy'?`<span class="parse-status busy" id="ps-${i}">Parsing&#8230;</span>`:f.parseStatus==='ok'?`<span class="parse-status ok" id="ps-${i}">&#10003; ${Math.round((f.parsedText||'').length/1000)}k chars</span>`:`<span class="parse-status err" id="ps-${i}" title="${esc(f.parseError)}">&#9888; Parse failed</span>`;
+    return `<div class="file-chip" id="chip-${i}"><span class="fname">${esc(f.name)}</span><span class="badge ${bc}">${bt}</span>${ps}<button class="remove-btn" data-idx="${i}">&#215;</button></div>`;
+  }).join('');
+}
+
+function renderAccountRows() {
+  const card=$('accountCard'), non=uploadedFiles.filter(f=>!f.isTemplate);
+  if (!non.length) { card.style.display='none'; return; }
+  card.style.display='block';
+  $('accountRows').innerHTML = non.map((f,i)=>`<div class="acct-row"><label title="${esc(f.name)}">${esc(f.name)}</label><select data-idx="${i}">${ACCOUNTS.map(a=>`<option value="${a}"${f.account===a?' selected':''}>${a}</option>`).join('')}</select></div>`).join('');
+}
+
+function updateProcessBtn() {
+  const pending=uploadedFiles.some(f=>f.isPdf&&f.parseStatus==='busy'), hasFiles=uploadedFiles.length>0;
+  $('processBtn').disabled = !hasFiles||pending;
+  $('processBtn').textContent = pending?'Waiting for PDF parsing\u2026':hasFiles?`Process statements \u2014 ${MONTH_NAMES[selMonth]} ${selYear}`:'Process statements with AI';
+}
+
+/* ─── PDF.js ────────────────────────────────────────────────────────────── */
+async function parsePdf(entry) {
+  try {
+    const buf=await entry.file.arrayBuffer(), pdf=await pdfjsLib.getDocument({data:buf}).promise, lines=[];
+    for (let p=1;p<=pdf.numPages;p++) {
+      const page=await pdf.getPage(p), ct=await page.getTextContent();
+      const items=ct.items.filter(it=>it.str?.trim()).map(it=>({str:it.str,x:it.transform[4],y:Math.round(it.transform[5]/3)*3}));
+      const lm={}; items.forEach(it=>{ (lm[it.y]=lm[it.y]||[]).push(it); });
+      lines.push(`--- Page ${p}/${pdf.numPages} ---`);
+      Object.keys(lm).map(Number).sort((a,b)=>b-a).forEach(y=>{ const row=lm[y].sort((a,b)=>a.x-b.x).map(i=>i.str).join(' ').trim(); if(row)lines.push(row); });
+    }
+    entry.parsedText=lines.join('\n'); entry.parseStatus=entry.parsedText.trim()?'ok':'err';
+    if (!entry.parsedText.trim()) entry.parseError='No text — may be a scanned/image PDF';
+  } catch(e) { entry.parseStatus='err'; entry.parseError=e.message||'Failed'; }
+  const idx=uploadedFiles.indexOf(entry), ps=document.getElementById(`ps-${idx}`);
+  if (ps) { ps.className=`parse-status ${entry.parseStatus}`; ps.textContent=entry.parseStatus==='ok'?`\u2713 ${Math.round((entry.parsedText||'').length/1000)}k chars`:'\u26a0 Parse failed'; if(entry.parseStatus!=='ok')ps.title=entry.parseError||''; }
+  updateProcessBtn();
+}
+
+/* ─── prompt ────────────────────────────────────────────────────────────── */
+function buildPrompt(fc, mn, mnum, yr) {
+  const fd=fc.map(f=>`=== FILE: ${f.name} | ACCOUNT MAPPING: ${f.account} | TYPE: ${f.isTemplate?'TEMPLATE':f.isPdf?'PDF STATEMENT':'CSV/TEXT STATEMENT'} ===\n${f.content}`).join('\n\n');
+  return `You are a finance data processor. Process ALL of the statement files below and return cleaned transactions for ${mn} ${yr} (month ${mnum}/${yr}).
+
+CRITICAL: You MUST process every single file listed. Do not skip any file.
+
+FILES:
+${fd}
+
+Return ONLY valid JSON — no markdown, no backticks, no explanation. Schema:
+{"transactions":[{"date":"Mon - 3/3/2026","transferType":"Incoming","account":"Kotak","description":"Food","details":"Swiggy","mode":"UPI","amount":-450.00}],"summary":{"totalIncoming":0,"totalOutgoing":0,"topMerchants":[{"name":"Swiggy","count":4}],"recurring":["Netflix"],"flagged":["Large transfer on 3/15"]}}
+
+PROCESSING RULES:
+1. ONLY include transactions from ${mn} ${yr} (month ${mnum}). Scan every file fully — do not stop early.
+2. Date format: "Day - M/D/YYYY" (e.g. "Mon - ${mnum}/3/${yr}")
+3. DR / Debit / Withdrawal / negative balance change = negative amount. CR / Credit / Deposit = positive amount.
+4. For PDF statements: scan all pages and identify transaction rows by date + description + amount patterns; ignore page headers, footers, and account summaries.
+5. Details field: strip prefixes like "UPI/", transaction reference IDs, city/country suffixes (e.g. "/IN"). Keep only the merchant name or person/UPI handle name. Example: "UPI/ANN JEROME/xyz@okaxis/IN" → "ANN JEROME".
+6. Description must be exactly ONE of: Transfer, Dividends, Groceries, Travel, Fine, Shopping, Miscellaneous, Food, Giving, Tithe, Recurring, Saving, Credit Card
+7. Categorize by Details content: swiggy/zomato/cafe/restaurant/bakery=Food; reliance/bigbasket/spar/dmart/supermarket=Groceries; amazon/flipkart/myntra/meesho/retail=Shopping; uber/ola/rapido/metro/bus/flight/irctc=Travel; netflix/spotify/prime/hotstar/emi/insurance/rent/subscription=Recurring; church/tithe/offering/ministry=Tithe; individual person names or personal UPI handles=Giving; salary/interest/dividend/cashback/refund=Dividends; credit card bill payment=Credit Card; savings/mutual fund/investment/ppf=Saving; penalty/late fee/fine=Fine; generic bank transfers without merchant context=Transfer; anything else=Miscellaneous
+8. Mode: "UPI" if transaction narration contains "UPI"; "Card" if it contains "POS", "CARD", "ATM", or merchant swipe; "UPI" as default if neither is clear
+9. Deduplicate: if the same transaction appears across multiple files (same date + amount + description), include it only once.
+10. Account assignment: use the ACCOUNT MAPPING label from the file header above. If the mapping is "Unknown", infer from file content clues — check the filename, file header rows, and transaction narrations for keywords like "Kotak", "ICICI", "Amazon" (for ICICI Amazon card), "Rupay" (for ICICI Rupay card), "HDFC", "SBI", "Axis", "OneCard", account numbers, or IFSC codes. Assign one of: Kotak, ICICI Amazon, ICICI Rupay, HDFC, SBI, Axis, OneCard, or Unknown.
+11. If no data for ${mn} ${yr} is found in a file, return only what you actually found — DO NOT fabricate, invent, or guess transactions. Return an empty transactions array if genuinely nothing is extractable. Never make up amounts, dates, merchants, or any transaction fields.`;
+}
+
+/* ─── process ───────────────────────────────────────────────────────────── */
+async function readText(file) { return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file); }); }
+
+// Per-file char budget: generous enough to capture most statements
+const CHARS_PER_FILE = 20000;
+// Total prompt budget before we need to batch (leave room for prompt overhead + response)
+const TOTAL_CHARS_BUDGET = 80000;
+
+function trimContent(content, budget) {
+  if (content.length <= budget) return content;
+  // Keep head and tail — transactions can appear anywhere
+  const half = Math.floor(budget / 2);
+  return content.slice(0, half) + `\n\n[... ${content.length - budget} chars omitted — file trimmed to fit context ...]\n\n` + content.slice(-half);
+}
+
+// Split file list into batches where each batch fits within total budget
+function makeBatches(fc) {
+  const batches = [];
+  let current = [], currentSize = 0;
+  for (const f of fc) {
+    const sz = f.content.length;
+    if (current.length > 0 && currentSize + sz > TOTAL_CHARS_BUDGET) {
+      batches.push(current);
+      current = [f]; currentSize = sz;
+    } else {
+      current.push(f); currentSize += sz;
+    }
+  }
+  if (current.length) batches.push(current);
+  return batches;
+}
+
+// Merge results from multiple batches, deduplicating by date+amount+details
+function mergeResults(results) {
+  const seen = new Set();
+  const transactions = [];
+  for (const r of results) {
+    for (const t of (r.transactions || [])) {
+      const key = `${t.date}|${t.amount}|${(t.details||'').toLowerCase().trim()}`;
+      if (!seen.has(key)) { seen.add(key); transactions.push(t); }
+    }
+  }
+  // Merge summaries (recalculate from transactions)
+  const incoming = transactions.filter(t=>t.transferType==='Incoming').reduce((s,t)=>s+t.amount,0);
+  const outgoing = transactions.filter(t=>t.transferType==='Outgoing').reduce((s,t)=>s+Math.abs(t.amount),0);
+  // Collect unique recurring/flagged across batches
+  const recurring = [...new Set(results.flatMap(r=>r.summary?.recurring||[]))];
+  const flagged   = [...new Set(results.flatMap(r=>r.summary?.flagged||[]))];
+  // Top merchants: aggregate counts
+  const mCounts = {};
+  results.flatMap(r=>r.summary?.topMerchants||[]).forEach(m=>{ mCounts[m.name]=(mCounts[m.name]||0)+m.count; });
+  const topMerchants = Object.entries(mCounts).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([name,count])=>({name,count}));
+  return { transactions, summary: { totalIncoming: incoming, totalOutgoing: outgoing, topMerchants, recurring, flagged } };
+}
+
+$('processBtn').addEventListener('click', async () => {
+  const cfgErr = validateConfig();
+  if (cfgErr) { $('errorBox').innerHTML=`<div class="error-box">&#9888; ${esc(cfgErr)}</div>`; return; }
+  $('processBtn').disabled=true; $('errorBox').innerHTML=''; $('resultsSection').style.display='none'; $('progressTrack').style.display='none';
+  const mn=MONTH_NAMES[selMonth], mnum=selMonth+1, yr=selYear;
+  const {provider,model}=getConfig();
+  const pLabel={'native':'Claude (native)','claude':'Claude API','openai':'ChatGPT','gemini':'Gemini'}[provider]||provider;
+  setStatus('Reading files\u2026',true); setProgress(5);
+  try {
+    // Read all files — no content is dropped, only trimmed per-file to CHARS_PER_FILE
+    const fc=[];
+    for (const uf of uploadedFiles) {
+      let raw;
+      if (uf.isPdf) {
+        raw = (uf.parseStatus==='ok' && uf.parsedText) ? uf.parsedText : `[PDF parse failed: ${uf.parseError||'unknown error'}]`;
+      } else {
+        raw = await readText(uf.file);
+      }
+      // Trim per-file content but keep a generous budget
+      const content = trimContent(raw, CHARS_PER_FILE);
+      fc.push({ name:uf.name, account:uf.account, isTemplate:uf.isTemplate, isPdf:uf.isPdf, content });
+    }
+
+    // Split into batches if total content exceeds budget
+    const batches = makeBatches(fc);
+    const batchCount = batches.length;
+    const batchResults = [];
+
+    for (let i = 0; i < batchCount; i++) {
+      const batchLabel = batchCount > 1 ? ` (batch ${i+1}/${batchCount})` : '';
+      setStatus(`Sending to ${pLabel}${batchLabel}\u2026`, true);
+      setProgress(25 + Math.round((i / batchCount) * 55));
+
+      const raw = await callLLM(buildPrompt(batches[i], mn, mnum, yr));
+
+      let parsed;
+      try {
+        const c = raw.replace(/```json|```/g,'').trim();
+        parsed = JSON.parse(c.slice(c.indexOf('{'), c.lastIndexOf('}')+1));
+      } catch {
+        throw new Error(`Could not parse AI response${batchCount>1?` for batch ${i+1}`:''}. Please try again.`);
+      }
+      batchResults.push(parsed);
+    }
+
+    setProgress(90); setStatus('Merging results\u2026', true);
+    const merged = mergeResults(batchResults);
+    processedRows = merged.transactions;
+
+    if (!processedRows.length) {
+      setProgress(100);
+      setStatus(`\u2713 Processing complete — no transactions found for ${mn} ${yr}`, false);
+      $('errorBox').innerHTML=`<div class="error-box" style="background:#fffbeb;border-color:#fde68a;color:#92400e">&#9432; No transactions were found in the uploaded files for ${mn} ${yr}. The files may not contain data for this period, or dates may be in an unrecognised format. No data was fabricated.</div>`;
+      $('processBtn').disabled=false; updateProcessBtn(); return;
+    }
+
+    setProgress(100);
+    const batchNote = batchCount > 1 ? ` (${batchCount} batches)` : '';
+    setStatus(`\u2713 ${processedRows.length} transactions extracted via ${pLabel}${batchNote}`, false);
+    renderResults(processedRows, merged.summary, mn, yr);
+    $('resultsSection').style.display='block';
+    $('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});
+
+  } catch(err) {
+    setStatus('',false); $('progressTrack').style.display='none';
+    const hint = err.message?.includes('401') ? ' — check your API key.'
+               : err.message?.includes('429') ? ' — rate limit hit, wait a moment and retry.'
+               : err.message?.includes('403') ? ' — API key may not have access to this model.'
+               : '';
+    $('errorBox').innerHTML=`<div class="error-box">&#9888; ${esc(err.message)}${hint}</div>`;
+  } finally { $('processBtn').disabled=false; updateProcessBtn(); }
+});
+
+/* ─── render results ────────────────────────────────────────────────────── */
+function renderResults(rows,summary,mn,yr) {
+  const inc=rows.filter(r=>r.transferType==='Incoming').reduce((s,r)=>s+r.amount,0);
+  const out=rows.filter(r=>r.transferType==='Outgoing').reduce((s,r)=>s+Math.abs(r.amount),0);
+  const net=inc-out;
+  $('statsGrid').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Transactions</div><div class="stat-value">${rows.length}</div><div class="stat-sub">${mn} ${yr}</div></div>
+    <div class="stat-card"><div class="stat-label">Total incoming</div><div class="stat-value pos">+&#8377;${fmtInt(inc)}</div></div>
+    <div class="stat-card"><div class="stat-label">Total outgoing</div><div class="stat-value neg">&#8722;&#8377;${fmtInt(out)}</div></div>
+    <div class="stat-card"><div class="stat-label">Net</div><div class="stat-value ${net>=0?'pos':'neg'}">${net>=0?'+':'&#8722;'}&#8377;${fmtInt(Math.abs(net))}</div></div>`;
+  $('txBody').innerHTML=rows.map(r=>`<tr><td style="white-space:nowrap">${esc(r.date)}</td><td style="color:#888;font-size:11px">${esc(r.transferType)}</td><td>${esc(r.account)}</td><td><span class="cat-pill ${catCls(r.description)}">${esc(r.description)}</span></td><td>${esc(r.details)}</td><td style="color:#aaa">${esc(r.mode)}</td><td style="text-align:right" class="${r.amount>=0?'pos':'neg'}">${r.amount>=0?'+':'&#8722;'}&#8377;${fmt(r.amount)}</td></tr>`).join('');
+  const ct={};
+  rows.filter(r=>r.transferType==='Outgoing').forEach(r=>{ ct[r.description]=(ct[r.description]||0)+Math.abs(r.amount); });
+  const sc=Object.entries(ct).sort((a,b)=>b[1]-a[1]), mx=sc[0]?.[1]||1;
+  const tm=summary.topMerchants||[], rec=summary.recurring||[], fl=summary.flagged||[];
+  $('summaryContent').innerHTML=`
+    <div class="stats-grid" style="margin-bottom:1.25rem">
+      <div class="stat-card"><div class="stat-label">Incoming</div><div class="stat-value pos">+&#8377;${fmtInt(inc)}</div></div>
+      <div class="stat-card"><div class="stat-label">Outgoing</div><div class="stat-value neg">&#8722;&#8377;${fmtInt(out)}</div></div>
+      <div class="stat-card"><div class="stat-label">Net</div><div class="stat-value ${net>=0?'pos':'neg'}">${net>=0?'+':'&#8722;'}&#8377;${fmtInt(Math.abs(net))}</div></div>
+      <div class="stat-card"><div class="stat-label">Transactions</div><div class="stat-value">${rows.length}</div></div>
+    </div>
+    <div style="margin-bottom:1.25rem"><div class="section-label">Spending by category</div><div class="cat-breakdown">${sc.slice(0,10).map(([n,a])=>`<div class="cat-row-s"><span class="cn"><span class="cat-pill ${catCls(n)}">${esc(n)}</span></span><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(a/mx*100)}%"></div></div><span class="ca">&#8377;${fmtInt(a)}</span></div>`).join('')}</div></div>
+    ${tm.length?`<div style="margin-bottom:1.25rem"><div class="section-label">Top merchants</div><div class="tag-wrap">${tm.slice(0,10).map(m=>`<span class="tag">${esc(m.name)} &#215;${m.count}</span>`).join('')}</div></div>`:''}
+    ${rec.length?`<div style="margin-bottom:1.25rem"><div class="section-label">Recurring payments</div><div class="tag-wrap">${rec.map(r=>`<span class="tag" style="background:#ede9fe;color:#4c1d95">${esc(r)}</span>`).join('')}</div></div>`:''}
+    ${fl.length?`<div><div class="section-label">Flagged</div>${fl.map(f=>`<div style="font-size:13px;color:#888;padding:5px 0;border-bottom:1px solid #f0f0ee">&#9873; ${esc(f)}</div>`).join('')}</div>`:''}`;
+}
+
+/* ─── tabs ──────────────────────────────────────────────────────────────── */
+function swTab(n) {
+  $('tab-transactions').style.display=n==='transactions'?'block':'none';
+  $('tab-summary').style.display=n==='summary'?'block':'none';
+  $('tabTx').classList.toggle('active',n==='transactions');
+  $('tabSum').classList.toggle('active',n==='summary');
+}
+$('tabTx').addEventListener('click',()=>swTab('transactions'));
+$('tabSum').addEventListener('click',()=>swTab('summary'));
+$('toSummaryBtn').addEventListener('click',()=>swTab('summary'));
+
+/* ─── download ──────────────────────────────────────────────────────────── */
+function dlCSV() {
+  if (!processedRows.length) return;
+  const fn=`${MONTH_NAMES[selMonth].toLowerCase()}-${selYear}-processed.csv`;
+  const hdr=['Date','Transfer Type','Account','Description','Details','Mode','Amount'];
+  const rows=processedRows.map(r=>[`"${r.date}"`,`"${r.transferType}"`,`"${r.account}"`,`"${r.description}"`,`"${(r.details||'').replace(/"/g,'""')}"`,`"${r.mode}"`,r.amount]);
+  const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  Object.assign(document.createElement('a'),{href:url,download:fn}).click();
+  URL.revokeObjectURL(url);
+}
+$('dlBtn1').addEventListener('click',dlCSV);
+$('dlBtn2').addEventListener('click',dlCSV);
+
+/* ─── init ──────────────────────────────────────────────────────────────── */
+initAiConfig();
+renderMonthGrid();
+</script>
+</body>
+</html>
